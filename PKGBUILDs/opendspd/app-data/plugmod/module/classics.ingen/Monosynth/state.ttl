@@ -1,0 +1,64 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<>
+	a pset:Preset ;
+	lv2:appliesTo <http://calf.sourceforge.net/plugins/Monosynth> ;
+	state:state [
+		<urn:calf:mod_matrix:0,0> "None" ;
+		<urn:calf:mod_matrix:0,1> "0..1" ;
+		<urn:calf:mod_matrix:0,2> "None" ;
+		<urn:calf:mod_matrix:0,3> "1" ;
+		<urn:calf:mod_matrix:0,4> "None" ;
+		<urn:calf:mod_matrix:1,0> "None" ;
+		<urn:calf:mod_matrix:1,1> "0..1" ;
+		<urn:calf:mod_matrix:1,2> "None" ;
+		<urn:calf:mod_matrix:1,3> "1" ;
+		<urn:calf:mod_matrix:1,4> "None" ;
+		<urn:calf:mod_matrix:2,0> "None" ;
+		<urn:calf:mod_matrix:2,1> "0..1" ;
+		<urn:calf:mod_matrix:2,2> "None" ;
+		<urn:calf:mod_matrix:2,3> "1" ;
+		<urn:calf:mod_matrix:2,4> "None" ;
+		<urn:calf:mod_matrix:3,0> "None" ;
+		<urn:calf:mod_matrix:3,1> "0..1" ;
+		<urn:calf:mod_matrix:3,2> "None" ;
+		<urn:calf:mod_matrix:3,3> "1" ;
+		<urn:calf:mod_matrix:3,4> "None" ;
+		<urn:calf:mod_matrix:4,0> "None" ;
+		<urn:calf:mod_matrix:4,1> "0..1" ;
+		<urn:calf:mod_matrix:4,2> "None" ;
+		<urn:calf:mod_matrix:4,3> "1" ;
+		<urn:calf:mod_matrix:4,4> "None" ;
+		<urn:calf:mod_matrix:5,0> "None" ;
+		<urn:calf:mod_matrix:5,1> "0..1" ;
+		<urn:calf:mod_matrix:5,2> "None" ;
+		<urn:calf:mod_matrix:5,3> "1" ;
+		<urn:calf:mod_matrix:5,4> "None" ;
+		<urn:calf:mod_matrix:6,0> "None" ;
+		<urn:calf:mod_matrix:6,1> "0..1" ;
+		<urn:calf:mod_matrix:6,2> "None" ;
+		<urn:calf:mod_matrix:6,3> "1" ;
+		<urn:calf:mod_matrix:6,4> "None" ;
+		<urn:calf:mod_matrix:7,0> "None" ;
+		<urn:calf:mod_matrix:7,1> "0..1" ;
+		<urn:calf:mod_matrix:7,2> "None" ;
+		<urn:calf:mod_matrix:7,3> "1" ;
+		<urn:calf:mod_matrix:7,4> "None" ;
+		<urn:calf:mod_matrix:8,0> "None" ;
+		<urn:calf:mod_matrix:8,1> "0..1" ;
+		<urn:calf:mod_matrix:8,2> "None" ;
+		<urn:calf:mod_matrix:8,3> "1" ;
+		<urn:calf:mod_matrix:8,4> "None" ;
+		<urn:calf:mod_matrix:9,0> "None" ;
+		<urn:calf:mod_matrix:9,1> "0..1" ;
+		<urn:calf:mod_matrix:9,2> "None" ;
+		<urn:calf:mod_matrix:9,3> "1" ;
+		<urn:calf:mod_matrix:9,4> "None"
+	] .
+
