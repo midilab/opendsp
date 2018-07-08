@@ -1,0 +1,946 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap: <http://usefulinc.com/ns/doap#> .
+@prefix ingen: <http://drobilla.net/ns/ingen#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix midi: <http://lv2plug.in/ns/ext/midi#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix patch: <http://lv2plug.in/ns/ext/patch#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<audio_out_1>
+	ingen:canvasX 649.0 ;
+	ingen:canvasY 86.0 ;
+	lv2:index 2 ;
+	lv2:name "Audio Out 1" ;
+	lv2:symbol "audio_out_1" ;
+	a lv2:AudioPort ,
+		lv2:OutputPort .
+
+<audio_out_2>
+	ingen:canvasX 647.0 ;
+	ingen:canvasY 139.0 ;
+	lv2:index 3 ;
+	lv2:name "Audio Out 2" ;
+	lv2:symbol "audio_out_2" ;
+	a lv2:AudioPort ,
+		lv2:OutputPort .
+
+<control>
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ;
+	<http://lv2plug.in/ns/ext/resize-port#minimumSize> 4096 ;
+	lv2:designation lv2:control ;
+	lv2:index 0 ;
+	lv2:name "Control" ;
+	lv2:portProperty lv2:connectionOptional ;
+	lv2:symbol "control" ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
+<fabla>
+	ingen:canvasX 200.0 ;
+	ingen:canvasY 98.0 ;
+	<http://lv2plug.in/ns/ext/presets#preset> <file:///usr/lib/lv2/fabla808.lv2/fabla808.ttl> ;
+	<http://lv2plug.in/ns/ext/state#state> <fabla/state.ttl> ;
+	lv2:port <fabla/compressor_attack> ,
+		<fabla/compressor_decay> ,
+		<fabla/compressor_enable> ,
+		<fabla/compressor_makeup> ,
+		<fabla/compressor_ratio> ,
+		<fabla/compressor_threshold> ,
+		<fabla/control> ,
+		<fabla/left> ,
+		<fabla/notify> ,
+		<fabla/pad_attack_1> ,
+		<fabla/pad_attack_10> ,
+		<fabla/pad_attack_11> ,
+		<fabla/pad_attack_12> ,
+		<fabla/pad_attack_13> ,
+		<fabla/pad_attack_14> ,
+		<fabla/pad_attack_15> ,
+		<fabla/pad_attack_16> ,
+		<fabla/pad_attack_2> ,
+		<fabla/pad_attack_3> ,
+		<fabla/pad_attack_4> ,
+		<fabla/pad_attack_5> ,
+		<fabla/pad_attack_6> ,
+		<fabla/pad_attack_7> ,
+		<fabla/pad_attack_8> ,
+		<fabla/pad_attack_9> ,
+		<fabla/pad_decay_1> ,
+		<fabla/pad_decay_10> ,
+		<fabla/pad_decay_11> ,
+		<fabla/pad_decay_12> ,
+		<fabla/pad_decay_13> ,
+		<fabla/pad_decay_14> ,
+		<fabla/pad_decay_15> ,
+		<fabla/pad_decay_16> ,
+		<fabla/pad_decay_2> ,
+		<fabla/pad_decay_3> ,
+		<fabla/pad_decay_4> ,
+		<fabla/pad_decay_5> ,
+		<fabla/pad_decay_6> ,
+		<fabla/pad_decay_7> ,
+		<fabla/pad_decay_8> ,
+		<fabla/pad_decay_9> ,
+		<fabla/pad_gain_1> ,
+		<fabla/pad_gain_10> ,
+		<fabla/pad_gain_11> ,
+		<fabla/pad_gain_12> ,
+		<fabla/pad_gain_13> ,
+		<fabla/pad_gain_14> ,
+		<fabla/pad_gain_15> ,
+		<fabla/pad_gain_16> ,
+		<fabla/pad_gain_2> ,
+		<fabla/pad_gain_3> ,
+		<fabla/pad_gain_4> ,
+		<fabla/pad_gain_5> ,
+		<fabla/pad_gain_6> ,
+		<fabla/pad_gain_7> ,
+		<fabla/pad_gain_8> ,
+		<fabla/pad_gain_9> ,
+		<fabla/pad_pan_1> ,
+		<fabla/pad_pan_10> ,
+		<fabla/pad_pan_11> ,
+		<fabla/pad_pan_12> ,
+		<fabla/pad_pan_13> ,
+		<fabla/pad_pan_14> ,
+		<fabla/pad_pan_15> ,
+		<fabla/pad_pan_16> ,
+		<fabla/pad_pan_2> ,
+		<fabla/pad_pan_3> ,
+		<fabla/pad_pan_4> ,
+		<fabla/pad_pan_5> ,
+		<fabla/pad_pan_6> ,
+		<fabla/pad_pan_7> ,
+		<fabla/pad_pan_8> ,
+		<fabla/pad_pan_9> ,
+		<fabla/pad_release_1> ,
+		<fabla/pad_release_10> ,
+		<fabla/pad_release_11> ,
+		<fabla/pad_release_12> ,
+		<fabla/pad_release_13> ,
+		<fabla/pad_release_14> ,
+		<fabla/pad_release_15> ,
+		<fabla/pad_release_16> ,
+		<fabla/pad_release_2> ,
+		<fabla/pad_release_3> ,
+		<fabla/pad_release_4> ,
+		<fabla/pad_release_5> ,
+		<fabla/pad_release_6> ,
+		<fabla/pad_release_7> ,
+		<fabla/pad_release_8> ,
+		<fabla/pad_release_9> ,
+		<fabla/pad_speed_1> ,
+		<fabla/pad_speed_10> ,
+		<fabla/pad_speed_11> ,
+		<fabla/pad_speed_12> ,
+		<fabla/pad_speed_13> ,
+		<fabla/pad_speed_14> ,
+		<fabla/pad_speed_15> ,
+		<fabla/pad_speed_16> ,
+		<fabla/pad_speed_2> ,
+		<fabla/pad_speed_3> ,
+		<fabla/pad_speed_4> ,
+		<fabla/pad_speed_5> ,
+		<fabla/pad_speed_6> ,
+		<fabla/pad_speed_7> ,
+		<fabla/pad_speed_8> ,
+		<fabla/pad_speed_9> ,
+		<fabla/pad_sustain_1> ,
+		<fabla/pad_sustain_10> ,
+		<fabla/pad_sustain_11> ,
+		<fabla/pad_sustain_12> ,
+		<fabla/pad_sustain_13> ,
+		<fabla/pad_sustain_14> ,
+		<fabla/pad_sustain_15> ,
+		<fabla/pad_sustain_16> ,
+		<fabla/pad_sustain_2> ,
+		<fabla/pad_sustain_3> ,
+		<fabla/pad_sustain_4> ,
+		<fabla/pad_sustain_5> ,
+		<fabla/pad_sustain_6> ,
+		<fabla/pad_sustain_7> ,
+		<fabla/pad_sustain_8> ,
+		<fabla/pad_sustain_9> ,
+		<fabla/right> ,
+		<fabla/volume> ;
+	lv2:prototype <http://www.openavproductions.com/fabla> ;
+	a ingen:Block .
+
+<fabla/compressor_attack>
+	ingen:value 0.15000001 ;
+	lv2:index 5 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/compressor_decay>
+	ingen:value 0.30000001 ;
+	lv2:index 6 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/compressor_enable>
+	ingen:value 1.0 ;
+	lv2:index 10 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/compressor_makeup>
+	ingen:value 0.94999993 ;
+	lv2:index 9 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/compressor_ratio>
+	ingen:value 0.5 ;
+	lv2:index 8 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/compressor_threshold>
+	ingen:value 0.5 ;
+	lv2:index 7 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/control>
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ,
+		<http://lv2plug.in/ns/ext/time#Position> ;
+	lv2:index 0 ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
+<fabla/left>
+	lv2:index 2 ;
+	a lv2:AudioPort ,
+		lv2:OutputPort .
+
+<fabla/notify>
+	ingen:broadcast false ;
+	atom:bufferType atom:Sequence ;
+	lv2:index 1 ;
+	a atom:AtomPort ,
+		lv2:OutputPort .
+
+<fabla/pad_attack_1>
+	ingen:value 0.0 ;
+	lv2:index 59 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_10>
+	ingen:value 0.0 ;
+	lv2:index 68 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_11>
+	ingen:value 0.0 ;
+	lv2:index 69 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_12>
+	ingen:value 0.0 ;
+	lv2:index 70 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_13>
+	ingen:value 0.0 ;
+	lv2:index 71 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_14>
+	ingen:value 0.0 ;
+	lv2:index 72 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_15>
+	ingen:value 0.0 ;
+	lv2:index 73 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_16>
+	ingen:value 0.0 ;
+	lv2:index 74 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_2>
+	ingen:value 0.0 ;
+	lv2:index 60 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_3>
+	ingen:value 0.0 ;
+	lv2:index 61 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_4>
+	ingen:value 0.0 ;
+	lv2:index 62 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_5>
+	ingen:value 0.0 ;
+	lv2:index 63 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_6>
+	ingen:value 0.0 ;
+	lv2:index 64 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_7>
+	ingen:value 0.0 ;
+	lv2:index 65 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_8>
+	ingen:value 0.0 ;
+	lv2:index 66 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_attack_9>
+	ingen:value 0.0 ;
+	lv2:index 67 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_1>
+	ingen:value 0.67999989 ;
+	lv2:index 75 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_10>
+	ingen:value 0.5 ;
+	lv2:index 84 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_11>
+	ingen:value 0.5 ;
+	lv2:index 85 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_12>
+	ingen:value 0.5 ;
+	lv2:index 86 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_13>
+	ingen:value 0.5 ;
+	lv2:index 87 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_14>
+	ingen:value 0.5 ;
+	lv2:index 88 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_15>
+	ingen:value 0.5 ;
+	lv2:index 89 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_16>
+	ingen:value 0.5 ;
+	lv2:index 90 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_2>
+	ingen:value 0.5 ;
+	lv2:index 76 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_3>
+	ingen:value 0.5 ;
+	lv2:index 77 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_4>
+	ingen:value 0.5 ;
+	lv2:index 78 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_5>
+	ingen:value 0.5 ;
+	lv2:index 79 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_6>
+	ingen:value 0.5 ;
+	lv2:index 80 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_7>
+	ingen:value 0.5 ;
+	lv2:index 81 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_8>
+	ingen:value 0.5 ;
+	lv2:index 82 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_decay_9>
+	ingen:value 0.5 ;
+	lv2:index 83 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_1>
+	ingen:value 0.5 ;
+	lv2:index 11 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_10>
+	ingen:value 0.5 ;
+	lv2:index 20 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_11>
+	ingen:value 0.5 ;
+	lv2:index 21 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_12>
+	ingen:value 0.5 ;
+	lv2:index 22 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_13>
+	ingen:value 0.5 ;
+	lv2:index 23 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_14>
+	ingen:value 0.5 ;
+	lv2:index 24 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_15>
+	ingen:value 0.5 ;
+	lv2:index 25 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_16>
+	ingen:value 0.5 ;
+	lv2:index 26 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_2>
+	ingen:value 1.0 ;
+	lv2:index 12 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_3>
+	ingen:value 0.5 ;
+	lv2:index 13 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_4>
+	ingen:value 0.5 ;
+	lv2:index 14 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_5>
+	ingen:value 0.5 ;
+	lv2:index 15 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_6>
+	ingen:value 0.5 ;
+	lv2:index 16 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_7>
+	ingen:value 0.5 ;
+	lv2:index 17 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_8>
+	ingen:value 0.5 ;
+	lv2:index 18 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_gain_9>
+	ingen:value 0.5 ;
+	lv2:index 19 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_1>
+	ingen:value 0.5 ;
+	lv2:index 43 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_10>
+	ingen:value 0.5 ;
+	lv2:index 52 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_11>
+	ingen:value 0.5 ;
+	lv2:index 53 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_12>
+	ingen:value 0.5 ;
+	lv2:index 54 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_13>
+	ingen:value 0.5 ;
+	lv2:index 55 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_14>
+	ingen:value 0.5 ;
+	lv2:index 56 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_15>
+	ingen:value 0.5 ;
+	lv2:index 57 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_16>
+	ingen:value 0.5 ;
+	lv2:index 58 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_2>
+	ingen:value 0.5 ;
+	lv2:index 44 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_3>
+	ingen:value 0.5 ;
+	lv2:index 45 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_4>
+	ingen:value 0.5 ;
+	lv2:index 46 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_5>
+	ingen:value 0.5 ;
+	lv2:index 47 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_6>
+	ingen:value 0.5 ;
+	lv2:index 48 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_7>
+	ingen:value 0.5 ;
+	lv2:index 49 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_8>
+	ingen:value 0.5 ;
+	lv2:index 50 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_pan_9>
+	ingen:value 0.5 ;
+	lv2:index 51 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_1>
+	ingen:value 0.5 ;
+	lv2:index 107 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_10>
+	ingen:value 0.5 ;
+	lv2:index 116 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_11>
+	ingen:value 0.5 ;
+	lv2:index 117 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_12>
+	ingen:value 0.5 ;
+	lv2:index 118 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_13>
+	ingen:value 0.5 ;
+	lv2:index 119 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_14>
+	ingen:value 0.5 ;
+	lv2:index 120 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_15>
+	ingen:value 0.5 ;
+	lv2:index 121 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_16>
+	ingen:value 0.5 ;
+	lv2:index 122 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_2>
+	ingen:value 0.5 ;
+	lv2:index 108 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_3>
+	ingen:value 0.5 ;
+	lv2:index 109 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_4>
+	ingen:value 0.5 ;
+	lv2:index 110 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_5>
+	ingen:value 0.5 ;
+	lv2:index 111 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_6>
+	ingen:value 0.5 ;
+	lv2:index 112 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_7>
+	ingen:value 0.5 ;
+	lv2:index 113 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_8>
+	ingen:value 0.5 ;
+	lv2:index 114 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_release_9>
+	ingen:value 0.5 ;
+	lv2:index 115 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_1>
+	ingen:value 0.5 ;
+	lv2:index 27 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_10>
+	ingen:value 0.5 ;
+	lv2:index 36 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_11>
+	ingen:value 0.5 ;
+	lv2:index 37 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_12>
+	ingen:value 0.5 ;
+	lv2:index 38 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_13>
+	ingen:value 0.5 ;
+	lv2:index 39 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_14>
+	ingen:value 0.5 ;
+	lv2:index 40 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_15>
+	ingen:value 0.5 ;
+	lv2:index 41 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_16>
+	ingen:value 0.5 ;
+	lv2:index 42 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_2>
+	ingen:value 0.5 ;
+	lv2:index 28 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_3>
+	ingen:value 0.5 ;
+	lv2:index 29 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_4>
+	ingen:value 0.5 ;
+	lv2:index 30 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_5>
+	ingen:value 0.5 ;
+	lv2:index 31 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_6>
+	ingen:value 0.5 ;
+	lv2:index 32 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_7>
+	ingen:value 0.5 ;
+	lv2:index 33 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_8>
+	ingen:value 0.5 ;
+	lv2:index 34 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_speed_9>
+	ingen:value 0.5 ;
+	lv2:index 35 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_1>
+	ingen:value 1.0 ;
+	lv2:index 91 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_10>
+	ingen:value 1.0 ;
+	lv2:index 100 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_11>
+	ingen:value 1.0 ;
+	lv2:index 101 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_12>
+	ingen:value 1.0 ;
+	lv2:index 102 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_13>
+	ingen:value 1.0 ;
+	lv2:index 103 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_14>
+	ingen:value 1.0 ;
+	lv2:index 104 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_15>
+	ingen:value 1.0 ;
+	lv2:index 105 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_16>
+	ingen:value 1.0 ;
+	lv2:index 106 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_2>
+	ingen:value 1.0 ;
+	lv2:index 92 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_3>
+	ingen:value 1.0 ;
+	lv2:index 93 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_4>
+	ingen:value 1.0 ;
+	lv2:index 94 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_5>
+	ingen:value 1.0 ;
+	lv2:index 95 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_6>
+	ingen:value 1.0 ;
+	lv2:index 96 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_7>
+	ingen:value 1.0 ;
+	lv2:index 97 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_8>
+	ingen:value 1.0 ;
+	lv2:index 98 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/pad_sustain_9>
+	ingen:value 1.0 ;
+	lv2:index 99 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<fabla/right>
+	lv2:index 3 ;
+	a lv2:AudioPort ,
+		lv2:OutputPort .
+
+<fabla/volume>
+	ingen:value 1.0 ;
+	lv2:index 4 ;
+	a lv2:ControlPort ,
+		lv2:InputPort .
+
+<>
+	ingen:arc [
+		ingen:head <audio_out_2> ;
+		ingen:tail <fabla/right>
+	] , [
+		ingen:head <audio_out_1> ;
+		ingen:tail <fabla/left>
+	] , [
+		ingen:head <fabla/control> ;
+		ingen:tail <control>
+	] ;
+	ingen:block <fabla> ;
+	ingen:polyphony 1 ;
+	<http://lv2plug.in/ns/extensions/ui#ui> ingen:GraphUIGtk2 ;
+	lv2:extensionData <http://lv2plug.in/ns/ext/state#interface> ;
+	lv2:port <audio_out_1> ,
+		<audio_out_2> ,
+		<control> ,
+		<notify> ;
+	doap:name "fabla" ;
+	a ingen:Graph ,
+		lv2:Plugin .
+
+<notify>
+	atom:bufferType atom:Sequence ;
+	atom:supports patch:Message ;
+	<http://lv2plug.in/ns/ext/resize-port#minimumSize> 4096 ;
+	lv2:designation lv2:control ;
+	lv2:index 1 ;
+	lv2:name "Notify" ;
+	lv2:portProperty lv2:connectionOptional ;
+	lv2:symbol "notify" ;
+	a atom:AtomPort ,
+		lv2:OutputPort .
+

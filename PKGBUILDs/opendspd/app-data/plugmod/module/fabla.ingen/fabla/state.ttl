@@ -1,0 +1,30 @@
+@prefix atom: <http://lv2plug.in/ns/ext/atom#> .
+@prefix lv2: <http://lv2plug.in/ns/lv2core#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<>
+	a pset:Preset ;
+	lv2:appliesTo <http://www.openavproductions.com/fabla> ;
+	state:state [
+		<http://www.openavproductions.com/fabla#pad_0_filename> <Classic-808_Kick_long.wav> ;
+		<http://www.openavproductions.com/fabla#pad_1_filename> <Classic-808_Kick_short.wav> ;
+		<http://www.openavproductions.com/fabla#pad_2_filename> <Classic-808_Clap.wav> ;
+		<http://www.openavproductions.com/fabla#pad_3_filename> <Classic-808_Clave.wav> ;
+		<http://www.openavproductions.com/fabla#pad_4_filename> <Classic-808_Snare_lo1.wav> ;
+		<http://www.openavproductions.com/fabla#pad_5_filename> <Classic-808_Snare_lo2.wav> ;
+		<http://www.openavproductions.com/fabla#pad_6_filename> <Classic-808_Snare_lo3.wav> ;
+		<http://www.openavproductions.com/fabla#pad_7_filename> <Classic-808_Cymbal-high.wav> ;
+		<http://www.openavproductions.com/fabla#pad_8_filename> <Classic-808_Lo_Tom.wav> ;
+		<http://www.openavproductions.com/fabla#pad_9_filename> <Classic-808_Md_Tom.wav> ;
+		<http://www.openavproductions.com/fabla#pad_10_filename> <Classic-808_Hi_Tom.wav> ;
+		<http://www.openavproductions.com/fabla#pad_11_filename> <Classic-808_Maracas.wav> ;
+		<http://www.openavproductions.com/fabla#pad_12_filename> <Classic-808_Lo_Conga.wav> ;
+		<http://www.openavproductions.com/fabla#pad_13_filename> <Classic-808_Md_Conga.wav> ;
+		<http://www.openavproductions.com/fabla#pad_14_filename> <Classic-808_Hi_Conga.wav> ;
+		<http://www.openavproductions.com/fabla#pad_15_filename> <Classic-808_Rim_Shot.wav>
+	] .
+
