@@ -1,7 +1,7 @@
 # arg 1:  the new package version
 # arg 2:  the old package version
 
-KERNEL_NAME=-raspberrypi
+KERNEL_NAME=-raspberrypi-rt-opendsp
 KERNEL_VERSION=4.9.35-1-rt25-ARCH
 
 disable_cma() {
