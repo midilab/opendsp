@@ -1,0 +1,7 @@
+/pkg/
+/src/
+*.gz
+*.xz
+*~
+/zam-plugins-git/
+/dpf/
