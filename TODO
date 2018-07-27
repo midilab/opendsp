@@ -1,0 +1,38 @@
+MDA OK
+https://aur.archlinux.org/packages/mda-lv2-git/
+https://github.com/falkTX/mda-lv2
+
+OpenAV
+fabla OK
+https://aur.archlinux.org/packages/fabla-git/
+fabla2 NOT STABLE!
+https://aur.archlinux.org/packages/openav-fabla2-git/
+https://github.com/falkTX/openAV-Fabla2
+artyfx
+https://aur.archlinux.org/packages/openav-artyfx-git/
+https://github.com/falkTX/openAV-ArtyFX
+luppp
+https://aur.archlinux.org/packages/openav-luppp-git/
+sorcer
+https://aur.archlinux.org/packages/openav-sorcer-git/
+
+Rkr
+https://github.com/falkTX/rkrlv2
+
+Fluidplug
+https://aur.archlinux.org/packages/fluidplug-git/
+https://github.com/falkTX/FluidPlug
+
+DFP
+https://github.com/DISTRHO/DPF-Plugins
+
+Distrho ports extra
+https://github.com/DISTRHO/DISTRHO-Ports-Extra
+
+Sooperlooper
+https://github.com/falkTX/sooperlooper-lv2-plugin
+
+tools
+https://github.com/falkTX/jack_link
+https://github.com/falkTX/midifilter.lv2 OK
+
