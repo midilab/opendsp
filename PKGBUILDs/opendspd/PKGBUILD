@@ -1,0 +1,20 @@
+# Maintainer: Midilab <contact@midilab.co>
+
+pkgname=opendspd
+pkgver=0.9
+pkgrel=1
+pkgdesc='OpenDSP Service'
+arch=(any)
+url='https://www.archlinux.org/'
+license=('GPL')
+depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils git)
+
+prepare() {
+  cd "${srcdir}/${_srcname}"
+
+}
+
+build() {
+  cd "${srcdir}/${_srcname}"
+
+}
