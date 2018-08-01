@@ -13,8 +13,8 @@ set -e
 
 platform=$1
 
-#image_name=opendsp_${platform}_$(date "+%Y-%m-%d").img
-image_name=/dev/sdb
+image_name=opendsp_${platform}_$(date "+%Y-%m-%d").img
+#image_name=/dev/sdb
 hostname=opendsp
 
 # above we have platform specific script
@@ -55,22 +55,20 @@ EOF
 
 # prepare img 
 
-: '
 # losetup
 #kpartx /dev/loop1 -a -v $image_name
 #kpartx -avs
 kpartx -a -v $image_name
 #losetup /dev/loop0 $image_name
-partprobe /dev/loop1
-bootpart=/dev/mapper/loop1p1
-rootpart=/dev/mapper/loop1p2
-homepart=/dev/mapper/loop1p3
-'
+partprobe /dev/loop0
+bootpart=/dev/mapper/loop0p1
+rootpart=/dev/mapper/loop0p2
+homepart=/dev/mapper/loop0p3
 
 # local sdcard
-bootpart=/dev/sdb1
-rootpart=/dev/sdb2
-homepart=/dev/sdb3
+#bootpart=/dev/sdb1
+#rootpart=/dev/sdb2
+#homepart=/dev/sdb3
 
 # setup boot partition
 mkdosfs -n BOOT $bootpart
@@ -107,9 +105,27 @@ sync
 echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
 cp /usr/bin/qemu-arm-static opendsp/usr/bin/
 
+mount -t proc /proc opendsp/proc
+mount -o bind /dev opendsp/dev
+mount -o bind /dev/pts opendsp/dev/pts
+mount -o bind /sys opendsp/sys
+
 # copy packages or modify pacman.conf for our new repository
-arch-chroot opendsp pacman-key --init
-arch-chroot opendsp pacman-key --populate archlinuxarm
+#arch-chroot opendsp pacman-key --init
+#arch-chroot opendsp pacman-key --populate archlinuxarm
+
+chroot opendsp pacman-key --init
+chroot opendsp pacman-key --populate archlinuxarm
+
+#chroot opendsp pacman -Syyu
+chroot opendsp pacman -Sy
+
+# install dev tool for opendsp packages collection compile
+#chroot opendsp pacman -S base-devel cmake
+#...
+
+# copy opendsp packaes collection to install partition and install then
+#...
 
 : '
 cat <<EOF > /etc/fstab
@@ -220,30 +236,21 @@ EOF
 rm opendsp/usr/bin/qemu-arm-static
 
 sync
-umount opendsp/{boot,home/opendsp/userland}
+umount opendsp/{sys,proc,dev/pts,dev,boot,home/opendsp/userland}
 umount opendsp
 rm -rf opendsp
 sync
 
-
-: '
-# losetup
 # release the image
 kpartx -d -v $image_name
-#kpartx -d -v /dev/loop0
-#losetup -d /dev/loop0
 sync
 
 # compress this bastard
 zip $image_name.zip $image_name
 
-# remove the associated loop device 
-#kpartx -d -v /dev/loop1
-
 # write to sdcard
 #
-dd bs=1M if=$image_name of=/dev/sdb status=progress
-'
+dd bs=1M if=$image_name of=/dev/sdc status=progress
 
 #FINISHED
 
