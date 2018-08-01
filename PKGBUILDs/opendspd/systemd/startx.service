@@ -1,0 +1,8 @@
+[Unit]
+After=systemd-user-session.service
+
+[Service]
+ExecStart=/bin/su opendsp -l -c /usr/bin/startx -- VT08
+
+[Install]
+WantedBy=multi-user.target

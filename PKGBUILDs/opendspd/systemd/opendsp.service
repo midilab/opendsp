@@ -1,0 +1,18 @@
+[Unit]
+Description=OpenDSP Remote Control Service
+After=remote-fs.service
+#ConditionCapability=CAP_SYS_NICE
+
+[Service]
+Type=simple
+User=opendsp
+Group=opendsp
+WorkingDirectory=/home/opendsp/
+ExecStart=/usr/bin/opendspd
+Environment="DISPLAY=:0"
+Environment="XAUTHORITY=/tmp/.Xauthority"
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target

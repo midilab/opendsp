@@ -1,0 +1,13 @@
+[Unit]
+Description=VNC Server for X11
+Requires=startx.service
+After=startx.service
+
+[Service]
+Type=forking
+ExecStart=/bin/su opendsp -l -c "/usr/bin/x11vnc -norc -forever -shared -bg -autoport 5900" 
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

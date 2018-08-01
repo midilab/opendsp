@@ -5,9 +5,9 @@ pkgver=0.9
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
-url='https://www.archlinux.org/'
+url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils git)
+depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils jackd)
 
 prepare() {
   cd "${srcdir}/${_srcname}"
