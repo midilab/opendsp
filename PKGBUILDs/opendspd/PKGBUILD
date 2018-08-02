@@ -1,20 +1,36 @@
 # Maintainer: Midilab <contact@midilab.co>
 
-pkgname=opendspd
+ipkgname=opendspd
 pkgver=0.9
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils jackd)
+depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils jack mididings-git)
+install="$pkgname.install"
 
-prepare() {
-  cd "${srcdir}/${_srcname}"
+pkgver()
+{
+  cd "$pkgname"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() 
+{
+  cd "${srcdir}/${srcname}"
 
 }
 
-build() {
-  cd "${srcdir}/${_srcname}"
+build() 
+{
+  cd "${srcdir}/${srcname}"
 
+}
+
+package()
+{
+  cd "${srcdir}/${srcname}"
+  #python setup.py install --root="$pkgdir"
+  python -m pip install --root="$pkgdir"
 }
