@@ -1,0 +1,37 @@
+# Maintainer: Midilab <contact@midilab.co>
+
+pkgname=mod-ttymidi
+pkgver=36.028ce4e
+pkgrel=1
+pkgdesc='Jack version of ttymidi - by mod devices'
+arch=(any)
+url='http://midilab.co/opendspd'
+license=('GPL')
+depends=()
+source=("git+https://github.com/moddevices/mod-ttymidi")
+#source=('git+https://<repo-url>#[commit|tag|branch]=<ref>')
+#source=("git+https://github.com/midilab/opendspd.git#branch=development")
+md5sums=('SKIP')
+
+pkgver()
+{
+  cd "$pkgname"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() 
+{
+  cd "${srcdir}/${pkgname}"
+}
+
+build() 
+{
+  cd "${srcdir}/${pkgname}"
+  make
+}
+
+package()
+{
+  cd "${srcdir}/${pkgname}"
+}
