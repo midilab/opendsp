@@ -1,6 +1,6 @@
-#!/bin/bash
-
-set -e
+post_install() {
+#  gtk-update-icon-cache -q -f -t /usr/share/icons/hicolor
+#  update-desktop-database -q
 
 #opendspd install
 opendsp_passwd=opendsp
@@ -24,5 +24,15 @@ EOF
 # xinitrc: exec dwm
 
 # compile
-git https://github.com/midilab/opendsp.git
+#git https://github.com/midilab/opendsp.git
 #git checkout development
+
+}
+
+post_upgrade() {
+  post_install
+}
+
+post_remove() {
+  post_install
+}
