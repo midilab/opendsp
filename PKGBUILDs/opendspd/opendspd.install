@@ -21,18 +21,16 @@ EOF
 #sudo vi /etc/X11/Xwrapper.config
 #allowed_users = anybody
 #needs_root_rights = yes
-# xinitrc: exec dwm
+#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
 
-# compile
-#git https://github.com/midilab/opendsp.git
-#git checkout development
+# xinitrc: exec dwm
 
 }
 
 post_upgrade() {
-  post_install
+  
 }
 
 post_remove() {
-  post_install
+  
 }

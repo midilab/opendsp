@@ -7,13 +7,17 @@ pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(alsa-firmware alsa-lib alsa-plugins alsa-utils jack mididings-git)
+depends=(xorg-server xorg-xinit xorg-server-utils xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils jack mididings-git)
 install="$pkgname.install"
+#source=("git+https://github.com/midilab/opendspd.git")
+source=("git+https://github.com/midilab/opendspd.git#branch=development")
+md5sums=('SKIP')
 
 pkgver()
 {
   cd "$pkgname"
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 prepare() 
@@ -25,12 +29,15 @@ prepare()
 build() 
 {
   cd "${srcdir}/${srcname}"
-
 }
 
 package()
 {
-  cd "${srcdir}/${srcname}"
-  #python setup.py install --root="$pkgdir"
-  python -m pip install --root="$pkgdir"
+	cd "${srcdir}/${srcname}"
+	#python setup.py install --root="$pkgdir"
+	python -m pip install --root="$pkgdir"
+	install -vD opendspd   -m 0755 $pkgdir/usr/bin/opendspd
+	install -vD systemd/opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
+	install -vD systemd/x11vnc.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
+	install -vD systemd/startx.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
 }
