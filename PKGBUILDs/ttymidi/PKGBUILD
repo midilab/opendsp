@@ -5,7 +5,7 @@ pkgver=36.028ce4e
 pkgrel=1
 pkgdesc='Jack version of ttymidi - by mod devices'
 arch=(any)
-url='http://midilab.co/opendspd'
+url='https://www.moddevices.com/'
 license=('GPL')
 depends=()
 source=("git+https://github.com/moddevices/mod-ttymidi")
@@ -23,6 +23,7 @@ pkgver()
 prepare() 
 {
   cd "${srcdir}/${pkgname}"
+  sed -i 's/ -Werror//' Makefile
 }
 
 build() 
@@ -33,5 +34,10 @@ build()
 
 package()
 {
+  mkdir "${pkgdir}/usr"
+  mkdir "${pkgdir}/usr/bin"
+  mkdir "${pkgdir}/usr/lib"
+  mkdir "${pkgdir}/usr/lib/jack"
   cd "${srcdir}/${pkgname}"
+  make DESTDIR="$pkgdir" PREFIX="/usr" install
 }
