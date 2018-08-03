@@ -1,43 +1,43 @@
 # Maintainer: Midilab <contact@midilab.co>
 
-ipkgname=opendspd
-pkgver=0.9
+pkgname=opendspd
+pkgver=8.ca23e45
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(xorg-server xorg-xinit xorg-server-utils xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils jack mididings-git)
+depends=(xorg-server xorg-xinit xorg-server-common xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools jack mididings)
 install="$pkgname.install"
 #source=("git+https://github.com/midilab/opendspd.git")
+#source=('git+https://<repo-url>#[commit|tag|branch]=<ref>')
 source=("git+https://github.com/midilab/opendspd.git#branch=development")
 md5sums=('SKIP')
 
 pkgver()
 {
   cd "$pkgname"
-  #echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 prepare() 
 {
-  cd "${srcdir}/${srcname}"
-
+  cd "${srcdir}/${pkgname}"
 }
 
 build() 
 {
-  cd "${srcdir}/${srcname}"
+  cd "${srcdir}/${pkgname}"
 }
 
 package()
 {
-	cd "${srcdir}/${srcname}"
-	#python setup.py install --root="$pkgdir"
-	python -m pip install --root="$pkgdir"
-	install -vD opendspd   -m 0755 $pkgdir/usr/bin/opendspd
-	install -vD systemd/opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
-	install -vD systemd/x11vnc.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
-	install -vD systemd/startx.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
+  cd "${srcdir}/${pkgname}"
+        python setup.py install --root="$pkgdir"
+	#python -m pip install --root="$pkgdir"
+	install -vD ../../opendsp-service   -m 0755 $pkgdir/usr/bin/opendspd
+	install -vD ../../systemd/opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
+	install -vD ../../systemd/x11vnc.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
+	install -vD ../../systemd/startx.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
 }
