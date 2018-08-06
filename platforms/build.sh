@@ -13,6 +13,8 @@ set -e
 
 platform=$1
 
+media_device=$2
+
 image_name=opendsp_${platform}_$(date "+%Y-%m-%d").img
 #image_name=/dev/sdb
 hostname=opendsp
@@ -250,7 +252,7 @@ zip $image_name.zip $image_name
 
 # write to sdcard
 #
-dd bs=1M if=$image_name of=/dev/sdc status=progress
+dd bs=1M if=$image_name of=$media_device status=progress
 
 #FINISHED
 
