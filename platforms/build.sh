@@ -95,7 +95,7 @@ mount -v -t vfat -o sync $homepart opendsp/home/opendsp/userland
 
 # check platform script 
 # install platform into img
-##wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
 bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
 #tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
 sync
