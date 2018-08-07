@@ -4,7 +4,7 @@
 
 buildarch=20
 
-pkgbase=linux-raspberrypi
+pkgbase=linux-raspberrypi-rt-opendsp
 _commit=be2540e540f5442d7b372208787fb64100af0c54
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
@@ -15,6 +15,7 @@ arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
+conflicts=('linux' 'linux-rt' 'linux-raspberry')
 options=('!strip')
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'https://www.kernel.org/pub/linux/kernel/projects/rt/4.9/patch-4.9.35-rt25.patch.gz'

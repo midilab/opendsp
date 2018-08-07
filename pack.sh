@@ -3,7 +3,13 @@
 set -e
 
 # depends: base-devel git
-declare -a package=("linux-raspberrypi-rt-opendsp" "rtirq" "mididings-git" "ttymidi" "opendspd" "csound" "gmm" "suil-git" "ganv-git" "raul-git" "lv2-git" "ntk-git" "distrho-lv2-git" "midifilter.lv2-git" "calf-git" "fabla-git" "mda-lv2-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "projectm-jack")
+declare -a package=("linux-raspberrypi-rt-opendsp" "mididings-git" "mod-ttymidi" "opendspd" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "mda-lv2-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "projectm-jack")
+
+# lets get some memory space for compile process
+sudo fallocate -l 512M /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
 
 cd PKGBUILDs/
 
@@ -11,10 +17,12 @@ cd PKGBUILDs/
 for i in "${package[@]}"
 do
    cd "$i"
+   echo "building $i"
    #makepkg -isc
-   makepkg -s --noconfirm
-   cp *.tar.xz ../../packages/armv7/
+   makepkg -s --noconfirm | true
+   cp *.tar.xz ../../packages/armv7/ | true
    cd ..
 done
 
-
+sudo swapoff -a
+sudo rm -f /swapfile

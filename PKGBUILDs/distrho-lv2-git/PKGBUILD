@@ -1,54 +1,34 @@
-pkgname=distrho-lv2-git
-#_commit=38bcc13e2c8083a5d502a5636136165b51f6fd9d
-pkgver=r357.bef9436
+# Maintainer: Daniel Appelt <daniel.appelt@gmail.com>
+# Contributor : speps <speps at aur dot archlinux dot org>
+_pkgbasename=distrho-lv2
+pkgname=${_pkgbasename}-git
+pkgver=r412.c742e91f
 pkgrel=1
 pkgdesc="Distrho LV2 Audio Plugins, using the JUCE Toolkit"
-arch=('armv7h')
+arch=('armv7h' 'i686' 'x86_64')
 url="http://distrho.sourceforge.net/"
-license=('GPL' 'GPL3' 'LGPL')
-depends=('lv2-git' 'alsa-lib' 'libgl' 'libxext')
-makedepends=('premake3' 'jack' 'libxinerama' 'csound'
-             'libxrender' 'libxcursor' 'qt4')
-optdepends=('jack: jack audio support'
-            'csound: cabbage plugins')
-provides=('distrho-lv2' 'distrho-plugins')
-conflicts=('distrho-lv2' 'distrho-plugins-lv2-git')
-replaces=('distrho-plugins-lv2-git')
-source=("git+https://github.com/DISTRHO/DISTRHO-Ports.git")
-md5sums=('SKIP')
+license=('GPL' 'GPL3')
+depends=('gcc-libs' 'lv2' 'libxext' 'freetype2' 'alsa-lib')
+makedepends=('git' 'premake3' 'libxinerama' 'libxrender' 'libxcursor' 'ladspa')
+provides=("${_pkgbasename}")
+conflicts=("${_pkgbasename}" 'distrho-plugins' 'distrho-plugins-lv2-git')
+source=("${_pkgbasename}::git://github.com/DISTRHO/DISTRHO-Ports.git")
+sha256sums=('SKIP')
 
 pkgver() {
-  cd "DISTRHO-Ports/"
-  echo r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  cd "${srcdir}/${_pkgbasename}"
+
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
-  cd "DISTRHO-Ports/"
+  cd "${srcdir}/${_pkgbasename}"
 
   # Copy vst sdk
   cp -Rf ../../vstsdk2.4/* sdks/vstsdk2.4/
 
   # Compile it for arm without SSE
   export NOOPTIMIZATIONS=1
-
-  # Optimizing for XU3
-  # flags 1
-  #export CFLAGS="-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -marm -ffast-math -mfloat-abi=hard -funsafe-math-optimizations"
-  #export CXXFLAGS="-march=armv7-a -mtune=cortex-a7 -mfpu=neon-vfpv4 -marm -ffast-math -mfloat-abi=hard -funsafe-math-optimizations"
-  # flags 2
-  #export CFLAGS="$CFLAGS -O3 -mcpu=cortex-a15 -mfpu=neon-vfpv4 -mfloat-abi=hard -ffast-math"
-  #export CXXFLAGS="$CXXFLAGS -O3 -mcpu=cortex-a15 -mfpu=neon-vfpv4 -mfloat-abi=hard -ffast-math"
-  # flags 3
-  #export CFLAGS="$CFLAGS -O3 -mcpu=cortex-a15 -mfpu=neon-vfpv4 -mfloat-abi=hard -ffast-math"
-  #export CXXFLAGS="$CXXFLAGS -O3 -mcpu=cortex-a15 -mfpu=neon-vfpv4 -mfloat-abi=hard -ffast-math"
-  # flags 4 no stability
-  #export CFLAGS="-O3 -pipe -mcpu=cortex-a15 -mfloat-abi=hard -mfpu=vfpv3-d16 -ffast-math"
-  #export CXXFLAGS="-O3 -pipe -mcpu=cortex-a15 -mfloat-abi=hard -mfpu=vfpv3-d16 -ffast-math" 
-  # flags5 
-  #export CFLAGS="$CFLAGS -O3 -pipe -mfloat-abi=hard -mfpu=vfpv3-d16 -ffast-math"
-  #export CXXFLAGS="$CXXFLAGS -O3 -pipe -mfloat-abi=hard -mfpu=vfpv3-d16 -ffast-math" 
-  #export CFLAGS="$CFLAGS -ffast-math"
-  #export CXXFLAGS="$CXXFLAGS -ffast-math"
 
   export CFLAGS="$CFLAGS -Ofast"
   export CXXFLAGS="$CXXFLAGS -Ofast"
@@ -57,21 +37,21 @@ prepare() {
   scripts/premake-update.sh linux
 
   # Removing SSE dependent from package
-  sed -i '/pitchedDelay/d' ports/Makefile
+  #sed -i '/pitchedDelay/d' ports/Makefile
 
 }
 
 build() {
-  cd "DISTRHO-Ports/"
+  cd "${srcdir}/${_pkgbasename}"
+
   make lv2
 }
 
 package() {
-  cd "DISTRHO-Ports/"
+  cd "${srcdir}/${_pkgbasename}"
+
   # lv2 plugins
   install -d "$pkgdir/usr/lib/lv2"
-  cp -a bin/lv2/*.lv2 \
-    "$pkgdir/usr/lib/lv2"
+  cp -a bin/lv2/*.lv2 "$pkgdir/usr/lib/lv2"
 }
 
-# vim:set ts=2 sw=2 et:

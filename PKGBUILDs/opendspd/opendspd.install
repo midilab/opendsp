@@ -21,8 +21,9 @@ post_install() {
 	# xinitrc: exec dwm
 	echo "exec blackbox" >> /home/opendsp/.xinitrc
 
+	#systemctl enable rtirq
 	systemctl enable opendsp
-	systemctl enable startx
+	#systemctl enable startx
 	#systemctl enable x11vnc
 
 }
