@@ -1,5 +1,9 @@
 post_install() {
 
+	# modules dependency
+  	#python pip install Cython
+  	#python pip install -r requiriments.txt
+
 	#opendspd install
 	useradd -m -G audio,video,uucp,lock,tty opendsp
 	echo "opendsp:opendsp" | sudo chpasswd

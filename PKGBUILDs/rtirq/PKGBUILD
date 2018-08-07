@@ -1,7 +1,7 @@
 # Maintainer: Corey Mwamba <contact.me@coreymwamba.co.uk>
 # Contributor: Corey Mwamba <contact.me@coreymwamba.co.uk>
 pkgname=rtirq
-pkgver=20150216
+pkgver=20180209
 pkgrel=1
 pkgdesc="Realtime IRQ thread system tuning."
 arch=('any')
@@ -12,7 +12,7 @@ depends=('bash')
 backup=('etc/conf.d/rtirq' 'usr/lib/systemd/system/rtirq.service')
 install=rtirq.install
 source=(http://www.rncbc.org/jack/$pkgname-$pkgver.tar.gz)
-md5sums=('59e8b012c16b1e879ce8648f537400c5')
+md5sums=('58a27e58b0e4382e149fe388955a3732')
 
 package() {
   cd "$srcdir/$pkgname-$pkgver"
