@@ -26,7 +26,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'config'
         'linux.preset'
         '99-linux.hook')
-md5sums=('29a50618e86a62fa9788bc0d9dd1f43b'
+md5sums=('9df3b7691e8b2eda0bf404aa892ccfd6'
          '039baf602bbd1f50f5025b8824333b48'
 	 '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
