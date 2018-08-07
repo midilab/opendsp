@@ -22,7 +22,8 @@ hostname=opendsp
 # above we have platform specific script
 # rpi3 script pre_build(image_name)
 boot_size=128
-root_size=4000
+#root_size=4000
+root_size=5500
 home_size=256
 image_size=$(($boot_size+$root_size+$home_size+64))
 
@@ -97,7 +98,7 @@ mount -v -t vfat -o sync $homepart opendsp/home/opendsp/userland
 
 # check platform script 
 # install platform into img
-wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+#wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
 bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
 #tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
 sync
@@ -166,15 +167,6 @@ systemctl disable systemd-random-seed
 '
 
 # audio stuff alsa
-#vi /boot/config.txt
-#dtparam=audio=on
-
-# free the serial UART for us to use with uMODULAR
-#sudo vi /boot/cmdline.txt
-#>take off all ttyAMA0 references
-# we dont have this guy on archlinux and systemd
-#sudo vi /etc/inittab
-#>take off all ttyAMA0 references
 
 # opendsp install
 # basic setup
@@ -221,18 +213,37 @@ q
 EOF
 '
 
+# raspberry pi2/pi3 shit
+echo "dtparam=audio=on" >> opendsp/boot/config.txt
+echo "disable_audio_dither=1" >> opendsp/boot/config.txt
+echo "enable_uart=1" >> opendsp/boot/config.txt
+echo "dtoverlay=pi3-miniuart-bt" >> opendsp/boot/config.txt
+echo "dtoverlay=midi-uart0" >> opendsp/boot/config.txt
+
+echo "hdmi_force_hotplug=1" >> opendsp/boot/config.txt
+#echo "hdmi_drive=2" >> opendsp/boot/config.txt
+#echo "hdmi_group=1" >> opendsp/boot/config.txt
+#echo "hdmi_mode=1" >> opendsp/boot/config.txt
+
+#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
+echo "gpu_mem=256" >> opendsp/boot/config.txt
+echo "avoid_warnings=2" >> opendsp/boot/config.txt
+echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
+
+# take uart usage off
+sed -i 's/ console=ttyAMA0,115200//' opendsp/boot/cmdline.txt
+sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
+
 # add opendsp repository
-#sed -i opendsp/etc/apt/sources.list -e "s/main/main contrib non-free firmware/"
-#echo "deb http://archive.raspberrypi.org/debian/ jessie main" >> opendsp/etc/apt/sources.list
 #...
 
 # get opendsp packages and install
 # check if we have binary, if not: get source and compile
 
-# useradd --create-home --groups wheel --shell /bin/bash michael
-# passwd michael
-
 # [chroot]# exit
+
+#
+killall gpg-agent
 
 # after all remove qemu
 rm opendsp/usr/bin/qemu-arm-static

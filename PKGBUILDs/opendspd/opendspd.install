@@ -21,27 +21,6 @@ post_install() {
 	systemctl enable startx
 	#systemctl enable x11vnc
 
-	# raspberry pi2/pi3 shit
-	echo "dtparam=audio=on" >> /boot/config.txt
-	echo "disable_audio_dither=1" >> /boot/config.txt
-	echo "enable_uart=1" >> /boot/config.txt
-	echo "dtoverlay=pi3-miniuart-bt" >> /boot/config.txt
-	echo "dtoverlay=midi-uart0" >> /boot/config.txt
-
-	echo "hdmi_force_hotplug=1" >> /boot/config.txt
-	#echo "hdmi_drive=2" >> /boot/config.txt
-	#echo "hdmi_group=1" >> /boot/config.txt
-	#echo "hdmi_mode=1" >> /boot/config.txt
-
-	echo "cma=128M" >> /boot/config.txt # broken on newer kernels... dont use it!
-	echo "gpu_mem=256" >> /boot/config.txt
-	echo "avoid_warnings=2" >> /boot/config.txt
-	echo "dtoverlay=vc4-kms-v3d" >> /boot/config.txt
-
-	# take uart usage off
-	sed -i 's/ console=ttyAMA0,115200//' /boot/cmdline.txt
-	sed -i 's/ kgdboc=ttyAMA0,115200//' /boot/cmdline.txt
-
 }
 
 post_upgrade() {
