@@ -12,7 +12,7 @@ for i in "${package[@]}"
 do
    cd "$i"
    #makepkg -isc
-   makepkg -is
+   makepkg -is --noconfirm
    cd ..
 done
 
