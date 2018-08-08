@@ -28,8 +28,8 @@ pkgver() {
 build() {
   cd "${srcdir}/${_pkgname}"
 
-  export CFLAGS="$CFLAGS -Ofast"
-  export CXXFLAGS="$CXXFLAGS -Ofast"  
+  export CFLAGS="$CFLAGS -O3"
+  export CXXFLAGS="$CXXFLAGS -O3"
 
   make
 }

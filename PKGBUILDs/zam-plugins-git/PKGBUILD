@@ -1,6 +1,6 @@
 # Maintainer Haskellfant <moritz.kiefer@purelyfunctional.org
 pkgname=zam-plugins-git
-pkgver=3.8.r1.g577fb21
+pkgver=3.10.r13.gfbdbf08
 pkgrel=1
 pkgdesc="Collection of LV2/LADSPA/VST audio plugins for high quality processing"
 arch=('armv7h' 'i686' 'x86_64')
@@ -30,8 +30,8 @@ prepare() {
 build() {
   cd "$srcdir/$pkgname"
   export NOOPT=true
-  export CFLAGS="$CFLAGS -Ofast"
-  export CXXFLAGS="$CXXFLAGS -Ofast"
+  export CFLAGS="$CFLAGS -O3"
+  export CXXFLAGS="$CXXFLAGS -O3"
   make
 }
 

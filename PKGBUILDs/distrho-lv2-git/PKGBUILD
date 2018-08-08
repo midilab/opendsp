@@ -30,8 +30,8 @@ prepare() {
   # Compile it for arm without SSE
   export NOOPTIMIZATIONS=1
 
-  export CFLAGS="$CFLAGS -Ofast"
-  export CXXFLAGS="$CXXFLAGS -Ofast"
+  export CFLAGS="$CFLAGS -O3"
+  export CXXFLAGS="$CXXFLAGS -O3"
 
   # generate build script
   scripts/premake-update.sh linux
