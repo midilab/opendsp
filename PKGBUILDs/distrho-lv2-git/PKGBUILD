@@ -37,8 +37,8 @@ prepare() {
   scripts/premake-update.sh linux
 
   # Removing SSE dependent from package
-  #sed -i '/pitchedDelay/d' ports/Makefile
-
+  sed -i '/pitchedDelay/d' ports/Makefile
+  sed -i '/refine/d' ports/Makefile
 }
 
 build() {
