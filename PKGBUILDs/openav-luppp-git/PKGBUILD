@@ -1,0 +1,37 @@
+# Maintainer:  VirtualTam <virtualtam@flibidi.net>
+pkgname=openav-luppp-git
+pkgver=1.2.0.r0.gabb0bfc
+pkgrel=1
+pkgdesc="Luppp is a live performance tool, created by OpenAV productions"
+arch=('armv7h' 'i686' 'x86_64')
+url="http://openavproductions.com/luppp/"
+license=('GPL3')
+groups=('openav')
+depends=('jack' 'liblo' 'ntk')
+makedepends=('cmake' 'git')
+provides=('openav-luppp')
+_gitname="openAV-Luppp"
+source=(git://github.com/harryhaaren/${_gitname}.git)
+sha256sums=(SKIP)
+
+pkgver() {
+  cd ${_gitname}
+  git describe --long --tags | sed 's/^release.//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+build(){
+  cd ${_gitname}
+
+  export CFLAGS="$CFLAGS -Ofast"
+  export CXXFLAGS="$CXXFLAGS -Ofast"
+
+  cmake ./ -DCMAKE_INSTALL_PREFIX="/usr" -DRELEASE_BUILD=1
+  make
+}
+
+package() {
+  cd ${_gitname}
+  make DESTDIR=${pkgdir} install
+  install -Dm644 "resources/metadata/luppp.desktop" "${pkgdir}/usr/share/applications/luppp.desktop"
+  install -Dm644 "resources/icons/luppp.png" "${pkgdir}/usr/share/luppp/luppp.png"
+}
