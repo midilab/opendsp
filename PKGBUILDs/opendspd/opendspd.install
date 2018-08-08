@@ -10,27 +10,23 @@ post_install() {
 
 	chown -R opendsp:opendsp /home/opendsp/
 
-	# set sudoers
-	echo "opendsp ALL=(ALL) ALL" >> /etc/sudoers
+	# set sudoers or other way to use chrt...
+	#echo "opendsp ALL=(ALL) ALL" >> /etc/sudoers
+	echo "opendsp ALL=(ALL:ALL) NOPASSWD:/sbin/chrt" >> /etc/sudores
 
-	# X11 needs config for script auto start
-	# config for normal users
-	#sudo vi /etc/X11/Xwrapper.config
-	#allowed_users = anybody
-	#needs_root_rights = yes
+	# in case we got a linux kernel rt, set limits for rt usage on limits.conf
+	#...
+
+	# X11 needs config for session control
 	#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
 	# or to add
 	echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
 	echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
-	# set Xauthority
-	touch /tmp/.Xauthority
-	ln -s /tmp/.Xauthority /home/opendsp/.Xauthority
 
 	# xinitrc: exec dwm
-	#echo "exec blackbox" >> /home/opendsp/.xinitrc
 	echo "exec xterm" >> /home/opendsp/.xinitrc
 
-	#systemctl enable rtirq
+	systemctl enable rtirq
 	systemctl enable opendsp
 	systemctl enable startx
 	#systemctl enable x11vnc
