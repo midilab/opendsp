@@ -2,7 +2,15 @@
 After=systemd-user-session.service
 
 [Service]
-ExecStart=/bin/su opendsp -l -c /usr/bin/startx -- VT08
+Environment="XAUTHORITY=/tmp/.Xauthority"
+Environment="TERM=xterm"
+Environment="HOME=/home/opendsp"
+Environment="SHELL=/bin/bash"
+Environment="USER=opendsp"
+Environment="LOGNAME=opendsp"
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl"
+
+ExecStart=/bin/su opendsp -p -c /usr/bin/startx -- VT08
 
 [Install]
 WantedBy=multi-user.target
