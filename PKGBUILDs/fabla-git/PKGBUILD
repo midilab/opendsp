@@ -3,14 +3,14 @@
 
 pkgname=fabla-git
 _pkgname=fabla
-pkgver=1.3.2.r3.g05bb8d4
+pkgver=1.3.2.r6.g49e820d
 pkgrel=1
 pkgdesc="A sampler LV2 plugin"
 arch=('armv7h' 'i686' 'x86_64')
 url="http://openavproductions.com/fabla/"
 license=('GPL')
 groups=('lv2-plugins')
-depends=('lv2' 'cairomm' 'libsndfile' 'ntk-git')
+depends=('lv2' 'cairomm' 'libsndfile' 'ntk')
 makedepends=('git')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
