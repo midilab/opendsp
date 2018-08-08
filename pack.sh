@@ -3,7 +3,7 @@
 set -e
 
 # depends: base-devel git
-declare -a package=("mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "mda-lv2-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "projectm-jack" "linux-raspberrypi-rt-opendsp")
+declare -a package=("mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "projectm-jack" "linux-raspberrypi-rt-opendsp")
 
 # lets get some memory space for compile process
 sudo fallocate -l 512M /swapfile

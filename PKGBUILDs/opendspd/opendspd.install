@@ -8,6 +8,11 @@ post_install() {
 	useradd -m -G audio,video,uucp,lock,tty opendsp
 	echo "opendsp:opendsp" | sudo chpasswd
 
+	chown -R opendsp:opendsp /home/opendsp/
+
+	# set sudoers
+	echo "opendsp ALL=(ALL) ALL" >> /etc/sudoers
+
 	# X11 needs config for script auto start
 	# config for normal users
 	#sudo vi /etc/X11/Xwrapper.config
@@ -17,13 +22,17 @@ post_install() {
 	# or to add
 	echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
 	echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
+	# set Xauthority
+	touch /tmp/.Xauthority
+	ln -s /tmp/.Xauthority /home/opendsp/.Xauthority
 
 	# xinitrc: exec dwm
-	echo "exec blackbox" >> /home/opendsp/.xinitrc
+	#echo "exec blackbox" >> /home/opendsp/.xinitrc
+	echo "exec xterm" >> /home/opendsp/.xinitrc
 
 	#systemctl enable rtirq
 	systemctl enable opendsp
-	#systemctl enable startx
+	systemctl enable startx
 	#systemctl enable x11vnc
 
 }
