@@ -1,0 +1,48 @@
+# Maintainer: CrocoDuck <crocoduck dot oducks at gmail dot com>
+
+pkgname=dpf-plugins-lv2-git
+pkgver=r86.0c433e4
+pkgrel=2
+pkgdesc="Collection of DPF-based plugins by DISTRHO. LV2"
+arch=('armv7h' 'i686' 'x86_64')
+url="http://distrho.sourceforge.net/"
+license=('custom')
+depends=('liblo' 'projectm')
+makedepends=('git' 'wget')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=("${pkgname%-*}"::'git+https://github.com/DISTRHO/DPF-Plugins.git')
+md5sums=('SKIP')
+
+pkgver() {
+  cd "${pkgname%-*}"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+    cd "${pkgname%-*}"
+
+    #export CFLAGS="$CFLAGS -O3"
+    #export CXXFLAGS="$CXXFLAGS -O3"
+    export CFLAGS="$CFLAGS -Ofast"
+    export CXXFLAGS="$CXXFLAGS -Ofast"
+
+    sed -i 's/-msse//' Makefile.mk
+    sed -i 's/-msse2//' Makefile.mk
+    sed -i 's/-mfpmath=sse//' Makefile.mk
+    sed -i 's/-mtune=generic//' Makefile.mk
+
+    sed -i 's/-msse//' dpf/dgl/Makefile.mk
+    sed -i 's/-msse2//' dpf/dgl/Makefile.mk
+    sed -i 's/-mtune=generic//' dpf/dgl/Makefile.mk
+
+    make BUILD_DSSI=true BUILD_LV2=true BUILD_VST=true BUILD_JACK=true
+}
+
+package() {
+    cd "${pkgname%-*}"
+    # Install the custom license:
+    install -Dm 644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    # Install the package files:
+	make DESTDIR="$pkgdir/" PREFIX="/usr" install
+}
