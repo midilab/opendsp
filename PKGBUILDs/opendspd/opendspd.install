@@ -16,19 +16,24 @@ post_install() {
 
 	# in case we got a linux kernel rt, set limits for rt usage on limits.conf
 	#...
+	# enable rtirq
+	systemctl enable rtirq
 
 	# X11 needs config for session control
 	#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
 	# or to add
 	echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
 	echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
+	# screen goes blank after a period... 
+	#setterm blank 0 > rc.local?
+	#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
 
 	# xinitrc: exec dwm
 	echo "exec xterm" >> /home/opendsp/.xinitrc
 
-	systemctl enable rtirq
+	# enable our service
 	systemctl enable opendsp
-	systemctl enable startx
+	#systemctl enable startx
 	#systemctl enable x11vnc
 
 }
