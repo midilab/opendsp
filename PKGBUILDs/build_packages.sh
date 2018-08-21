@@ -11,8 +11,6 @@ sudo chmod 600 /swapfile
 sudo mkswap /swapfile
 sudo swapon /swapfile
 
-cd PKGBUILDs/
-
 for i in "${package[@]}"
 do
    cd "$i"
