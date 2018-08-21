@@ -12,18 +12,21 @@
 set -e
 
 platform=$1
-
 media_device=$2
 
 image_name=opendsp_${platform}_$(date "+%Y-%m-%d").img
 #image_name=/dev/sdb
 hostname=opendsp
 
+# create partitions
+
+
+
 # above we have platform specific script
 # rpi3 script pre_build(image_name)
 boot_size=128
-#root_size=4000
-root_size=5500
+root_size=3500
+#root_size=5500
 home_size=256
 image_size=$(($boot_size+$root_size+$home_size+64))
 
@@ -93,12 +96,12 @@ mount -v -t vfat -o sync $bootpart opendsp/boot
 # mount user land
 mkdir -v opendsp/home
 mkdir -v opendsp/home/opendsp
-mkdir -v opendsp/home/opendsp/userland
-mount -v -t vfat -o sync $homepart opendsp/home/opendsp/userland
+mkdir -v opendsp/home/opendsp/data
+mount -v -t vfat -o sync $homepart opendsp/home/opendsp/data
 
 # check platform script 
 # install platform into img
-#wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
+wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
 bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
 #tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
 sync
@@ -117,11 +120,24 @@ mount -o bind /sys opendsp/sys
 #arch-chroot opendsp pacman-key --init
 #arch-chroot opendsp pacman-key --populate archlinuxarm
 
-chroot opendsp pacman-key --init
-chroot opendsp pacman-key --populate archlinuxarm
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	chroot opendsp pacman-key --init
+	retVal=$?    
+done
 
-#chroot opendsp pacman -Syyu
-chroot opendsp pacman -Sy
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	chroot opendsp pacman-key --populate archlinuxarm  
+	retVal=$?  
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	#chroot opendsp pacman -Syyu
+	chroot opendsp pacman -Sy
+	retVal=$?
+done
 
 # install dev tool for opendsp packages collection compile
 #chroot opendsp pacman -S base-devel cmake
@@ -186,14 +202,14 @@ OpenDSP
 
 EOF
 
-cat <<EOF > opendsp/boot/resize_userland_partition.sh
+cat <<EOF > opendsp/boot/resize_data_partition.sh
 #!/bin/bash -v
 
 set -e
 
 mount -vo remount,rw /
 mount -vo remount,rw /boot
-umount -v /home/opendsp/userland || true
+umount -v /home/opendsp/data || true
 
 parted /dev/mmcblk0 <<EOF
 resizepart
@@ -239,18 +255,67 @@ sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 
 # get opendsp packages and install
 # check if we have binary, if not: get source and compile
+mkdir opendsp/root/opendsp
+cp ../packages/armv7/* opendsp/root/opendsp/
+
+declare -a package=("linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git")
+for i in "${package[@]}"
+do
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz"
+		retVal=$?
+	done
+done
 
 # [chroot]# exit
 
 #
-killall gpg-agent
+chroot opendsp killall gpg-agent || true
+chroot opendsp killall pacman || true
 
 # after all remove qemu
 rm opendsp/usr/bin/qemu-arm-static
 
 sync
-umount opendsp/{sys,proc,dev/pts,dev,boot,home/opendsp/userland}
-umount opendsp
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/sys
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/proc
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/dev/pts
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/dev
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/boot
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp/home/opendsp/data
+	retVal=$?
+done
+
+retVal=-1
+while [ $retVal -ne 0 ]; do
+	umount opendsp
+	retVal=$?
+done
+
 rm -rf opendsp
 sync
 
