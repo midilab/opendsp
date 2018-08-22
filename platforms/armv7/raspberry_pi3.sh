@@ -16,7 +16,7 @@ retVal=-1
 
 prepare() {
 
-	image_name = $1
+	image_name=$1
 
 	image_size=$(($boot_size+$root_size+$home_size+64))
 

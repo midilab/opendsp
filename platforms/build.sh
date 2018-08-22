@@ -17,12 +17,12 @@ hostname=opendsp
 script=${platform}/${device}.sh
 if [ ! -f "$script" ]
 then
-	echo "$0: platform script '${file}' not found."
+	echo "$0: platform script '${script}' not found."
 	exit -1
 fi
 
 # import platform specific create script
-source script
+source ${script}
 
 # partitioning and prepare root boot(in case) and userland
 # partitions ready for use after prepare: opendsp, opendsp/boot, opendsp/home/opendsp/userland
