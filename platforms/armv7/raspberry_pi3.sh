@@ -116,20 +116,20 @@ install() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --init
+		chroot opendsp pacman-key --init || true
 		retVal=$?    
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --populate archlinuxarm  
+		chroot opendsp pacman-key --populate archlinuxarm || true
 		retVal=$?  
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		#chroot opendsp pacman -Syyu
-		chroot opendsp pacman -Sy
+		#chroot opendsp pacman -Syyu || true
+		chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
 
@@ -195,7 +195,7 @@ install_packages() {
 	do
 		retVal=-1
 		while [ $retVal -ne 0 ]; do
-			chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz"
+			chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz" || true
 			retVal=$?
 		done
 	done
@@ -219,43 +219,43 @@ finish() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/sys
+		umount opendsp/sys || true 
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/proc
+		umount opendsp/proc || true
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/dev/pts
+		umount opendsp/dev/pts || true
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/dev
+		umount opendsp/dev || true
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/boot
+		umount opendsp/boot || true
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/home/opendsp/data
+		umount opendsp/home/opendsp/data || true
 		retVal=$?
 	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp
+		umount opendsp || true
 		retVal=$?
 	done
 
