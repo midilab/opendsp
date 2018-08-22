@@ -15,8 +15,9 @@ for i in "${package[@]}"
 do
    cd "$i"
    echo "building $i"
-   makepkg -sci --noconfirm 
+   makepkg -si --noconfirm 
    cp *.tar.xz ../packages/armv7/ 
+   makepkg -c --noconfirm
    cd ..
 done
 
