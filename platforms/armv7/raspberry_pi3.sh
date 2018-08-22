@@ -206,7 +206,7 @@ install_packages() {
 
 finish() {
 
-	image_name = $1
+	image_name=$1
 
 	#
 	chroot opendsp killall gpg-agent || true
