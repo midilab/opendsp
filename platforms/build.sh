@@ -255,18 +255,18 @@ sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 
 # get opendsp packages and install
 # check if we have binary, if not: get source and compile
-mkdir opendsp/root/opendsp
-cp ../packages/armv7/* opendsp/root/opendsp/
+###mkdir opendsp/root/opendsp
+###cp ../packages/armv7/* opendsp/root/opendsp/
 
-declare -a package=("linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git")
-for i in "${package[@]}"
-do
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz"
-		retVal=$?
-	done
-done
+###declare -a package=("linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git")
+###for i in "${package[@]}"
+###do
+###	retVal=-1
+###	while [ $retVal -ne 0 ]; do
+###		chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz"
+###		retVal=$?
+###	done
+###done
 
 # [chroot]# exit
 
@@ -282,26 +282,31 @@ sync
 retVal=-1
 while [ $retVal -ne 0 ]; do
 	umount opendsp/sys
+	retVal=$?
 done
 
 retVal=-1
 while [ $retVal -ne 0 ]; do
 	umount opendsp/proc
+	retVal=$?
 done
 
 retVal=-1
 while [ $retVal -ne 0 ]; do
 	umount opendsp/dev/pts
+	retVal=$?
 done
 
 retVal=-1
 while [ $retVal -ne 0 ]; do
 	umount opendsp/dev
+	retVal=$?
 done
 
 retVal=-1
 while [ $retVal -ne 0 ]; do
 	umount opendsp/boot
+	retVal=$?
 done
 
 retVal=-1
