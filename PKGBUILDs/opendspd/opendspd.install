@@ -36,6 +36,46 @@ post_install() {
 	#systemctl enable startx
 	#systemctl enable x11vnc
 
+
+: '
+cat <<EOF > /etc/fstab
+/dev/mmcblk0p1  /boot           vfat    ro,auto,exec            0       2
+/dev/mmcblk0p2  /               auto    defaults,noatime,ro     0       1
+EOF
+# /dev/mmcblk0p1  /boot           vfat    ro,auto,exec            0       2
+# /dev/mmcblk0p2  /               auto    defaults,noatime,ro     0       1
+# /dev/mmcblk0p3  /samples        auto    ro,auto,exec            0       0
+EOF
+'
+
+# make the entire system read only
+: '
+#!/bin/sh
+
+# shhd access because it wont work sudo with ro
+vi /etc/ssh/sshd_config
+#Add "PermitRootLogin yes"
+
+# boot args
+root=/dev/mmcblk0p2 ro rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95
+xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop
+
+# Readonly filesystems
+#/dev/mmcblk0p1 /boot vfat ro,noatime 0 2
+#/dev/mmcblk0p2 / ext4 defaults,noatime 0 1
+/dev/mmcblk0p1	 /boot	 vfat	 defaults,ro,errors=remount-ro        0       0
+
+# RAM filesystem for runtime shit
+tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+
+# disable some services
+systemctl disable systemd-random-seed
+'
+
+# audio stuff alsa
+
+
 }
 
 post_upgrade() {
