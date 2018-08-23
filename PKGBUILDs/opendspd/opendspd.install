@@ -1,80 +1,38 @@
 post_install() {
 
-	# modules dependency
-  	#python pip install Cython
-  	#python pip install -r requiriments.txt
+	# do opendsp user dont exist?
+	if ! id -u opendsp > /dev/null 2>&1; then
+	
+		# create user
+		useradd -m -G audio,video,uucp,lock,tty opendsp
+		# change pass
+		echo "opendsp:opendsp" | sudo chpasswd
+		# in case we already have the user home path, give him full permition
+		chown -R opendsp:opendsp /home/opendsp/
+		
+		# in case we got a linux kernel rt, set limits for rt usage on limits.conf
+		#...
+		# enable rtirq
+		systemctl enable rtirq		
+		
+		# X11 needs config for session control
+		#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
+		# or to add
+		echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
+		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
+		# screen goes blank after a period... 
+		#setterm blank 0 > rc.local?
+		#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
 
-	#opendspd install
-	useradd -m -G audio,video,uucp,lock,tty opendsp
-	echo "opendsp:opendsp" | sudo chpasswd
+		# xinitrc: exec dwm
+		echo "exec xterm" >> /home/opendsp/.xinitrc
 
-	chown -R opendsp:opendsp /home/opendsp/
-
-	# set sudoers or other way to use chrt...
-	#echo "opendsp ALL=(ALL) ALL" >> /etc/sudoers
-	echo "opendsp ALL=(ALL:ALL) NOPASSWD:/sbin/chrt" >> /etc/sudores
-	#echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudores
-
-	# in case we got a linux kernel rt, set limits for rt usage on limits.conf
-	#...
-	# enable rtirq
-	systemctl enable rtirq
-
-	# X11 needs config for session control
-	#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
-	# or to add
-	echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
-	echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
-	# screen goes blank after a period... 
-	#setterm blank 0 > rc.local?
-	#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
-
-	# xinitrc: exec dwm
-	echo "exec xterm" >> /home/opendsp/.xinitrc
-
-	# enable our service
-	systemctl enable opendsp
-	#systemctl enable startx
-	#systemctl enable x11vnc
-
-: '
-cat <<EOF > /etc/fstab
-/dev/mmcblk0p1  /boot           vfat    ro,auto,exec            0       2
-/dev/mmcblk0p2  /               auto    defaults,noatime,ro     0       1
-EOF
-# /dev/mmcblk0p1  /boot           vfat    ro,auto,exec            0       2
-# /dev/mmcblk0p2  /               auto    defaults,noatime,ro     0       1
-# /dev/mmcblk0p3  /samples        auto    ro,auto,exec            0       0
-EOF
-'
-
-# make the entire system read only
-: '
-#!/bin/sh
-
-# shhd access because it wont work sudo with ro
-vi /etc/ssh/sshd_config
-#Add "PermitRootLogin yes"
-
-# boot args
-root=/dev/mmcblk0p2 ro rootwait console=tty1 selinux=0 plymouth.enable=0 smsc95
-xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop
-
-# Readonly filesystems
-#/dev/mmcblk0p1 /boot vfat ro,noatime 0 2
-#/dev/mmcblk0p2 / ext4 defaults,noatime 0 1
-/dev/mmcblk0p1	 /boot	 vfat	 defaults,ro,errors=remount-ro        0       0
-
-# RAM filesystem for runtime shit
-tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
-tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
-
-# disable some services
-systemctl disable systemd-random-seed
-'
-
-# audio stuff alsa
-
+		# enable our service
+		systemctl enable opendsp
+		#systemctl enable startx
+		#systemctl enable x11vnc	
+		
+	fi	
 
 }
 

@@ -55,7 +55,7 @@ EOF
 
 # opendsp meta install
 #...
-#install_packages
+install_packages
 
 # finishing image
 finish $image_name

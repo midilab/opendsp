@@ -181,6 +181,28 @@ tunning() {
 	# take uart usage off
 	sed -i 's/ console=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
+	
+	# set read only system
+	cat <<EOF > opendsp/etc/fstab
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# Readonly filesystems
+/dev/mmcblk0p1 	/boot 		vfat 		ro,auto,exec            0       2
+/dev/mmcblk0p2 	/ 			ext4	    defaults,noatime,ro     0       1
+/dev/mmcblk0p3 	/home/opendsp/user_data vfat ro,auto,exec,noatime 0 	2
+
+# RAM filesystem for runtime shit
+tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+EOF
+	
+	# boot as read only
+	sed -i 's/ rw/ ro/' opendsp/boot/cmdline.txt
+	
+	# disable some services
+	chroot opendsp systemctl disable systemd-random-seed || true
+
 }	
 
 install_packages() {
@@ -190,7 +212,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "mod-ttymidi" "opendspd" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers")
+	declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "opendspd")
 	for i in "${package[@]}"
 	do
 		retVal=-1
