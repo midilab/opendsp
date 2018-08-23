@@ -13,6 +13,7 @@ post_install() {
 	# set sudoers or other way to use chrt...
 	#echo "opendsp ALL=(ALL) ALL" >> /etc/sudoers
 	echo "opendsp ALL=(ALL:ALL) NOPASSWD:/sbin/chrt" >> /etc/sudores
+	#echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudores
 
 	# in case we got a linux kernel rt, set limits for rt usage on limits.conf
 	#...
@@ -35,7 +36,6 @@ post_install() {
 	systemctl enable opendsp
 	#systemctl enable startx
 	#systemctl enable x11vnc
-
 
 : '
 cat <<EOF > /etc/fstab

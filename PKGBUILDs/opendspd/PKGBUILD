@@ -7,7 +7,7 @@ pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(sudo xorg-server xorg-xinit xorg-server-common xterm openbox x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv jack mididings xdotool mod-ttymidi ecasound calf mda.lv2)
+depends=(sudo xorg-server xorg-xinit xorg-server-common xterm openbox x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv jack mididings xdotool mod-ttymidi ecasound calf mda.lv2 rtirq)
 install="$pkgname.install"
 #dep: lv2 calf mda.lv2
 #source=("git+https://github.com/midilab/opendspd.git")

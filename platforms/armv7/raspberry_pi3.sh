@@ -128,8 +128,8 @@ install() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		#chroot opendsp pacman -Syyu || true
-		chroot opendsp pacman -Sy || true
+		chroot opendsp pacman -Syyu || true
+		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
 

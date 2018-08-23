@@ -6,7 +6,7 @@ pkgdesc="LV2 host for Jack controllable via socket or command line"
 arch=('armv7h' 'x86_64')
 url="https://github.com/moddevices/mod-host"
 license=('GPL3')
-depends=('lilv>=0.14.2' 'fftw')
+depends=('lilv>=0.14.2' 'fftw' 'lv2')
 makedepends=('git')
 provides=("${pkgname%-git}")
 conflicts=("${pkgname%-git}")
