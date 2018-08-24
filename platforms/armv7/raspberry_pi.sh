@@ -12,7 +12,6 @@ boot_size=128
 #root_size=3500
 root_size=7500
 home_size=256
-retVal=-1
 
 prepare() {
 
@@ -73,22 +72,23 @@ EOF
 	mkfs.ext4 -L ROOT $rootpart
 	# setup user land partition
 	mkfs.fat -n OPENDSP $homepart
-	sync
 
 	fdisk -l $image_name
 
 	# mount root
 	mkdir -v opendsp
 	mount -v -t ext4 -o sync $rootpart opendsp
-	sync
+	
 	# mount boot
 	mkdir -v opendsp/boot
 	mount -v -t vfat -o sync $bootpart opendsp/boot
+	
 	# mount user land
 	mkdir -v opendsp/home
 	mkdir -v opendsp/home/opendsp
 	mkdir -v opendsp/home/opendsp/data
 	mount -v -t vfat -o sync $homepart opendsp/home/opendsp/data
+	
 }
 
 
@@ -98,21 +98,16 @@ install() {
 	wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
 	bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
 	#tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
-	sync
 
-	# cross compile or install packages...
 	# prepare for chroot using qemu
 	echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
 	cp /usr/bin/qemu-arm-static opendsp/usr/bin/
 
+	# good idea to have those mounted as we chroot in
 	mount -t proc /proc opendsp/proc
 	mount -o bind /dev opendsp/dev
 	mount -o bind /dev/pts opendsp/dev/pts
 	mount -o bind /sys opendsp/sys
-
-	# copy packages or modify pacman.conf for our new repository
-	#arch-chroot opendsp pacman-key --init
-	#arch-chroot opendsp pacman-key --populate archlinuxarm
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
@@ -132,13 +127,6 @@ install() {
 		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
-
-	# install dev tool for opendsp packages collection compile
-	#chroot opendsp pacman -S base-devel cmake
-	#...
-
-	# copy opendsp packaes collection to install partition and install then
-	#...
 
 	# resize script for first boot time
 	cat <<EOF > opendsp/boot/resize_data_partition.sh
@@ -161,38 +149,43 @@ EOF
 }	
 
 tunning() {
-	# raspberry pi2/pi3 shit
+	
+	# enable onboard sound
 	echo "dtparam=audio=on" >> opendsp/boot/config.txt
 	echo "disable_audio_dither=1" >> opendsp/boot/config.txt
+	
+	# enable MIDI overlay driver for uart
 	echo "enable_uart=1" >> opendsp/boot/config.txt
 	echo "dtoverlay=pi3-miniuart-bt" >> opendsp/boot/config.txt
 	echo "dtoverlay=midi-uart0" >> opendsp/boot/config.txt
 
+	# config defaults for hdmi
 	echo "hdmi_force_hotplug=1" >> opendsp/boot/config.txt
 	#echo "hdmi_drive=2" >> opendsp/boot/config.txt
 	#echo "hdmi_group=1" >> opendsp/boot/config.txt
 	#echo "hdmi_mode=1" >> opendsp/boot/config.txt
 
+	# enable broadcom video core drivers for GPU acceleration
 	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
 	echo "gpu_mem=256" >> opendsp/boot/config.txt
 	echo "avoid_warnings=2" >> opendsp/boot/config.txt
 	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 
-	# take uart usage off
+	# take uart usage off for console, we need it for MIDI uart
 	sed -i 's/ console=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	
-	# set read only system
+	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab
 # Static information about the filesystems.
 # See fstab(5) for details.
 
-# Readonly filesystems
-/dev/mmcblk0p1 	/boot 		vfat 		ro,auto,exec            0       2
-/dev/mmcblk0p2 	/ 			ext4	    defaults,noatime,ro     0       1
-/dev/mmcblk0p3 	/home/opendsp/user_data vfat ro,auto,exec,noatime 0 	2
+# readonly filesystems
+/dev/mmcblk0p1 	/boot 				vfat	ro,auto,exec            0       2
+/dev/mmcblk0p2 	/ 					ext4	defaults,noatime,ro     0       1
+/dev/mmcblk0p3 	/home/opendsp/data 	vfat 	ro,auto,exec,noatime 	0 		2
 
-# RAM filesystem for runtime shit
+# ram filesystems for runtime stuff
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
@@ -207,12 +200,12 @@ EOF
 
 install_packages() {
 
-	# get opendsp packages and install
-	# check if we have binary, if not: get source and compile
+	# install opendsp packages
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
 	declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "opendspd")
+	
 	for i in "${package[@]}"
 	do
 		retVal=-1
@@ -230,7 +223,7 @@ finish() {
 
 	image_name=$1
 
-	#
+	# just in case, sometimes they can lock /dev/
 	chroot opendsp killall gpg-agent || true
 	chroot opendsp killall pacman || true
 
@@ -282,10 +275,8 @@ finish() {
 	done
 
 	rm -rf opendsp
-	sync
 
 	# release the image
 	kpartx -d -v $image_name
-	sync	
 	
 }

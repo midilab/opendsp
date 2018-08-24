@@ -1,6 +1,6 @@
 #!/bin/bash 
-# example to build an armv7 version of raspberry pi3 and write a live image to /dev/sdc
-# ./build armv7 raspberry_pi3 /dev/sdc
+# example to build an OpenDSP OS for armv7 version of raspberry pi3/pi2 and write a live image to /dev/sdc 
+# ./build armv7 raspberry_pi /dev/sdc
 
 set -e
 
@@ -24,8 +24,8 @@ fi
 # import platform specific create script
 source ${script}
 
-# partitioning and prepare root boot(in case) and userland
-# partitions ready for use after prepare: opendsp, opendsp/boot, opendsp/home/opendsp/userland
+# partitioning and prepare root, boot(in case) and userland
+# partitions path ready for use after prepare function: opendsp, opendsp/boot, opendsp/home/opendsp/data
 prepare $image_name
 
 # install base archlinux on disk image 
@@ -35,7 +35,7 @@ install
 tunning
 
 #
-# OpenDSP install
+# OpenDSP default install
 #
 echo $hostname > opendsp/etc/hostname
 echo "127.0.1.1 $hostname" >> opendsp/etc/hosts
@@ -63,9 +63,9 @@ finish $image_name
 # compress this bastard
 zip $image_name.zip $image_name
 
-# write to sdcard
+# write to media device?
 #
-dd bs=1M if=$image_name of=$media_device status=progress
+#dd bs=1M if=$image_name of=$media_device status=progress
 
 #FINISHED
 

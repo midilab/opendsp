@@ -24,7 +24,7 @@ post_install() {
 		#setterm blank 0 > rc.local?
 		#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
 
-		# xinitrc: exec dwm
+		# xinitrc: anything for now... we just dont need a window manager
 		echo "exec xterm" >> /home/opendsp/.xinitrc
 
 		# enable our service
