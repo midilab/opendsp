@@ -28,8 +28,8 @@ pkgver() {
 prepare() {
   cd "$srcdir/$pkgname"
   
-  # forcing python2 compile
-  #sed -i 's/env python/&2/' setup.py
+  # for python3.7 async is now a reserved word, lets patch it
+  sed -i 's/async/a_sync/' mididings/units/call.py
 }
 
 build() {
