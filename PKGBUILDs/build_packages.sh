@@ -3,7 +3,7 @@
 set -e
 
 # depends: base-devel git cmake
-declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "opendspd")
+declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
 
 # lets get some memory space for compile process
 if [ ! -f "/swapfile" ]

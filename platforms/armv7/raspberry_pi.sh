@@ -127,13 +127,6 @@ install() {
 		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
-	
-	# xf86 drivers for vc4 broadcom GPU
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -S xf86-video-fbturbo-git || true
-		retVal=$?
-	done	
 
 	# resize script for first boot time
 	cat <<EOF > opendsp/boot/resize_data_partition.sh
@@ -178,6 +171,13 @@ tunning() {
 	echo "avoid_warnings=2" >> opendsp/boot/config.txt
 	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 
+	# install xf86 drivers for vc4 broadcom GPU
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman -S xf86-video-fbturbo-git || true
+		retVal=$?
+	done	
+	
 	# take uart usage off for console, we need it for MIDI uart
 	sed -i 's/ console=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
@@ -211,7 +211,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-headers-opendsp" "opendspd")
+	declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx"  "linux-raspberrypi-rt-opendsp" "opendspd")
 	
 	for i in "${package[@]}"
 	do
