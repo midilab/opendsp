@@ -181,9 +181,9 @@ tunning() {
 # See fstab(5) for details.
 
 # readonly filesystems
-/dev/mmcblk0p1 	/boot 				vfat	ro,auto,exec            0       2
-/dev/mmcblk0p2 	/ 					ext4	defaults,noatime,ro     0       1
-/dev/mmcblk0p3 	/home/opendsp/data 	vfat 	ro,auto,exec,noatime 	0 		2
+/dev/mmcblk0p1  /boot                   vfat    ro,auto,exec            0       2
+/dev/mmcblk0p2  /                       ext4    defaults,noatime,ro     0       1
+/dev/mmcblk0p3  /home/opendsp/data      vfat    ro,auto,exec,noatime    0       2
 
 # ram filesystems for runtime stuff
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
