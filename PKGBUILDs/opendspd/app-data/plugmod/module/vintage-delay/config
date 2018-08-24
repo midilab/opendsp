@@ -1,0 +1,15 @@
+[plugin]
+Uri: http://calf.sourceforge.net/plugins/VintageDelay
+MidiInPort: events_in
+OutputPort1: out_l
+OutputPort2: out_r
+InputPort1: in_l
+InputPort2: in_r
+
+[map]
+cutoff: 0 102 0 1.0000
+resonance: 0 103 0 1.0000
+delaywet: 0 106 0 1.0000
+delaytime: 0 28 0 1.0000
+delayfeedback: 0 118 0 1.0000
+

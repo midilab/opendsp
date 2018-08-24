@@ -1,0 +1,51 @@
+[Mixer]
+Model: mixer42
+Input1: Bass
+Input2: Lead
+Input3: Pads
+Input4: Efxs
+Send1: TapeDelay
+Send2: Reverb
+Master: Compressor
+
+[TapeDelay]
+Module: vintage-delay
+Channel: 14
+Bank: 1
+Program: 1
+
+[Reverb]
+Module: mverb
+Channel: 13
+Bank: 1
+Program: 1
+
+[Compressor]
+Module: calf-compressor
+Channel: 12
+Bank: 1
+Program: 1
+
+[Bass]
+Module: monosynth
+Channel: 1
+Bank: 1
+Program: 1
+
+[Lead]
+Module: roland-jx10
+Channel: 2
+Bank: 1
+Program: 1
+
+[Pads]
+Module: rhodes
+Channel: 3
+Bank: 1
+Program: 1
+
+[Efxs]
+Module: yamaha-dx7
+Channel: 4
+Bank: 1
+Program: 1
