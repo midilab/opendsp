@@ -27,6 +27,10 @@ post_install() {
 		# xinitrc: anything for now... we just dont need a window manager
 		echo "exec xterm" >> /home/opendsp/.xinitrc
 
+		# set sudo permition to enable opendspd changes realtime priority of process
+		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
+		echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
 		# enable our service
 		systemctl enable opendsp
 		#systemctl enable startx
