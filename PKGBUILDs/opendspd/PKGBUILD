@@ -40,8 +40,6 @@ package()
   install -vD ../../systemd/opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
   install -vD ../../systemd/x11vnc.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
   install -vD ../../systemd/startx.service  -m 0644 $pkgdir/etc/systemd/system/startx.service
-  
-  mkdir $pkgdir/home/opendsp/
-  mkdir $pkgdir/home/opendsp/data/
-  install -vD ../../app-data/plugmod -m 0644 $pkgdir/home/opendsp/data/
+  install -vd -m 0755 $pkgdir/home/opendsp/data/
+  cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
 }
