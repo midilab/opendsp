@@ -1,13 +1,12 @@
 #!/bin/bash 
-# example to build an OpenDSP OS for armv7 version of raspberry pi3/pi2 and write a live image to /dev/sdc 
-# ./build armv7 raspberry_pi /dev/sdc
+# example to build an OpenDSP OS for armv7 version of raspberry pi3/pi2
+# ./build armv7 raspberry_pi
 
 set -e
 
 # globals
 platform=$1
 device=$2
-media_device=$3
 image_name=opendsp_${platform}_${device}-$(date "+%Y-%m-%d").img
 hostname=opendsp
 
@@ -64,7 +63,7 @@ finish $image_name
 zip $image_name.zip $image_name
 
 # write to media device?
-#
+#media_device=/dev/sdc
 #dd bs=1M if=$image_name of=$media_device status=progress
 
 #FINISHED

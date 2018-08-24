@@ -127,6 +127,13 @@ install() {
 		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
+	
+	# xf86 drivers for vc4 broadcom GPU
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman -S xf86-video-fbturbo-git || true
+		retVal=$?
+	done	
 
 	# resize script for first boot time
 	cat <<EOF > opendsp/boot/resize_data_partition.sh
