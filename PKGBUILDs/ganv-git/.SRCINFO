@@ -1,0 +1,19 @@
+pkgbase = ganv-git
+	pkgdesc = An interactive Gtkmm canvas widget for graph-based interfaces
+	pkgver = r325.dc3db77
+	pkgrel = 1
+	url = http://drobilla.net/software/ganv/
+	arch = i686
+	arch = x86_64
+	license = GPL3
+	makedepends = git
+	makedepends = python
+	depends = gtkmm
+	depends = graphviz
+	provides = ganv
+	conflicts = ganv
+	source = git+http://git.drobilla.net/ganv.git
+	sha256sums = SKIP
+
+pkgname = ganv-git
+
