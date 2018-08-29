@@ -5,9 +5,10 @@ After=startx.service
 
 [Service]
 Type=forking
-ExecStart=/bin/su opendsp -l -c "/usr/bin/x11vnc -norc -forever -shared -bg -autoport 5900" 
+ExecStart=/bin/su opendsp -l -c "/usr/bin/x11vnc -auth /tmp/.Xauthority -display :0 -norc -forever -shared -bg -autoport 5900" 
 Restart=on-failure
 RestartSec=5
+WorkingDirectory=/home/opendsp/
 
 [Install]
 WantedBy=multi-user.target

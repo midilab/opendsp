@@ -56,6 +56,18 @@ EOF
 #...
 install_packages
 
+#
+# post install opendsp realtime setup
+#
+# enable rtirq
+chroot opendsp systemctl enable rtirq	
+# set cpu for performance mode
+sed -i '/governor/d' opendsp/etc/default/cpupower
+echo "governor='performance'" >> opendsp/etc/default/cpupower
+chroot opendsp systemctl enable cpupower
+# get a better swappiness for realtime environment
+echo "vm.swappiness=10" >> opendsp/etc/sysctl.conf
+
 # finishing image
 finish $image_name
 

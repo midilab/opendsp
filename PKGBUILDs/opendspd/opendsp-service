@@ -30,8 +30,7 @@ if __name__ == '__main__':
     odsp.start_midi()
 
     # Choose App
-    odsp.start_app('plugmod_mixer')
-    #odsp.start_app('plugmod_ingen')
+    odsp.start_app('plugmod')
     #odsp.start_app('vcs')
 
     # Open default project
