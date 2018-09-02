@@ -1,7 +1,6 @@
 [Unit]
 Description=OpenDSP Remote Control Service
 After=remote-fs.service
-#ConditionCapability=CAP_SYS_NICE
 
 [Service]
 Type=simple
@@ -13,6 +12,10 @@ Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/tmp/.Xauthority"
 StandardOutput=syslog
 StandardError=syslog
+CPUSchedulingPolicy=rr
+CPUSchedulingPriority=51
+LimitRTPRIO=50
+LimitRTTIME=infinity
 
 [Install]
 WantedBy=multi-user.target

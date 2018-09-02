@@ -21,9 +21,13 @@ post_install() {
 
 		# xinitrc: anything for now... we just dont need a window manager
 		echo "exec xterm" >> /home/opendsp/.xinitrc
+		echo "touch /tmp/.Xauthority" >> /home/opendsp/.profile
 		
 		# allow x11 forward for plugmod ingen edit modules
 		echo "X11Forwarding yes" >> /etc/ssh/sshd_config
+		echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config
+		mkdir /home/opendsp/.ssh/
+		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.ssh/environment
 
 		# set sudo permition to enable opendspd changes realtime priority of process
 		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers

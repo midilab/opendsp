@@ -196,13 +196,12 @@ tunning() {
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
-	
-	# boot as read only
+		
+	# boot as read only and threadirq enabled
 	sed -i 's/ rw/ ro/' opendsp/boot/cmdline.txt
-	
-	# disable some services
-	chroot opendsp systemctl disable systemd-random-seed || true
 
+	## Remount /dev/shm to prevent memory allocation errors
+	#sudo mount -o remount,size=128M /dev/shm
 }	
 
 install_packages() {
@@ -211,7 +210,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
+	declare -a package=("mididings-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
 	
 	for i in "${package[@]}"
 	do

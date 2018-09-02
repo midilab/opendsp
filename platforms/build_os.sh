@@ -68,6 +68,19 @@ chroot opendsp systemctl enable cpupower
 # get a better swappiness for realtime environment
 echo "vm.swappiness=10" >> opendsp/etc/sysctl.conf
 
+# set realtime environment for DSPing
+#/etc/pam.d/systemd-user
+#account required pam_unix.so
+#session  required pam_limits.so
+#session optional pam_systemd.so
+# 
+echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
+echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
+# enabling threadirqs
+sed -i 's/ ro/ ro threadirqs/' opendsp/boot/cmdline.txt	
+# disable some services
+chroot opendsp systemctl disable systemd-random-seed || true
+
 # finishing image
 finish $image_name
 
