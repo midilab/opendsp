@@ -1,51 +1,30 @@
 [Mixer]
 Model: mixer422
-Channel1: Bass
-Channel2: Lead 
-Channel3: Rhodes
-Channel4: Drums
-Send1: TapeDelay
-Send2: Reverb
-Master: Compressor
+Channel1: bass
+Channel2: lead
+Channel3: rhodes
+Channel4: drums
 
-[Bass]
-Module: monosynth
+[bass]
+Module: noisemaker
 Channel: 1
 Bank: 1
 Program: 1
 
-[Lead]
-Module: yamaha-dx7
+[lead]
+Module: noisemaker
 Channel: 2
 Bank: 1
 Program: 1
 
-[Rhodes]
-Module: rhodes
+[rhodes]
+Module: noisemaker
 Channel: 3
 Bank: 1
 Program: 1
 
-[Drums]
+[drums]
 Module: fabla
 Channel: 4
-Bank: 1
-Program: 1
-
-[TapeDelay]
-Module: vintage-delay
-Channel: 14
-Bank: 1
-Program: 1
-
-[Reverb]
-Module: mverb
-Channel: 13
-Bank: 1
-Program: 1
-
-[Compressor]
-Module: calf-compressor
-Channel: 12
 Bank: 1
 Program: 1
