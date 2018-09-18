@@ -1,19 +1,20 @@
 #!/bin/bash 
 # example to build an OpenDSP OS for armv7 version of raspberry pi3/pi2
-# ./build armv7 raspberry_pi
+# ./build_os armv7/raspberry_pi
 
 set -e
 
 # globals
-platform=$1
-device=$2
+platform=${1%%/*}
+device=${1##*/}
+
 image_name=opendsp_${platform}_${device}-$(date "+%Y-%m-%d").img
 hostname=opendsp
 
 #
 # Platform create script
 #
-script=${platform}/${device}.sh
+script=${platform}/${device}
 if [ ! -f "$script" ]
 then
 	echo "$0: platform script '${script}' not found."
