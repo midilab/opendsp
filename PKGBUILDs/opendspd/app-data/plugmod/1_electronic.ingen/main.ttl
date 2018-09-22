@@ -10,8 +10,8 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 <Monosynth>
-	ingen:canvasX 555.0 ;
-	ingen:canvasY 19.0 ;
+	ingen:canvasX 410.0 ;
+	ingen:canvasY 88.0 ;
 	<http://lv2plug.in/ns/ext/state#state> <Monosynth/state.ttl> ;
 	lv2:port <Monosynth/adsr2_a> ,
 		<Monosynth/adsr2_amp> ,
@@ -499,90 +499,79 @@
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
-<audio_out_1>
-	ingen:canvasX 1369.0 ;
-	ingen:canvasY 26.0 ;
+<audio_in_1>
+	ingen:canvasX 35.04270554 ;
+	ingen:canvasY 88.5640564 ;
 	lv2:index 2 ;
+	lv2:name "Audio In 1" ;
+	lv2:symbol "audio_in_1" ;
+	a lv2:AudioPort ,
+		lv2:InputPort .
+
+<audio_in_2>
+	ingen:canvasX 34.0 ;
+	ingen:canvasY 126.0 ;
+	lv2:index 3 ;
+	lv2:name "Audio In 2" ;
+	lv2:symbol "audio_in_2" ;
+	a lv2:AudioPort ,
+		lv2:InputPort .
+
+<audio_in_3>
+	ingen:canvasX 34.29893112 ;
+	ingen:canvasY 164.45907593 ;
+	lv2:index 4 ;
+	lv2:name "Audio In 3" ;
+	lv2:symbol "audio_in_3" ;
+	a lv2:AudioPort ,
+		lv2:InputPort .
+
+<audio_in_4>
+	ingen:canvasX 34.84341431 ;
+	ingen:canvasY 204.70819092 ;
+	lv2:index 5 ;
+	lv2:name "Audio In 4" ;
+	lv2:symbol "audio_in_4" ;
+	a lv2:AudioPort ,
+		lv2:InputPort .
+
+<audio_out_1>
+	ingen:canvasX 1159.0 ;
+	ingen:canvasY 80.0 ;
+	lv2:index 10 ;
 	lv2:name "Audio Out 1" ;
 	lv2:symbol "audio_out_1" ;
 	a lv2:AudioPort ,
 		lv2:OutputPort .
 
 <audio_out_2>
-	ingen:canvasX 1371.0 ;
-	ingen:canvasY 99.0 ;
-	lv2:index 3 ;
+	ingen:canvasX 1161.0 ;
+	ingen:canvasY 125.0 ;
+	lv2:index 11 ;
 	lv2:name "Audio Out 2" ;
 	lv2:symbol "audio_out_2" ;
 	a lv2:AudioPort ,
 		lv2:OutputPort .
 
 <audio_out_3>
-	ingen:canvasX 1373.0 ;
-	ingen:canvasY 188.0 ;
-	lv2:index 4 ;
+	ingen:canvasX 1159.0 ;
+	ingen:canvasY 170.0 ;
+	lv2:index 12 ;
 	lv2:name "Audio Out 3" ;
 	lv2:symbol "audio_out_3" ;
 	a lv2:AudioPort ,
 		lv2:OutputPort .
 
 <audio_out_4>
-	ingen:canvasX 1361.0 ;
-	ingen:canvasY 281.0 ;
-	lv2:index 5 ;
+	ingen:canvasX 1158.0 ;
+	ingen:canvasY 213.0 ;
+	lv2:index 13 ;
 	lv2:name "Audio Out 4" ;
 	lv2:symbol "audio_out_4" ;
 	a lv2:AudioPort ,
 		lv2:OutputPort .
 
-<channel_1>
-	ingen:canvasX 37.0 ;
-	ingen:canvasY 45.0 ;
-	atom:bufferType atom:Sequence ;
-	atom:supports <http://lv2plug.in/ns/ext/time#Position> ;
-	lv2:index 9 ;
-	lv2:name "Channel 1" ;
-	lv2:symbol "channel_1" ;
-	a atom:AtomPort ,
-		lv2:InputPort .
-
-<channel_2>
-	ingen:canvasX 33.0 ;
-	ingen:canvasY 98.0 ;
-	atom:bufferType atom:Sequence ;
-	atom:supports atom:Property ,
-		midi:MidiEvent ;
-	lv2:index 6 ;
-	lv2:name "Channel 2" ;
-	lv2:symbol "channel_2" ;
-	a atom:AtomPort ,
-		lv2:InputPort .
-
-<channel_3>
-	ingen:canvasX 44.0 ;
-	ingen:canvasY 169.0 ;
-	atom:bufferType atom:Sequence ;
-	atom:supports midi:MidiEvent ;
-	lv2:index 7 ;
-	lv2:name "Channel 3" ;
-	lv2:symbol "channel_3" ;
-	a atom:AtomPort ,
-		lv2:InputPort .
-
-<channel_4>
-	ingen:canvasX 52.0 ;
-	ingen:canvasY 229.0 ;
-	atom:bufferType atom:Sequence ;
-	atom:supports <http://lv2plug.in/ns/ext/time#Position> ;
-	lv2:index 8 ;
-	lv2:name "Channel 4" ;
-	lv2:symbol "channel_4" ;
-	a atom:AtomPort ,
-		lv2:InputPort .
-
 <control>
-	ingen:canvasX 15.0 ;
-	ingen:canvasY 6.0 ;
 	atom:bufferType atom:Sequence ;
 	atom:supports patch:Message ;
 	<http://lv2plug.in/ns/ext/resize-port#minimumSize> 4096 ;
@@ -595,8 +584,8 @@
 		lv2:InputPort .
 
 <dexed>
-	ingen:canvasX 828.0 ;
-	ingen:canvasY 91.0 ;
+	ingen:canvasX 631.0 ;
+	ingen:canvasY 89.0 ;
 	<http://lv2plug.in/ns/ext/state#state> <dexed/state.ttl> ;
 	lv2:port <dexed/algorithm> ,
 		<dexed/cutoff> ,
@@ -1711,9 +1700,53 @@
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
+<event_in_1>
+	ingen:canvasX 38.71707916 ;
+	ingen:canvasY 290.04803467 ;
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ;
+	lv2:index 6 ;
+	lv2:name "Event In 1" ;
+	lv2:symbol "event_in_1" ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
+<event_in_2>
+	ingen:canvasX 39.0 ;
+	ingen:canvasY 336.0 ;
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ;
+	lv2:index 7 ;
+	lv2:name "Event In 2" ;
+	lv2:symbol "event_in_2" ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
+<event_in_3>
+	ingen:canvasX 38.0 ;
+	ingen:canvasY 385.0 ;
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ;
+	lv2:index 8 ;
+	lv2:name "Event In 3" ;
+	lv2:symbol "event_in_3" ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
+<event_in_4>
+	ingen:canvasX 39.0 ;
+	ingen:canvasY 435.0 ;
+	atom:bufferType atom:Sequence ;
+	atom:supports midi:MidiEvent ;
+	lv2:index 9 ;
+	lv2:name "Event In 4" ;
+	lv2:symbol "event_in_4" ;
+	a atom:AtomPort ,
+		lv2:InputPort .
+
 <fabla>
-	ingen:canvasX 1111.0 ;
-	ingen:canvasY 239.0 ;
+	ingen:canvasX 878.0 ;
+	ingen:canvasY 89.0 ;
 	<http://lv2plug.in/ns/ext/presets#preset> <file:///usr/lib/lv2/fabla808.lv2/fabla808.ttl> ;
 	<http://lv2plug.in/ns/ext/state#state> <fabla/state.ttl> ;
 	lv2:port <fabla/compressor_attack> ,
@@ -1892,6 +1925,7 @@
 		lv2:OutputPort .
 
 <fabla/notify>
+	ingen:broadcast false ;
 	atom:bufferType atom:Sequence ;
 	lv2:index 1 ;
 	a atom:AtomPort ,
@@ -2582,16 +2616,39 @@
 
 <>
 	ingen:arc [
+		ingen:head <audio_out_4> ;
+		ingen:tail <fabla/left>
+	] , [
+		ingen:head <audio_out_4> ;
+		ingen:tail <fabla/right>
+	] , [
+		ingen:head <Monosynth/midi_in> ;
+		ingen:tail <event_in_2>
+	] , [
+		ingen:head <dexed/lv2_events_in> ;
+		ingen:tail <event_in_3>
+	] , [
+		ingen:head <fabla/control> ;
+		ingen:tail <event_in_4>
+	] , [
 		ingen:head <audio_out_1> ;
 		ingen:tail <tal_noisemaker/lv2_audio_out_1>
-	] , _:b1 ,
-		_:b2 ,
-		_:b3 ,
-		_:b4 ,
-		_:b5 ,
-		_:b6 ,
-		_:b7 ,
-		_:b8 ;
+	] , [
+		ingen:head <audio_out_1> ;
+		ingen:tail <tal_noisemaker/lv2_audio_out_2>
+	] , [
+		ingen:head <audio_out_2> ;
+		ingen:tail <Monosynth/out_r>
+	] , [
+		ingen:head <audio_out_2> ;
+		ingen:tail <Monosynth/out_l>
+	] , [
+		ingen:head <tal_noisemaker/lv2_events_in> ;
+		ingen:tail <event_in_1>
+	] , [
+		ingen:head <audio_out_3> ;
+		ingen:tail <dexed/lv2_audio_out_1>
+	] ;
 	ingen:block <Monosynth> ,
 		<dexed> ,
 		<fabla> ,
@@ -2599,23 +2656,25 @@
 	ingen:polyphony 1 ;
 	<http://lv2plug.in/ns/extensions/ui#ui> ingen:GraphUIGtk2 ;
 	lv2:extensionData <http://lv2plug.in/ns/ext/state#interface> ;
-	lv2:port <audio_out_1> ,
+	lv2:port <audio_in_1> ,
+		<audio_in_2> ,
+		<audio_in_3> ,
+		<audio_in_4> ,
+		<audio_out_1> ,
 		<audio_out_2> ,
 		<audio_out_3> ,
 		<audio_out_4> ,
-		<channel_1> ,
-		<channel_2> ,
-		<channel_3> ,
-		<channel_4> ,
 		<control> ,
+		<event_in_1> ,
+		<event_in_2> ,
+		<event_in_3> ,
+		<event_in_4> ,
 		<notify> ;
-	doap:name "classics" ;
+	doap:name "plugmod_electronic" ;
 	a ingen:Graph ,
 		lv2:Plugin .
 
 <notify>
-	ingen:canvasX 1369.0 ;
-	ingen:canvasY 400.0 ;
 	atom:bufferType atom:Sequence ;
 	atom:supports patch:Message ;
 	<http://lv2plug.in/ns/ext/resize-port#minimumSize> 4096 ;
@@ -2628,9 +2687,9 @@
 		lv2:OutputPort .
 
 <tal_noisemaker>
-	ingen:canvasX 274.0 ;
-	ingen:canvasY 18.0 ;
-	<http://lv2plug.in/ns/ext/presets#preset> <http://kunz.corrupt.ch/products/tal-noisemaker#preset019> ;
+	ingen:canvasX 182.0 ;
+	ingen:canvasY 87.0 ;
+	<http://lv2plug.in/ns/ext/presets#preset> <http://kunz.corrupt.ch/products/tal-noisemaker#preset020> ;
 	<http://lv2plug.in/ns/ext/state#state> <tal_noisemaker/state.ttl> ;
 	lv2:port <tal_noisemaker/ampattack> ,
 		<tal_noisemaker/ampdecay> ,
@@ -2732,25 +2791,25 @@
 	a ingen:Block .
 
 <tal_noisemaker/ampattack>
-	ingen:value 0.148 ;
+	ingen:value 0.0 ;
 	lv2:index 15 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/ampdecay>
-	ingen:value 0.37599999 ;
+	ingen:value 0.31999999 ;
 	lv2:index 16 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/amprelease>
-	ingen:value 0.44 ;
+	ingen:value 0.26800001 ;
 	lv2:index 18 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/ampsustain>
-	ingen:value 0.46399999 ;
+	ingen:value 1.0 ;
 	lv2:index 17 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2768,13 +2827,13 @@
 		lv2:InputPort .
 
 <tal_noisemaker/cutoff>
-	ingen:value 0.25600001 ;
+	ingen:value 0.152 ;
 	lv2:index 7 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/delayfactorl>
-	ingen:value 0.0 ;
+	ingen:value 1.0 ;
 	lv2:index 89 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2792,37 +2851,37 @@
 		lv2:InputPort .
 
 <tal_noisemaker/delayhighshelf>
-	ingen:value 0.0 ;
+	ingen:value 0.72399998 ;
 	lv2:index 91 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/delaylowshelf>
-	ingen:value 0.0 ;
+	ingen:value 0.112 ;
 	lv2:index 92 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/delaysync>
-	ingen:value 0.0 ;
+	ingen:value 1.0 ;
 	lv2:index 88 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/delaytime>
-	ingen:value 0.5 ;
+	ingen:value 0.43200001 ;
 	lv2:index 87 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/delaywet>
-	ingen:value 0.0 ;
+	ingen:value 0.208 ;
 	lv2:index 86 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/detune>
-	ingen:value 0.252 ;
+	ingen:value 0.0 ;
 	lv2:index 71 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2864,13 +2923,13 @@
 		lv2:InputPort .
 
 <tal_noisemaker/filtercontour>
-	ingen:value 0.63200003 ;
+	ingen:value 0.78799999 ;
 	lv2:index 10 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/filterdecay>
-	ingen:value 0.384 ;
+	ingen:value 0.44800001 ;
 	lv2:index 12 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2882,25 +2941,25 @@
 		lv2:InputPort .
 
 <tal_noisemaker/filterrelease>
-	ingen:value 0.49200001 ;
+	ingen:value 1.0 ;
 	lv2:index 14 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/filtersustain>
-	ingen:value 0.0 ;
+	ingen:value 0.42399999 ;
 	lv2:index 13 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/filtertype>
-	ingen:value 0.090909 ;
+	ingen:value 0.45454499 ;
 	lv2:index 6 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/freeadamount>
-	ingen:value 0.0 ;
+	ingen:value 0.5 ;
 	lv2:index 47 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2912,19 +2971,19 @@
 		lv2:InputPort .
 
 <tal_noisemaker/freeaddecay>
-	ingen:value 0.0 ;
+	ingen:value 0.32800001 ;
 	lv2:index 46 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/freeaddestination>
-	ingen:value 0.0 ;
+	ingen:value 0.60000002 ;
 	lv2:index 48 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/highpass>
-	ingen:value 0.0 ;
+	ingen:value 0.204 ;
 	lv2:index 70 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2936,7 +2995,7 @@
 		lv2:InputPort .
 
 <tal_noisemaker/lfo1amount>
-	ingen:value 0.0 ;
+	ingen:value 0.51200002 ;
 	lv2:index 34 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -2948,19 +3007,19 @@
 		lv2:InputPort .
 
 <tal_noisemaker/lfo1keytrigger>
-	ingen:value 0.0 ;
+	ingen:value 1.0 ;
 	lv2:index 50 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/lfo1phase>
-	ingen:value 0.0 ;
+	ingen:value 0.55199999 ;
 	lv2:index 38 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/lfo1rate>
-	ingen:value 0.0 ;
+	ingen:value 0.236 ;
 	lv2:index 32 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3102,7 +3161,7 @@
 		lv2:InputPort .
 
 <tal_noisemaker/osc1phase>
-	ingen:value 0.0 ;
+	ingen:value 0.50400001 ;
 	lv2:index 43 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3114,13 +3173,13 @@
 		lv2:InputPort .
 
 <tal_noisemaker/osc1tune>
-	ingen:value 0.51200002 ;
+	ingen:value 0.14399999 ;
 	lv2:index 23 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/osc1volume>
-	ingen:value 0.62 ;
+	ingen:value 0.63999999 ;
 	lv2:index 19 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3138,7 +3197,7 @@
 		lv2:InputPort .
 
 <tal_noisemaker/osc2fm>
-	ingen:value 0.0 ;
+	ingen:value 0.63599998 ;
 	lv2:index 40 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3150,13 +3209,13 @@
 		lv2:InputPort .
 
 <tal_noisemaker/osc2tune>
-	ingen:value 0.0 ;
+	ingen:value 0.384 ;
 	lv2:index 24 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/osc2volume>
-	ingen:value 0.0 ;
+	ingen:value 0.648 ;
 	lv2:index 20 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3168,7 +3227,7 @@
 		lv2:InputPort .
 
 <tal_noisemaker/osc3volume>
-	ingen:value 0.57599998 ;
+	ingen:value 0.53600001 ;
 	lv2:index 21 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3180,19 +3239,19 @@
 		lv2:InputPort .
 
 <tal_noisemaker/oscmastertune>
-	ingen:value 0.5 ;
+	ingen:value 0.0 ;
 	lv2:index 22 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/oscsync>
-	ingen:value 0.0 ;
+	ingen:value 1.0 ;
 	lv2:index 29 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/pitchwheelcutoff>
-	ingen:value 0.148 ;
+	ingen:value 0.44400001 ;
 	lv2:index 59 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3204,49 +3263,49 @@
 		lv2:InputPort .
 
 <tal_noisemaker/portamento>
-	ingen:value 0.58399999 ;
+	ingen:value 0.0 ;
 	lv2:index 53 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/portamentomode>
-	ingen:value 0.0 ;
+	ingen:value 1.0 ;
 	lv2:index 54 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/resonance>
-	ingen:value 0.0 ;
+	ingen:value 0.412 ;
 	lv2:index 8 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/reverbdecay>
-	ingen:value 0.75199997 ;
+	ingen:value 0.71600002 ;
 	lv2:index 65 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/reverbhighcut>
-	ingen:value 0.412 ;
+	ingen:value 0.0 ;
 	lv2:index 67 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/reverblowcut>
-	ingen:value 0.83600003 ;
+	ingen:value 1.0 ;
 	lv2:index 68 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/reverbpredelay>
-	ingen:value 0.0 ;
+	ingen:value 0.248 ;
 	lv2:index 66 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
 
 <tal_noisemaker/reverbwet>
-	ingen:value 0.0 ;
+	ingen:value 0.31200001 ;
 	lv2:index 64 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3258,7 +3317,7 @@
 		lv2:InputPort .
 
 <tal_noisemaker/transpose>
-	ingen:value 0.47600001 ;
+	ingen:value 0.84399998 ;
 	lv2:index 44 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
@@ -3306,40 +3365,8 @@
 		lv2:InputPort .
 
 <tal_noisemaker/volume>
-	ingen:value 0.67199999 ;
+	ingen:value 0.39199999 ;
 	lv2:index 5 ;
 	a lv2:ControlPort ,
 		lv2:InputPort .
-
-_:b1
-	ingen:head <tal_noisemaker/lv2_events_in> ;
-	ingen:tail <channel_1> .
-
-_:b2
-	ingen:head <audio_out_4> ;
-	ingen:tail <fabla/left> .
-
-_:b3
-	ingen:head <dexed/lv2_events_in> ;
-	ingen:tail <channel_3> .
-
-_:b4
-	ingen:head <fabla/control> ;
-	ingen:tail <channel_4> .
-
-_:b5
-	ingen:head <Monosynth/midi_in> ;
-	ingen:tail <channel_2> .
-
-_:b6
-	ingen:head <audio_out_2> ;
-	ingen:tail <Monosynth/out_l> .
-
-_:b7
-	ingen:head <audio_out_4> ;
-	ingen:tail <fabla/right> .
-
-_:b8
-	ingen:head <audio_out_3> ;
-	ingen:tail <dexed/lv2_audio_out_1> .
 
