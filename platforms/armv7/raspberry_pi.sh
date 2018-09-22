@@ -1,6 +1,9 @@
 #!/bin/bash
 # host dependencies:
+# on archlinux
 # sudo pacman -S multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static arch-install-scripts
+# most debian based
+# sudo apt-get install multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static
 # Register the qemu-arm-static as an ARM interpreter in the kernel (using binfmt_misc kernel module)
 # as root:
 #sudo update-binfmts --enable arm
@@ -9,8 +12,8 @@
 # echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register
 
 boot_size=128
-#root_size=3500
-root_size=7500
+root_size=3500
+#root_size=7500
 home_size=256
 
 prepare() {
@@ -36,26 +39,17 @@ n
 
 
 +$(($root_size))M
-p
 n
-p
+
 
 
 +$(($home_size))M
 p
-t
-3
-b
 w
 EOF
 
 	# prepare img 
-
-	# losetup
-	#kpartx /dev/loop1 -a -v $image_name
-	#kpartx -avs
 	kpartx -a -v $image_name
-	#losetup /dev/loop0 $image_name
 	partprobe /dev/loop0
 	bootpart=/dev/mapper/loop0p1
 	rootpart=/dev/mapper/loop0p2
@@ -71,7 +65,7 @@ EOF
 	# setup root partition
 	mkfs.ext4 -L ROOT $rootpart
 	# setup user land partition
-	mkfs.fat -n OPENDSP $homepart
+	mkfs.ext4 -L OPENDSP $homepart
 
 	fdisk -l $image_name
 
@@ -87,7 +81,7 @@ EOF
 	mkdir -v opendsp/home
 	mkdir -v opendsp/home/opendsp
 	mkdir -v opendsp/home/opendsp/data
-	mount -v -t vfat -o sync $homepart opendsp/home/opendsp/data
+	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
 	
 }
 
@@ -100,7 +94,7 @@ install() {
 	#tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
 
 	# prepare for chroot using qemu
-	echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
+	echo  ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
 	cp /usr/bin/qemu-arm-static opendsp/usr/bin/
 
 	# good idea to have those mounted as we chroot in
@@ -108,6 +102,7 @@ install() {
 	mount -o bind /dev opendsp/dev
 	mount -o bind /dev/pts opendsp/dev/pts
 	mount -o bind /sys opendsp/sys
+	#mount -o bind /run opendsp/run
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
@@ -123,7 +118,7 @@ install() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -Syyu || true
+		chroot opendsp pacman --noconfirm -Syyu || true
 		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
@@ -190,7 +185,7 @@ tunning() {
 # readonly filesystems
 /dev/mmcblk0p1  /boot                   vfat    ro,auto,exec            0       2
 /dev/mmcblk0p2  /                       ext4    defaults,noatime,ro     0       1
-/dev/mmcblk0p3  /home/opendsp/data      vfat    ro,auto,exec,noatime    0       2
+/dev/mmcblk0p3  /home/opendsp/data      ext4    defaults,noatime,ro     0       1
 
 # ram filesystems for runtime stuff
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
@@ -210,7 +205,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "mod-host-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
+	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
 	
 	for i in "${package[@]}"
 	do
@@ -240,43 +235,7 @@ finish() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount opendsp/sys || true 
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp/proc || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp/dev/pts || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp/dev || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp/boot || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp/home/opendsp/data || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount opendsp || true
+		umount --recursive opendsp/ || true 
 		retVal=$?
 	done
 
