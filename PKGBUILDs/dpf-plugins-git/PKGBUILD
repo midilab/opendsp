@@ -1,8 +1,8 @@
 # Maintainer: CrocoDuck <crocoduck dot oducks at gmail dot com>
 
 pkgname=dpf-plugins-lv2-git
-pkgver=r86.0c433e4
-pkgrel=2
+pkgver=r95.3adff28
+pkgrel=1
 pkgdesc="Collection of DPF-based plugins by DISTRHO. LV2"
 arch=('armv7h' 'i686' 'x86_64')
 url="http://distrho.sourceforge.net/"
@@ -27,16 +27,16 @@ build() {
     export CFLAGS="$CFLAGS -Ofast"
     export CXXFLAGS="$CXXFLAGS -Ofast"
 
-    sed -i 's/-msse//' Makefile.mk
-    sed -i 's/-msse2//' Makefile.mk
-    sed -i 's/-mfpmath=sse//' Makefile.mk
-    sed -i 's/-mtune=generic//' Makefile.mk
+    sed -i 's/-msse//' dpf/Makefile.base.mk
+    sed -i 's/-msse2//' dpf/Makefile.base.mk
+    sed -i 's/-mfpmath=sse//' dpf/Makefile.base.mk
+    sed -i 's/-mtune=generic//' dpf/Makefile.base.mk
 
-    sed -i 's/-msse//' dpf/dgl/Makefile.mk
-    sed -i 's/-msse2//' dpf/dgl/Makefile.mk
-    sed -i 's/-mtune=generic//' dpf/dgl/Makefile.mk
+    sed -i 's/-msse//' dpf/dgl/Makefile
+    sed -i 's/-msse2//' dpf/dgl/Makefile
+    sed -i 's/-mtune=generic//' dpf/dgl/Makefile
 
-    make BUILD_DSSI=true BUILD_LV2=true BUILD_VST=true BUILD_JACK=true
+    make BUILD_DSSI=false BUILD_LV2=true BUILD_VST=false HAVE_PROJM=true BUILD_JACK=true
 }
 
 package() {
