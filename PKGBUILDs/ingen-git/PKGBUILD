@@ -9,7 +9,7 @@ pkgdesc="A modular plugin host for JACK and LV2."
 arch=('armv7h' 'i686' 'x86_64')
 url="http://drobilla.net/software/${_pkgname}/"
 license=('GPL')
-depends=('alsa-lib' 'ganv-git' 'jack' 'lilv-git' 'portaudio' 'suil-git' 'serd-git' 'raul-git')
+depends=('alsa-lib' 'ganv-git' 'jack' 'lilv-git' 'portaudio' 'suil-git' 'serd-git' 'raul-git' 'lv2-git')
 makedepends=('python2')
 optdepends=(
     'lv2-plugins: various useful LV2 plug-in packages'

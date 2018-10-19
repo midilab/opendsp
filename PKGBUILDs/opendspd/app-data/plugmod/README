@@ -1,8 +1,0 @@
-the app directory are for sessions/projects data for user usage.
-since they are accessed via midi CC we have a maximun of 128 sessions/presets avaliable
-per application for user usage and 128 for factory usage.
-
-plugmod is used in a modular fashioned way:
-+ choose a instrument module and copy as a track<number> inside session directory
-+ choose a mixer layout and copy it inside session directory
-+ write a config file inside directory tells session channels input and others...
