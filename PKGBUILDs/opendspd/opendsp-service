@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # OpenDSP Manager
-# Copyright (C) 2015 Romulo Silva <contact@midilab.co>
+# Copyright (C) 2018 Romulo Silva <contact@midilab.co>
 #
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License as
@@ -15,26 +15,16 @@
 # GNU General Public License for more details.
 #
 # For a full copy of the GNU General Public License see the doc/GPL.txt file.
-#import opendspd
 from opendspd import opendspd
 
 if __name__ == '__main__':
 
-    # OpenDSPControl object for general environment managment
+    # get opendsp manager singleton instance
     odsp = opendspd.OpenDspCtrl()
 
-    # Load user config files
-    odsp.load_config()
+    # initing opendsp
+    odsp.init()
 
-    # Start Audio engine
-    odsp.start_audio()
-
-    # Start MIDI engine
-    odsp.start_midi()
-
-    # start App
-    odsp.start_app()
-
-    # Daemonize us! \_/
+    # daemonize us \_/
     odsp.run_manager()
 

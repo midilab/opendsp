@@ -162,9 +162,9 @@ tunning() {
 
 	# enable broadcom video core drivers for GPU acceleration
 	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
-	echo "gpu_mem=256" >> opendsp/boot/config.txt
-	echo "avoid_warnings=2" >> opendsp/boot/config.txt
-	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
+	##echo "gpu_mem=256" >> opendsp/boot/config.txt
+	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
+	##echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 
 	# install xf86 drivers for vc4 broadcom GPU
 	retVal=-1
