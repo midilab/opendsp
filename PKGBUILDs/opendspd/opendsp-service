@@ -20,7 +20,7 @@ from opendspd import opendspd
 if __name__ == '__main__':
 
     # get opendsp manager singleton instance
-    odsp = opendspd.OpenDspCtrl()
+    odsp = opendspd.Manager()
 
     # initing opendsp
     odsp.init()
