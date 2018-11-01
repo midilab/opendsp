@@ -23,21 +23,17 @@ if __name__ == '__main__':
     # OpenDSPControl object for general environment managment
     odsp = opendspd.OpenDspCtrl()
 
+    # Load user config files
+    odsp.load_config()
+
     # Start Audio engine
     odsp.start_audio()
 
     # Start MIDI engine
     odsp.start_midi()
 
-    # Choose App
-    odsp.start_app('plugmod')
-    #odsp.start_app('vcs')
-
-    # Open default project
-    #odsp.open_project("6")
-    
-    # Open last project
-    #odsp.open_last_project()
+    # start App
+    odsp.start_app()
 
     # Daemonize us! \_/
     odsp.run_manager()
