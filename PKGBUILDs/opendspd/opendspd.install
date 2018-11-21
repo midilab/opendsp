@@ -1,12 +1,13 @@
 post_install() {
 
 	# do opendsp user dont exist?
-	if `grep -c '^opendsp:' /etc/passwd` eq 0	
+	if [ `grep -c '^opendsp:' /etc/passwd` = 0 ]
+	then
 	
 		# create user
 		useradd -m -G audio,video,uucp,lock,tty opendsp
 		# change pass
-		echo "opendsp:opendsp" | sudo chpasswd
+		echo "opendsp:opendsp" | chpasswd
 		# in case we already have the user home path, give him full permition
 		chown -R opendsp:opendsp /home/opendsp/	
 		
