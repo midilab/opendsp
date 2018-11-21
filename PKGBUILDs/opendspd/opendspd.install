@@ -1,7 +1,7 @@
 post_install() {
 
 	# do opendsp user dont exist?
-	if ! id -u opendsp > /dev/null 2>&1; then
+	if `grep -c '^opendsp:' /etc/passwd` eq 0	
 	
 		# create user
 		useradd -m -G audio,video,uucp,lock,tty opendsp

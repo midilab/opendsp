@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendspd
-pkgver=9.2248962
+pkgver=36.49fe703
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
