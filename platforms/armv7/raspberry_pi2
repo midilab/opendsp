@@ -118,7 +118,7 @@ install() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman --noconfirm -Syyu || true
+		chroot opendsp pacman -Syyu || true
 		#chroot opendsp pacman -Sy || true
 		retVal=$?
 	done
@@ -144,6 +144,14 @@ EOF
 }	
 
 tunning() {
+
+	# enable broadcom video core drivers for GPU acceleration
+	# delete first ocurrence of gpu_men
+	
+	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
+	echo "gpu_mem=256" >> opendsp/boot/config.txt
+	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
+	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 	
 	# enable onboard sound
 	echo "dtparam=audio=on" >> opendsp/boot/config.txt
@@ -159,12 +167,6 @@ tunning() {
 	#echo "hdmi_drive=2" >> opendsp/boot/config.txt
 	#echo "hdmi_group=1" >> opendsp/boot/config.txt
 	#echo "hdmi_mode=1" >> opendsp/boot/config.txt
-
-	# enable broadcom video core drivers for GPU acceleration
-	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
-	##echo "gpu_mem=256" >> opendsp/boot/config.txt
-	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
-	##echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 
 	# install xf86 drivers for vc4 broadcom GPU
 	retVal=-1
@@ -205,13 +207,14 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "mda-lv2-git" "calf-git" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
+	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
 	
 	for i in "${package[@]}"
 	do
 		retVal=-1
 		while [ $retVal -ne 0 ]; do
-			chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz" || true
+			#chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz" || true
+			chroot opendsp pacman -U "/root/opendsp/${i}.pkg.tar.xz" || true
 			retVal=$?
 		done
 	done
@@ -235,7 +238,7 @@ finish() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		umount --recursive opendsp/ || true 
+		umount --recursive --lazy opendsp/ || true 
 		retVal=$?
 	done
 
