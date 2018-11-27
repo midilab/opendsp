@@ -57,7 +57,7 @@ opendsp_tunning() {
 	# 
 	echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
 	echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
-	# enabling threadirqs
+	# enabling threadirqs and boot read only file system
 	sed -i 's/ rw/ ro threadirqs/' opendsp/boot/cmdline.txt	
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
@@ -66,53 +66,6 @@ opendsp_tunning() {
 compress() {
 	zip $1.zip $1
 }
-
-mount() {
- 
-	kpartx -a -v $1
-	#partprobe /dev/loop0
-	bootpart=/dev/mapper/loop0p1
-	rootpart=/dev/mapper/loop0p2
-	homepart=/dev/mapper/loop0p3
-
-	# mount root
-	mkdir -v opendsp
-	mount -v -t ext4 -o sync $rootpart opendsp
-	
-	# mount boot
-	mount -v -t vfat -o sync $bootpart opendsp/boot
-	
-	# mount user land
-	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
-		
-}
-
-umount() {
-	
-	sync
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount --recursive --lazy opendsp/ || true 
-		retVal=$?
-	done
-
-	rm -rf opendsp
-
-	# release the image
-	kpartx -d -v $1	
-	
-}
-
-# no platform script needed here
-case $action in
-	"mount") 
-		mount $image_manage
-		exit 0 ;;
-	"umount") 
-		umount $image_manage
-		exit 0 ;;
-esac
 
 #
 # Platform create script
@@ -126,31 +79,6 @@ fi
 
 # import platform specific create script
 source ${script}
-
-# run only a action?
-case $action in
-	"prepare") 
-		prepare $image_name
-		exit 0 ;;
-	"install") 
-		install
-		exit 0 ;;
-	"tunning") 
-		tunning
-		exit 0 ;;
-	"opendsp_install") 
-		opendsp_install $hostname
-		exit 0 ;;	
-	"install_packages") 
-		install_packages
-		exit 0 ;;		
-	"opendsp_tunning") 
-		opendsp_tunning
-		exit 0 ;;	
-	"finish") 
-		finish $image_name
-		exit 0 ;;	
-esac
  
 # partitioning and prepare root, boot(in case) and userland
 # partitions path ready for use after prepare function: opendsp, opendsp/boot, opendsp/home/opendsp/data

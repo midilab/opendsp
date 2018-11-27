@@ -12,9 +12,10 @@
 # echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register
 
 boot_size=128
-root_size=3500
+root_size=3300
 #root_size=7500
 home_size=256
+device=""
 
 prepare() {
 
@@ -48,20 +49,14 @@ p
 w
 EOF
 
-	# prepare img 
-	kpartx -a -v $image_name
-	partprobe /dev/loop0
-	bootpart=/dev/mapper/loop0p1
-	rootpart=/dev/mapper/loop0p2
-	homepart=/dev/mapper/loop0p3
-
-	# local sdcard
-	#bootpart=/dev/sdb1
-	#rootpart=/dev/sdb2
-	#homepart=/dev/sdb3
+	# prepare img
+	device="$(losetup --show -f -P "$image_name")"
+	bootpart="${device}p1"
+	rootpart="${device}p2"
+	homepart="${device}p3"
 
 	# setup boot partition
-	mkdosfs -n BOOT $bootpart
+	mkfs.fat -n BOOT $bootpart
 	# setup root partition
 	mkfs.ext4 -L ROOT $rootpart
 	# setup user land partition
@@ -147,6 +142,7 @@ tunning() {
 
 	# enable broadcom video core drivers for GPU acceleration
 	# delete first ocurrence of gpu_men
+	sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt
 	
 	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
 	echo "gpu_mem=256" >> opendsp/boot/config.txt
@@ -194,9 +190,6 @@ tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       
 tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 		
-	# boot as read only and threadirq enabled
-	sed -i 's/ rw/ ro/' opendsp/boot/cmdline.txt
-
 	## Remount /dev/shm to prevent memory allocation errors
 	#sudo mount -o remount,size=128M /dev/shm
 }	
@@ -245,6 +238,7 @@ finish() {
 	rm -rf opendsp
 
 	# release the image
-	kpartx -d -v $image_name
+	losetup -d $image_name
+	losetup -d $device
 	
 }
