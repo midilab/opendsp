@@ -62,6 +62,14 @@ opendsp_tunning() {
 	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/cmdline.txt	
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
+	#systemctl enable avahi-daemon
+	#systemctl disable raspi-config
+	#systemctl disable cron
+	#systemctl disable rsyslog
+	#systemctl disable ntp
+	#systemctl disable triggerhappy
+	#systemctl disable serial-getty@ttyAMA0.service
+	#systemctl disable getty@tty1.service
 	
 	# newer archlinux versions need to generate ssh keys by our own
 	chroot opendsp ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
@@ -116,6 +124,13 @@ tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0      
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 	
+	cat <<EOF > opendsp/home/opendsp/.xinitrc	
+# we dont need fancy wm... just loop to the eternity
+while [ 1 ]; do
+  sleep 10000
+done
+EOF
+
 	# disable some systems
 	chroot opendsp systemctl disable systemd-timesyncd
 }

@@ -16,8 +16,11 @@ post_install() {
 		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
 
 		# xinitrc: anything for now... we just dont need a window manager
-		echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc
-				
+		#echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc
+		echo "while [ 1 ]; do" > /home/opendsp/.xinitrc
+		echo "  sleep 10000" >> /home/opendsp/.xinitrc
+		echo "done" >> /home/opendsp/.xinitrc
+
 		# allow x11 forward for plugmod ingen edit modules
 		echo "X11Forwarding yes" >> /etc/ssh/sshd_config
 		echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config
@@ -31,8 +34,15 @@ post_install() {
 
 		# enable our service
 		systemctl enable opendsp
-		#systemctl enable startx
-		#systemctl enable x11vnc	
+		#systemctl enable display
+		#systemctl enable vdisplay	
+		
+		# setup visualizer projectm to hold on user data partition
+		mkdir -v /home/opendsp/data/visualizer/projectM
+		cp -Rf /usr/share/projectM/* /home/opendsp/data/visualizer/projectM/
+		# force projectM to read our $HOME/.projectM/config.inp instead of default
+		rm /usr/share/projectM/config.inp
+		ln -s /home/opendsp/data/visualizer/projectM/ /home/opendsp/.projectM
 		
 		# setup sane permitions
 		chown -R opendsp:opendsp /home/opendsp/			

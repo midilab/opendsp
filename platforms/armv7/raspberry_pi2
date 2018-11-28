@@ -207,7 +207,34 @@ tunning() {
 
 	# enable broadcom video core drivers for GPU acceleration
 	# delete first ocurrence of gpu_men
-	sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt
+	#sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt	
+#dtoverlay=hifiberry-dacplus
+###dtoverlay=hifiberry-dac
+###dtoverlay=hifiberry-digi
+###dtoverlay=hifiberry-amp
+###dtoverlay=audioinjector-wm8731-audio
+###dtoverlay=iqaudio-dac
+###dtoverlay=iqaudio-dacplus
+###dtoverlay=iqaudio-digi-wm8804-audio
+###dtoverlay=pisound
+###dtoverlay=justboom-dac
+###dtoverlay=justboom-digi
+###dtoverlay=i2s-mmap
+###dtoverlay=pi3-disable-bt
+##dtoverlay=pi3-disable-wifi
+# Adjust Serial Port Clock to allow MIDI baudrate 31250
+###init_uart_clock=2441000
+###init_uart_baud=38400
+###dtparam=uart0_clkrate=3000000
+###dtoverlay=midi-uart0
+#disable_splash=1
+#disable_overscan=1
+#hdmi_pixel_encoding=1
+#hdmi_force_hotplug=1
+###framebuffer_width=1280
+###framebuffer_height=800
+#framebuffer_depth=16
+#framebuffer_ignore_alpha=1	
 	
 	echo "gpu_mem=256" >> opendsp/boot/config.txt
 	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
@@ -246,7 +273,7 @@ tunning() {
 	
 	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
 	cat <<EOF > opendsp/etc/rtirq.conf	
-RTIRQ_NAME_LIST="bcm2835 DMA 3f00b880 3f200000 3f804000 3f805000 dwc uart-p VCHIQ vc4"
+RTIRQ_NAME_LIST="DMA bcm2835 VCHIQ vc4 3f00b880 3f200000 3f804000 3f805000 dwc uart-p"
 
 # Highest priority.
 RTIRQ_PRIO_HIGH=90
@@ -259,6 +286,11 @@ RTIRQ_PRIO_LOW=51
 
 # Whether to reset all IRQ threads to SCHED_OTHER.
 RTIRQ_RESET_ALL=0
+
+# Process names which will be forced to the
+# highest realtime priority range (99-91)
+# (space separated list, from highest to lower priority).
+# RTIRQ_HIGH_LIST="timer"
 
 # On kernel configurations that support it,
 # which services should be NOT threaded 
@@ -287,7 +319,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
+	declare -a package=("mididings-git" "lv2-git" "ganv-git" "lilv-git" "raul-git" "serd-git" "suil-git" "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "opendspd")
 	
 	for i in "${package[@]}"
 	do
