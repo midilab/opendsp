@@ -37,6 +37,8 @@ prepare() {
   ./configure --prefix="/usr" --enable-arch=native --without-lash --without-juno
   # for arm and 32bits replace all non arm flags
   find . -type f | xargs sed -i  's/\-m32 / /g'
+  # typo error fix
+  find . -type f | xargs sed -i  's/ mfence/mfence/g'
   # port assembly instruction mfence to arm related mdb
   find . -type f | xargs sed -i  's/mfence/dmb/g'
   # dont let config.status screw our work
