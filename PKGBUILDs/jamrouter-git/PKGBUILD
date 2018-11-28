@@ -29,25 +29,31 @@ md5sums=(
 validpgpkeys=()
 
 prepare() {
-	cd "$pkgname"
+  cd "$pkgname"
+ 
+  # replicate our makepkg CFLAGS and CPPFLAGS environment here
+  sed -i "s/ARCH_OPT_CFLAGS=\"\-mtune=native \-march=native\"/ARCH_OPT_CFLAGS=\"${CFLAGS}\"/g" configure.ac
+
   aclocal &> /dev/null
   autoconf &> /dev/null
-	automake &> /dev/null
-	autoheader &> /dev/null
+  automake &> /dev/null
+  autoheader &> /dev/null
+
   ./configure --prefix="/usr" --enable-arch=native --without-lash --without-juno
   # for arm and 32bits replace all non arm flags
   find . -type f | xargs sed -i  's/\-m32 / /g'
   # typo error fix
   find . -type f | xargs sed -i  's/ mfence/mfence/g'
   # port assembly instruction mfence to arm related mdb
-  find . -type f | xargs sed -i  's/mfence/dmb/g'
+  find . -type f | xargs sed -i  's/mfence/dmb ish/g'
+  #find . -type f | xargs sed -i  's/mfence/dmb/g' 
   # dont let config.status screw our work
   sed -i 's/config.status \-\-recheck/config.status/g' Makefile
   sed -i 's/config.status \-\-recheck/config.status/g' Makefile.in 
 }
 
 build() {
-	cd "$pkgname"
+  cd "$pkgname"
   make
 }
 
