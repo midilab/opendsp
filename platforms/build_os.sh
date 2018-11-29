@@ -61,6 +61,9 @@ opendsp_tunning() {
 	sed -i 's/ rw/ ro threadirqs/' opendsp/boot/cmdline.txt	
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
+	
+	# newer archlinux versions need to generate ssh keys by our own
+	chroot opendsp ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
 }
 
 compress() {
@@ -87,14 +90,14 @@ prepare $image_name
 # install base archlinux on disk image 
 install
 
-# platform specific tunnings
-tunning
-
 # generic and non platform dependent opendsp install 
 opendsp_install $hostname
 
 # opendsp meta install
 install_packages
+
+# platform specific tunnings
+tunning
 
 # generic and non platform dependent opendsp tunning parameters for reatime kernel and ecosystem setup
 opendsp_tunning
