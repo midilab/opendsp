@@ -13,7 +13,6 @@
 
 boot_size=128
 root_size=3300
-#root_size=7500
 home_size=256
 device=""
 
@@ -106,7 +105,6 @@ mount_img() {
 	mount -o bind /sys opendsp/sys
 	
 	# prepare for chroot using qemu
-	echo  ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
 	cp /usr/bin/qemu-arm-static opendsp/usr/bin/	
 	
 	# copy temporarly our resolv.conf to get internet connection
@@ -193,15 +191,13 @@ install() {
 set -e
 
 systemctl stop opendsp
-#mount -vo remount,rw /
-#mount -vo remount,rw /boot
 umount -v /home/opendsp/data || true
 
 parted /dev/mmcblk0 <<EOF
 resizepart
 3
-y
--1M
+-16M
+Yes
 q
 EOF
 

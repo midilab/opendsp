@@ -8,8 +8,6 @@ post_install() {
 		useradd -m -G audio,video,uucp,lock,tty opendsp
 		# change pass
 		echo "opendsp:opendsp" | chpasswd
-		# in case we already have the user home path, give him full permition
-		chown -R opendsp:opendsp /home/opendsp/	
 		
 		# X11 needs config for session control
 		#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
@@ -22,14 +20,23 @@ post_install() {
 
 		# xinitrc: anything for now... we just dont need a window manager
 		echo "exec xterm" >> /home/opendsp/.xinitrc
-		echo "touch /tmp/.Xauthority" >> /home/opendsp/.profile
-		
+				
 		# allow x11 forward for plugmod ingen edit modules
 		echo "X11Forwarding yes" >> /etc/ssh/sshd_config
 		echo "PermitUserEnvironment yes" >> /etc/ssh/sshd_config
 		mkdir /home/opendsp/.ssh/
 		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.ssh/environment
+		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.profile
+		cat <<EOF > /home/opendsp/.ssh/rc
+touch /tmp/.Xauthority
 
+if read proto cookie; 
+ then 
+    echo "add $DISPLAY $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
+    echo "add `echo $DISPLAY | sed 's/:/\/unix:/'` $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
+fi
+EOF		
+		
 		# set sudo permition to enable opendspd changes realtime priority of process
 		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
 		echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
@@ -38,6 +45,9 @@ post_install() {
 		systemctl enable opendsp
 		#systemctl enable startx
 		#systemctl enable x11vnc	
+		
+		# setup sane permitions
+		chown -R opendsp:opendsp /home/opendsp/			
 		
 	fi	
 
