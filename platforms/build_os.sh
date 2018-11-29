@@ -18,18 +18,18 @@ hostname=opendsp
 opendsp_install() {
 	
 	echo $1 > opendsp/etc/hostname
-	echo "127.0.1.1 $hostname" >> opendsp/etc/hosts
+	echo "127.0.1.1 $1" >> opendsp/etc/hosts
+	
+	echo "" > opendsp/etc/motd
+	cat <<EOF > opendsp/etc/issue
 
-	cat <<EOF > opendsp/etc/motd
 
-OpenDSP
-######################
-* MIDI
-* OSC
-* Keyboard
-* Joystick
-* Mouse
-######################
+ ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
+██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
+██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
+██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
+╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
+ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
 
 EOF
 
