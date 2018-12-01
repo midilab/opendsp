@@ -209,7 +209,6 @@ tunning() {
 	# delete first ocurrence of gpu_men
 	sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt
 	
-	#echo "cma=128M" >> opendsp/boot/config.txt # broken on newer kernels... dont use it!
 	echo "gpu_mem=256" >> opendsp/boot/config.txt
 	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
 	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
@@ -232,7 +231,7 @@ tunning() {
 	# install xf86 drivers for vc4 broadcom GPU
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -S xf86-video-fbturbo-git || true
+		chroot opendsp pacman -S xf86-video-fbdev || true
 		retVal=$?
 	done	
 	

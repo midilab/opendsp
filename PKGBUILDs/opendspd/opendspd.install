@@ -19,7 +19,7 @@ post_install() {
 		#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
 
 		# xinitrc: anything for now... we just dont need a window manager
-		echo "exec xterm" >> /home/opendsp/.xinitrc
+		echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc
 				
 		# allow x11 forward for plugmod ingen edit modules
 		echo "X11Forwarding yes" >> /etc/ssh/sshd_config
