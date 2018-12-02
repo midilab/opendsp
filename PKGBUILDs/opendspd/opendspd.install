@@ -14,9 +14,6 @@ post_install() {
 		# or to add
 		echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
 		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
-		# screen goes blank after a period... 
-		#setterm blank 0 > rc.local?
-		#sh -c 'setterm -blank 0 -powersave off -powerdown 0 < /dev/console > /dev/console 2>&1'
 
 		# xinitrc: anything for now... we just dont need a window manager
 		echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc

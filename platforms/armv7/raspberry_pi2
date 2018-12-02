@@ -240,7 +240,7 @@ tunning() {
 	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
-	sed -i 's/ console=tty1/ console=null quiet logo.nologo/' opendsp/boot/cmdline.txt
+	sed -i 's/ console=tty1/ console=null quiet logo.nologo consoleblank=0/' opendsp/boot/cmdline.txt
 	echo "disable_splash=1" >> opendsp/boot/config.txt
 	echo "avoid_warnings=1" >> opendsp/boot/config.txt
 	
