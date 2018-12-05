@@ -244,6 +244,28 @@ tunning() {
 	echo "disable_splash=1" >> opendsp/boot/config.txt
 	echo "avoid_warnings=1" >> opendsp/boot/config.txt
 	
+	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
+	cat <<EOF > opendsp/etc/rtirq.conf	
+RTIRQ_NAME_LIST="bcm2835 DMA 3f00b880 3f200000 3f804000 3f805000 dwc uart-p VCHIQ vc4"
+
+# Highest priority.
+RTIRQ_PRIO_HIGH=90
+
+# Priority decrease step.
+RTIRQ_PRIO_DECR=3
+
+# Lowest priority.
+RTIRQ_PRIO_LOW=51
+
+# Whether to reset all IRQ threads to SCHED_OTHER.
+RTIRQ_RESET_ALL=0
+
+# On kernel configurations that support it,
+# which services should be NOT threaded 
+# (space separated list).
+RTIRQ_NON_THREADED="ksoftirqd"
+EOF
+	
 	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab
 # Static information about the filesystems.
@@ -252,11 +274,7 @@ tunning() {
 # readonly filesystems
 /dev/mmcblk0p1  /boot                   vfat    ro,auto,exec            0       2
 /dev/mmcblk0p2  /                       ext4    defaults,noatime,ro     0       1
-/dev/mmcblk0p3  /home/opendsp/data      ext4    defaults,noatime,ro     0       1
-
-# ram filesystems for runtime stuff
-tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
-tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+/dev/mmcblk0p3  /home/opendsp/data      ext4    defaults,noatime,rw     0       1
 EOF
 		
 	## Remount /dev/shm to prevent memory allocation errors

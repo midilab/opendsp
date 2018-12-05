@@ -41,7 +41,8 @@ opendsp_tunning() {
 	# post install opendsp realtime setup
 	#
 	# enable rtirq
-	chroot opendsp systemctl enable rtirq	
+	chroot opendsp systemctl enable rtirq
+	
 	# set cpu for performance mode
 	sed -i '/governor/d' opendsp/etc/default/cpupower
 	echo "governor='performance'" >> opendsp/etc/default/cpupower
@@ -57,13 +58,59 @@ opendsp_tunning() {
 	# 
 	echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
 	echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
-	# enabling threadirqs and boot read only file system
-	sed -i 's/ rw/ ro threadirqs/' opendsp/boot/cmdline.txt	
+	# enabling threadirqs and boot read only file system and other system options
+	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/cmdline.txt	
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
 	
 	# newer archlinux versions need to generate ssh keys by our own
 	chroot opendsp ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
+	
+	# setup samba share for user data
+	chroot opendsp smbpasswd -a opendsp -n
+	cat <<EOF > opendsp/etc/samba/smb.conf	
+[global]
+  workgroup = OpenDSPGroup
+  server string = "Use this share to access all your opendsp user data" 
+  guest account = opendsp
+  passdb backend = tdbsam
+  load printers = no
+  printing = bsd
+  printcap name = /dev/null
+  disable spoolss = yes
+  show add printer wizard = no
+  security = user
+  map to guest = Bad User
+  create mask = 0644
+  directory mask = 0755  
+
+[user]
+  comment = OpenDSP user data 
+  path = /home/opendsp/data
+  writable = yes
+  printable = no
+  public = yes
+EOF
+
+	# little hack that enable us to start samba on read only file system
+	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
+	mkdir opendsp/var/cache/samba
+	mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
+	mkdir opendsp/var/lib/samba
+	chroot opendsp systemctl enable sambafix
+	chroot opendsp systemctl enable smb
+	chroot opendsp systemctl enable nmb
+	cat <<EOF >> opendsp/etc/fstab
+# ram memory runtime filesystems
+tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+# samba fix for read only environment
+tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
+EOF
+	
+	# disable some systems
+	chroot opendsp systemctl disable systemd-timesyncd
 }
 
 compress() {

@@ -7,7 +7,7 @@ pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(sudo xorg-server xorg-xinit xorg-server-common xterm openbox x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings-git xdotool ingen-git mda.lv2 calf ecasound xwax projectm-jack rtirq cpupower parted)
+depends=(sudo xorg-server xorg-xinit xorg-server-common xterm openbox x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings-git xdotool ingen-git mda.lv2 calf ecasound xwax projectm-jack rtirq samba cpupower parted)
 install="$pkgname.install"
 source=("git+https://github.com/midilab/opendspd.git")
 md5sums=('SKIP')
@@ -37,6 +37,7 @@ package()
   install -vD ../../systemd/opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
   install -vD ../../systemd/x11vnc.service  -m 0644 $pkgdir/etc/systemd/system/x11vnc.service
   install -vD ../../systemd/startx.service  -m 0644 $pkgdir/etc/systemd/system/startx.service
+  install -vD ../../systemd/sambafix.service  -m 0644 $pkgdir/etc/systemd/system/sambafix.service
   install -vd -m 0755 $pkgdir/home/opendsp/data/
   cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
 }
