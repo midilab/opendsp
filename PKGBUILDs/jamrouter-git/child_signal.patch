@@ -1,0 +1,15 @@
+--- jamrouter.c	2018-11-28 07:05:20.289990764 +0000
++++ jamrouter.c.mod	2018-11-28 07:14:05.899990563 +0000
+@@ -380,10 +380,8 @@
+ int
+ init_signal_handlers(void)
+ {
+-	int                 signals[14] = {
+-		SIGHUP,  SIGINT,  SIGQUIT, SIGILL,  SIGABRT, SIGFPE,  SIGSEGV,
+-		SIGPIPE, SIGALRM, SIGTERM, SIGUSR1, SIGUSR2, SIGCHLD, 0
+-	};
++	int signals[4] = { SIGHUP,  SIGINT, SIGTERM, 0 };
++
+ 	struct sigaction    action;
+ 	int                 j;
+ 

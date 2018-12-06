@@ -44,9 +44,11 @@ prepare() {
   find . -type f | xargs sed -i  's/\-m32 / /g'
   # typo error fix
   find . -type f | xargs sed -i  's/ mfence/mfence/g'
-  # port assembly instruction mfence to arm related mdb
-  find . -type f | xargs sed -i  's/mfence/dmb ish/g'
-  #find . -type f | xargs sed -i  's/mfence/dmb/g' 
+  # port assembly instruction mfence to arm related dmb
+  # reference: https://www.cl.cam.ac.uk/~pes20/cpp/cpp0xmappings.html
+  find . -type f | xargs sed -i  's/mfence; # read\/write fence/dmb ish/g'
+  # fix for posix std: https://github.com/williamweston/jamrouter/pull/1 
+  patch src/jamrouter.c < ../../child_signal.patch
   # dont let config.status screw our work
   sed -i 's/config.status \-\-recheck/config.status/g' Makefile
   sed -i 's/config.status \-\-recheck/config.status/g' Makefile.in 
