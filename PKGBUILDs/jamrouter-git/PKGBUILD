@@ -46,7 +46,7 @@ prepare() {
   find . -type f | xargs sed -i  's/ mfence/mfence/g'
   # port assembly instruction mfence to arm related dmb
   # reference: https://www.cl.cam.ac.uk/~pes20/cpp/cpp0xmappings.html
-  find . -type f | xargs sed -i  's/mfence; # read\/write fence/dmb ish/g'
+  find . -type f | xargs sed -i  's/mfence; # read\/write fence/dmb/g'
   # fix for posix std: https://github.com/williamweston/jamrouter/pull/1 
   patch src/jamrouter.c < ../../child_signal.patch
   # dont let config.status screw our work
