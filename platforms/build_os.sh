@@ -67,6 +67,11 @@ opendsp_tunning() {
 	chroot opendsp ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
 	
 	# setup samba share for user data
+	# run for the first time to create dir structure
+	chroot opendsp systemctl start smb
+	chroot opendsp systemctl start nmb	
+	chroot opendsp systemctl stop nmb
+	chroot opendsp systemctl stop smb	
 	chroot opendsp smbpasswd -a opendsp -n
 	cat <<EOF > opendsp/etc/samba/smb.conf	
 [global]
@@ -92,14 +97,16 @@ opendsp_tunning() {
   public = yes
 EOF
 
+	# enable service at boot time
+	chroot opendsp systemctl enable smb
+	chroot opendsp systemctl enable nmb	
+
 	# little hack that enable us to start samba on read only file system
 	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
 	mkdir opendsp/var/cache/samba
 	mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
 	mkdir opendsp/var/lib/samba
 	chroot opendsp systemctl enable sambafix
-	chroot opendsp systemctl enable smb
-	chroot opendsp systemctl enable nmb
 	cat <<EOF >> opendsp/etc/fstab
 # ram memory runtime filesystems
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
