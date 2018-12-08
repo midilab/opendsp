@@ -1,0 +1,7 @@
+touch /tmp/.Xauthority
+
+if read proto cookie; 
+ then 
+    echo "add $DISPLAY $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
+    echo "add `echo $DISPLAY | sed 's/:/\/unix:/'` $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
+fi
