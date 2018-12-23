@@ -24,15 +24,6 @@ post_install() {
 		mkdir /home/opendsp/.ssh/
 		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.ssh/environment
 		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.profile
-		cat <<EOF > /home/opendsp/.ssh/rc
-touch /tmp/.Xauthority
-
-if read proto cookie; 
- then 
-    echo "add $DISPLAY $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
-    echo "add `echo $DISPLAY | sed 's/:/\/unix:/'` $proto $cookie" | xauth -q -f /tmp/.Xauthority -;
-fi
-EOF		
 		
 		# set sudo permition to enable opendspd changes realtime priority of process
 		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
