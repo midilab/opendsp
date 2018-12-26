@@ -1,6 +1,7 @@
 [Unit]
 Description=OpenDSP Remote Control Service
-After=remote-fs.service
+Wants=network-online.target
+After=network-online.target
 #ConditionCapability=CAP_SYS_NICE
 
 [Service]
