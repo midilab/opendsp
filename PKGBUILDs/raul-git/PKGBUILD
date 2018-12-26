@@ -3,7 +3,7 @@
 
 _pkgname="raul"
 pkgname="${_pkgname}-git"
-pkgver=0.8.10.r567.5eb7a55
+pkgver=0.8.10.r587.a6b5e9b
 pkgrel=1
 epoch=1
 pkgdesc="Realtime Audio Utility Library aimed at audio and musical applications"
