@@ -16,7 +16,6 @@ post_install() {
 		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
 
 		# xinitrc: anything for now... we just dont need a window manager
-		#echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc
 		echo "while [ 1 ]; do" > /home/opendsp/.xinitrc
 		echo "  sleep 10000" >> /home/opendsp/.xinitrc
 		echo "done" >> /home/opendsp/.xinitrc

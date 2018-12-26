@@ -6,9 +6,9 @@ After=systemd-user-session.service
 Type=forking
 Environment="DISPLAY=:1"
 ExecStartPre=/bin/su opendsp -l -c "/usr/bin/Xvfb :1 -screen 0 1280x1024x16 &"
-#ExecStart=/bin/sh -c "/usr/bin/x11vnc -auth /tmp/.Xauthority -display :1 -norc -forever -shared -bg -autoport 5900 &"
-ExecStart=/bin/sh -c "/usr/bin/novnc &"
+ExecStart=/bin/sh -c "/usr/bin/x11vnc -auth /tmp/.Xauthority -display :1 -norc -forever -shared -bg -autoport 5900 &"
 ExecStartPost=/bin/sh -c "/usr/bin/openbox &"
+ExecStartPost=/bin/sh -c "/usr/bin/novnc &"
 Restart=on-failure
 RestartSec=5
 WorkingDirectory=/home/opendsp/

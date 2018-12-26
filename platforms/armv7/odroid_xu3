@@ -1,17 +1,5 @@
 #!/bin/bash
-# host dependencies:
-# on archlinux
-# sudo pacman -S multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static arch-install-scripts
-# most debian based
-# sudo apt-get install multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static
-# Register the qemu-arm-static as an ARM interpreter in the kernel (using binfmt_misc kernel module)
-# as root:
-#sudo update-binfmts --enable arm
-#sudo systemctl enable binfmt-support.service # to load on boot up
-# or
-# echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register
 
-boot_size=128
 root_size=3300
 home_size=256
 device=""
@@ -20,7 +8,7 @@ prepare() {
 
 	image_name=$1
 
-	image_size=$(($boot_size+$root_size+$home_size+64))
+	image_size=$(($root_size+$home_size+64))
 
 	dd if=/dev/zero of=$image_name  bs=1M  count=$image_size
 		
@@ -30,19 +18,12 @@ o
 n
 
 
-
-+$(($boot_size))M
-t
-c
-n
-
-
-
+4096
 +$(($root_size))M
 n
 
 
-
+6762496
 +$(($home_size))M
 p
 w
@@ -50,12 +31,9 @@ EOF
 
 	# prepare img
 	device="$(losetup --show -f -P "$image_name")"
-	bootpart="${device}p1"
-	rootpart="${device}p2"
-	homepart="${device}p3"
+	rootpart="${device}p1"
+	homepart="${device}p2"
 
-	# setup boot partition
-	mkfs.fat -n BOOT $bootpart
 	# setup root partition
 	mkfs.ext4 -L ROOT $rootpart
 	# setup user land partition
@@ -67,16 +45,11 @@ EOF
 	mkdir -v opendsp
 	mount -v -t ext4 -o sync $rootpart opendsp
 	
-	# mount boot
-	mkdir -v opendsp/boot
-	mount -v -t vfat -o sync $bootpart opendsp/boot
-	
 	# mount user land
 	mkdir -v opendsp/home
 	mkdir -v opendsp/home/opendsp
 	mkdir -v opendsp/home/opendsp/data
-	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
-	
+	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data	
 }
 
 mount_img() {
@@ -85,16 +58,12 @@ mount_img() {
 	
 	# mount on loop device
 	device="$(losetup --show -f -P "$image_name")"
-	bootpart="${device}p1"
-	rootpart="${device}p2"
-	homepart="${device}p3"
+	rootpart="${device}p1"
+	homepart="${device}p2"
 
 	# mount root
 	mkdir -v opendsp
 	mount -v -t ext4 -o sync $rootpart opendsp
-	
-	# mount boot
-	mount -v -t vfat -o sync $bootpart opendsp/boot
 	
 	# mount user land
 	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
@@ -148,9 +117,13 @@ umount_img() {
 install() {
 		
 	# install platform into img
-	wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-	bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
-	#tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
+	wget http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-xu3-latest.tar.gz
+	bsdtar -xvpf ArchLinuxARM-odroid-xu3-latest.tar.gz -C opendsp || true
+
+	# flash bootloader 
+	cd opendsp/boot/
+	sh sd_fusing.sh $device
+	cd ../..
 
 	# prepare for chroot using qemu
 	echo  ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
@@ -193,52 +166,25 @@ set -e
 systemctl stop opendsp
 umount -v /home/opendsp/data || true
 
-parted /dev/mmcblk0 <<\EOF
+parted /dev/mmcblk1 <<\EOF
 resizepart
-3
+2
 -16M
 q
 \EOF
 EOF
 
-}	
+}
 
 tunning() {
 
 	# enable broadcom video core drivers for GPU acceleration
 	# delete first ocurrence of gpu_men
 	#sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt		
-	
-	echo "gpu_mem=256" >> opendsp/boot/config.txt
-	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
-	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
-	
-	# enable onboard sound
-	echo "dtparam=audio=on" >> opendsp/boot/config.txt
-	echo "disable_audio_dither=1" >> opendsp/boot/config.txt
-	# other vendors soundcards
-	#dtoverlay=hifiberry-dacplus
-	###dtoverlay=hifiberry-dac
-	###dtoverlay=hifiberry-digi
-	###dtoverlay=hifiberry-amp
-	###dtoverlay=audioinjector-wm8731-audio
-	###dtoverlay=iqaudio-dac
-	###dtoverlay=iqaudio-dacplus
-	###dtoverlay=iqaudio-digi-wm8804-audio
-	###dtoverlay=pisound
-	###dtoverlay=justboom-dac
-	###dtoverlay=justboom-digi
-	###dtoverlay=i2s-mmap
-	###dtoverlay=pi3-disable-bt
-	##dtoverlay=pi3-disable-wifi
-	
-	# enable MIDI overlay driver for uart
-	echo "enable_uart=1" >> opendsp/boot/config.txt
-	echo "dtoverlay=pi3-miniuart-bt" >> opendsp/boot/config.txt
-	echo "dtoverlay=midi-uart0" >> opendsp/boot/config.txt
+	#echo "gpu_mem=256" >> opendsp/boot/config.txt
 
 	# config defaults for hdmi
-	echo "hdmi_force_hotplug=1" >> opendsp/boot/config.txt
+	###echo "hdmi_force_hotplug=1" >> opendsp/boot/config.txt
 	#echo "hdmi_drive=2" >> opendsp/boot/config.txt
 	#echo "hdmi_group=1" >> opendsp/boot/config.txt
 	#echo "hdmi_mode=1" >> opendsp/boot/config.txt
@@ -253,22 +199,25 @@ tunning() {
 	
 	# install xf86 drivers for vc4 broadcom GPU
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -S xf86-video-fbdev || true
+	while [ $retVal -ne 0 ]; do	
+#odroid-libgl				ODROID-X/X2/U2/U3 Mali GL Driver
+#odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
+#odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
+#odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
+		chroot opendsp pacman -S xf86-video-fbturbo-git || true
 		retVal=$?
 	done	
 	
 	# take uart usage off for console, we need it for MIDI uart
-	sed -i 's/ console=ttyAMA0,115200//' opendsp/boot/cmdline.txt
-	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
+	sed -i 's/ console=ttySAC2,115200n8//' opendsp/boot/boot.txt
 	
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
-	sed -i 's/ console=tty1/ console=null quiet logo.nologo consoleblank=0 isolcpus=1,2,3/' opendsp/boot/cmdline.txt
-	echo "disable_splash=1" >> opendsp/boot/config.txt
-	echo "avoid_warnings=1" >> opendsp/boot/config.txt
-	
+	sed -i 's/ console=tty1/ console=null quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
+	#echo "disable_splash=1" >> opendsp/boot/config.txt
+	#echo "avoid_warnings=1" >> opendsp/boot/config.txt
+
 	# enabling threadirqs and boot read only file system and other system options
-	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/cmdline.txt	
+	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/boot.txt
 	
 	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
 	cat <<EOF > opendsp/etc/rtirq.conf	
@@ -303,9 +252,8 @@ EOF
 # See fstab(5) for details.
 
 # readonly filesystems
-/dev/mmcblk0p1  /boot                   vfat    ro,auto,exec            0       2
-/dev/mmcblk0p2  /                       ext4    defaults,noatime,ro     0       1
-/dev/mmcblk0p3  /home/opendsp/data      ext4    defaults,noatime,rw     0       1
+/dev/mmcblk1p1  /                       ext4    defaults,noatime,ro     0       1
+/dev/mmcblk1p2  /home/opendsp/data      ext4    defaults,noatime,rw     0       1
 EOF
 		
 	## Remount /dev/shm to prevent memory allocation errors
@@ -318,7 +266,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "novnc" "opendspd")
+	declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "novnc" "opendspd")
 	
 	for i in "${package[@]}"
 	do
