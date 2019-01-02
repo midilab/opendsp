@@ -124,8 +124,18 @@ tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0      
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 
+#lrwxrwxrwx 1 opendsp opendsp   31 Dec 20 11:24 .mixxx -> /home/opendsp/data/djing/mixxx/
+#lrwxrwxrwx 1 opendsp opendsp   39 Dec 25  2018 .projectM -> /home/opendsp/data/visualizer/projectM/
+
+	# create config dir link on data partition for apps that need write access
+	#ln -s /home/
 	# disable some systems
 	#chroot opendsp systemctl disable systemd-timesyncd
+
+	# /etc/create_ap.conf
+	#SSID=OpenDSP
+	#PASSPHRASE=opendsp_
+
 }
 
 compress() {

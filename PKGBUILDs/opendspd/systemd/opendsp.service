@@ -2,7 +2,12 @@
 Description=OpenDSP Remote Control Service
 Wants=network-online.target
 After=network-online.target
+#After=network.target
+After=remote-fs.service
+After=systemd-user-sessions.service
 #ConditionCapability=CAP_SYS_NICE
+After=getty.target
+
 
 [Service]
 Type=simple

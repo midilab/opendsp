@@ -191,6 +191,8 @@ install() {
 set -e
 
 systemctl stop opendsp
+systemctl stop smb
+systemctl stop nmb
 umount -v /home/opendsp/data || true
 
 parted /dev/mmcblk0 <<\EOF
@@ -199,6 +201,10 @@ resizepart
 -16M
 q
 \EOF
+
+e2fsck /dev/mmcblk1p2
+resize2fs /dev/mmcblk1p2
+
 EOF
 
 }	

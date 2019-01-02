@@ -164,6 +164,8 @@ install() {
 set -e
 
 systemctl stop opendsp
+systemctl stop smb
+systemctl stop nmb
 umount -v /home/opendsp/data || true
 
 parted /dev/mmcblk1 <<\EOF
@@ -172,6 +174,10 @@ resizepart
 -16M
 q
 \EOF
+
+e2fsck /dev/mmcblk1p2
+resize2fs /dev/mmcblk1p2
+
 EOF
 
 }
@@ -204,7 +210,8 @@ tunning() {
 #odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
 #odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
 #odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
-		chroot opendsp pacman -S xf86-video-fbturbo-git || true
+		#chroot opendsp pacman -S odroid-xu3-libgl-x11 xf86-video-armsoc-odroid odroid-xu3-libgl-headers || true
+		chroot opendsp pacman -S xf86-video-fbdev || true
 		retVal=$?
 	done	
 	
