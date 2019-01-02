@@ -39,6 +39,6 @@ package()
   install -vD ../../systemd/display.service  -m 0644 $pkgdir/etc/systemd/system/display.service
   install -vD ../../systemd/sambafix.service  -m 0644 $pkgdir/etc/systemd/system/sambafix.service
   install -vD ../../rc_ssh  -m 0644 $pkgdir/home/opendsp/.ssh/rc
-  install -vd -m 0755 $pkgdir/home/opendsp/data/
-  cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
+  #install -vd -m 0755 $pkgdir/home/opendsp/data/
+  #cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
 }
