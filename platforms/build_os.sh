@@ -58,8 +58,7 @@ opendsp_tunning() {
 	# 
 	echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
 	echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
-	# enabling threadirqs and boot read only file system and other system options
-	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/cmdline.txt	
+	
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
 	#systemctl enable avahi-daemon
@@ -74,13 +73,9 @@ opendsp_tunning() {
 	# newer archlinux versions need to generate ssh keys by our own
 	chroot opendsp ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
 	
-	# setup samba share for user data
-	# run for the first time to create dir structure
-	chroot opendsp systemctl start smb
-	chroot opendsp systemctl start nmb	
-	chroot opendsp systemctl stop nmb
-	chroot opendsp systemctl stop smb	
-	chroot opendsp smbpasswd -a opendsp -n
+	# enable service at boot time
+	chroot opendsp systemctl enable smb
+	chroot opendsp systemctl enable nmb		
 	cat <<EOF > opendsp/etc/samba/smb.conf	
 [global]
   workgroup = OpenDSPGroup
@@ -104,10 +99,15 @@ opendsp_tunning() {
   printable = no
   public = yes
 EOF
-
-	# enable service at boot time
-	chroot opendsp systemctl enable smb
-	chroot opendsp systemctl enable nmb	
+	
+	# setup samba share for user data
+	# run for the first time to create dir structure
+	# we need to run it on first boot
+	chroot opendsp systemctl start smb
+	chroot opendsp systemctl start nmb	
+	chroot opendsp systemctl stop nmb
+	chroot opendsp systemctl stop smb	
+	chroot opendsp smbpasswd -a opendsp -n
 
 	# little hack that enable us to start samba on read only file system
 	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
@@ -123,16 +123,19 @@ tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       
 tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
 EOF
-	
-	cat <<EOF > opendsp/home/opendsp/.xinitrc	
-# we dont need fancy wm... just loop to the eternity
-while [ 1 ]; do
-  sleep 10000
-done
-EOF
 
+#lrwxrwxrwx 1 opendsp opendsp   31 Dec 20 11:24 .mixxx -> /home/opendsp/data/djing/mixxx/
+#lrwxrwxrwx 1 opendsp opendsp   39 Dec 25  2018 .projectM -> /home/opendsp/data/visualizer/projectM/
+
+	# create config dir link on data partition for apps that need write access
+	#ln -s /home/
 	# disable some systems
-	chroot opendsp systemctl disable systemd-timesyncd
+	#chroot opendsp systemctl disable systemd-timesyncd
+
+	# /etc/create_ap.conf
+	#SSID=OpenDSP
+	#PASSPHRASE=opendsp_
+
 }
 
 compress() {
@@ -166,7 +169,7 @@ opendsp_install $hostname
 install_packages
 
 # platform specific tunnings
-tunning
+#tunning
 
 # generic and non platform dependent opendsp tunning parameters for reatime kernel and ecosystem setup
 opendsp_tunning

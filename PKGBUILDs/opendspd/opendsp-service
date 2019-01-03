@@ -27,4 +27,7 @@ if __name__ == '__main__':
 
     # daemonize us \_/
     odsp.run_manager()
+    
+    # in case we stop odsp, destroy the object
+    del odsp
 

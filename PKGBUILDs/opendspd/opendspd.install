@@ -16,7 +16,6 @@ post_install() {
 		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
 
 		# xinitrc: anything for now... we just dont need a window manager
-		#echo "exec xterm -bg black -fg white -maximized" >> /home/opendsp/.xinitrc
 		echo "while [ 1 ]; do" > /home/opendsp/.xinitrc
 		echo "  sleep 10000" >> /home/opendsp/.xinitrc
 		echo "done" >> /home/opendsp/.xinitrc
@@ -34,8 +33,6 @@ post_install() {
 
 		# enable our service
 		systemctl enable opendsp
-		#systemctl enable display
-		#systemctl enable vdisplay	
 		
 		# setup visualizer projectm to hold on user data partition
 		mkdir -v /home/opendsp/data/visualizer/projectM
@@ -52,7 +49,8 @@ post_install() {
 }
 
 post_upgrade() {
-  post_install
+	# setup sane permitions
+	chown -R opendsp:opendsp /home/opendsp/		  
 }
 
 post_remove() {
