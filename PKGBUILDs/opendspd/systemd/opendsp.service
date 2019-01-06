@@ -1,16 +1,8 @@
 [Unit]
 Description=OpenDSP Remote Control Service
-Wants=network-online.target
-After=network-online.target
-#After=network.target
-After=remote-fs.service
-After=systemd-user-sessions.service
-#ConditionCapability=CAP_SYS_NICE
-After=getty.target
-
 
 [Service]
-Type=simple
+Type=idle
 User=opendsp
 Group=opendsp
 WorkingDirectory=/home/opendsp/
@@ -19,12 +11,12 @@ Environment="DISPLAY=:0"
 Environment="XAUTHORITY=/tmp/.Xauthority"
 StandardOutput=syslog
 StandardError=syslog
-#CPUSchedulingPolicy=rr
-#CPUSchedulingPriority=50
 LimitRTPRIO=infinity
 LimitMEMLOCK=infinity
 LimitRTTIME=infinity
 TasksMax=infinity
+Restart=on-failure
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

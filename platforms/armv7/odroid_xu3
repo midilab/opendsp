@@ -206,12 +206,31 @@ tunning() {
 	# install xf86 drivers for vc4 broadcom GPU
 	retVal=-1
 	while [ $retVal -ne 0 ]; do	
-#odroid-libgl				ODROID-X/X2/U2/U3 Mali GL Driver
-#odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
-#odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
-#odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
-		#chroot opendsp pacman -S odroid-xu3-libgl-x11 xf86-video-armsoc-odroid odroid-xu3-libgl-headers || true
-		chroot opendsp pacman -S xf86-video-fbdev || true
+		#odroid-libgl				ODROID-X/X2/U2/U3 Mali GL Driver
+		#odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
+		#odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
+		#odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
+		#chroot opendsp pacman -S odroid-xu3-libgl-x11 odroid-xu3-libgl-headers || true
+		# this needs special kernel parameter
+		chroot opendsp pacman -S xf86-video-fbdev odroid-xu3-libgl-fb || true
+		# or xf86-video-armsoc-odroid
+		#Section "Device"
+		#   Identifier "Mali-Fbdev"
+		#   Driver   "armsoc"
+		#   Option   "fbdev"           "/dev/fb0"
+		#   Option  "DriverName"      "exynos"
+		#   Option  "Debug" "false"
+		#EndSection
+		#
+		#Section "Screen"
+		#   Identifier   "Mali-Screen"
+		#   Device       "Mali-Fbdev"
+		#   DefaultDepth 24 
+		#EndSection
+		#
+		#Section "DRI"
+		#   Mode 0666
+		#EndSection
 		retVal=$?
 	done	
 	
@@ -219,39 +238,12 @@ tunning() {
 	sed -i 's/ console=ttySAC2,115200n8//' opendsp/boot/boot.txt
 	
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
-	sed -i 's/ console=tty1/ console=null quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
+	sed -i 's/ console=tty1/ console=null fsck.repair=yes quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
 	#echo "disable_splash=1" >> opendsp/boot/config.txt
 	#echo "avoid_warnings=1" >> opendsp/boot/config.txt
 
 	# enabling threadirqs and boot read only file system and other system options
-	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/boot.txt
-	
-	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
-	cat <<EOF > opendsp/etc/rtirq.conf	
-RTIRQ_NAME_LIST="DMA bcm2835 VCHIQ vc4 3f00b880 3f200000 3f804000 3f805000 dwc uart-p"
-
-# Highest priority.
-RTIRQ_PRIO_HIGH=90
-
-# Priority decrease step.
-RTIRQ_PRIO_DECR=3
-
-# Lowest priority.
-RTIRQ_PRIO_LOW=51
-
-# Whether to reset all IRQ threads to SCHED_OTHER.
-RTIRQ_RESET_ALL=0
-
-# Process names which will be forced to the
-# highest realtime priority range (99-91)
-# (space separated list, from highest to lower priority).
-# RTIRQ_HIGH_LIST="timer"
-
-# On kernel configurations that support it,
-# which services should be NOT threaded 
-# (space separated list).
-RTIRQ_NON_THREADED="ksoftirqd"
-EOF
+	sed -i 's/ rw/ ro/' opendsp/boot/boot.txt
 	
 	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab

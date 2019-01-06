@@ -202,8 +202,13 @@ resizepart
 q
 \EOF
 
-e2fsck /dev/mmcblk1p2
-resize2fs /dev/mmcblk1p2
+e2fsck /dev/mmcblk0p2
+resize2fs /dev/mmcblk0p2
+
+# set output of onboard always to jack
+amixer cset numid=3 1
+
+
 
 EOF
 
@@ -261,6 +266,7 @@ tunning() {
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
 		chroot opendsp pacman -S xf86-video-fbdev || true
+		#chroot opendsp pacman -S xf86-video-fbturbo-git || true
 		retVal=$?
 	done	
 	
@@ -269,12 +275,12 @@ tunning() {
 	sed -i 's/ kgdboc=ttyAMA0,115200//' opendsp/boot/cmdline.txt
 	
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
-	sed -i 's/ console=tty1/ console=null quiet logo.nologo consoleblank=0 isolcpus=1,2,3/' opendsp/boot/cmdline.txt
+	sed -i 's/ console=tty1/ console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0/' opendsp/boot/cmdline.txt
 	echo "disable_splash=1" >> opendsp/boot/config.txt
 	echo "avoid_warnings=1" >> opendsp/boot/config.txt
 	
 	# enabling threadirqs and boot read only file system and other system options
-	sed -i 's/ rw/ ro threadirqs fsck.repair=yes nohz=off/' opendsp/boot/cmdline.txt	
+	sed -i 's/ rw/ ro /' opendsp/boot/cmdline.txt	
 	
 	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
 	cat <<EOF > opendsp/etc/rtirq.conf	
