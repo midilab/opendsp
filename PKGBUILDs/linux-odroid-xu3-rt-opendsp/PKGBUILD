@@ -20,10 +20,10 @@ source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '99-linux.hook')
 md5sums=('a8bef40edc2779dd3ee11a1b368f005e'
-         'ae2a36bc59d5abf26ae537c0110ae337'
-         'a84976d500db50cee07177eccfe2f455'
+         'af146540fc966871942eb844aef9611c'
+         'c0079f067681a9abb12d9611fe3ecf2a'
          '79fa396e3f9a09a85156d6d7c2d34b58')
-
+         
 prepare() {
   cd "${srcdir}/${_srcname}"
 
