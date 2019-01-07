@@ -2,7 +2,7 @@
 
 _pkgname=mda-lv2
 pkgname="${_pkgname}-git"
-pkgver=1.2.2.r184.2baf4a1
+pkgver=1.2.2.r197.dc11f75
 pkgrel=1
 pkgdesc="A port of the MDA VST plugins to the LV2 format"
 arch=("armv7h" "i686" "x86_64")
@@ -27,6 +27,8 @@ build() {
   cd "${srcdir}/${_pkgname}"
 
   python ./waf configure --prefix="/usr"
+
+  sed -i 's/lv2.h/\/usr\/include\/lv2\/lv2.h/' lvz/wrapper.cpp
   python ./waf build
 }
 
