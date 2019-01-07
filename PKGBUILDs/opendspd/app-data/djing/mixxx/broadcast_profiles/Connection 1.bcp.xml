@@ -4,7 +4,7 @@
     <Enabled>1</Enabled>
     <Host></Host>
     <Port>8000</Port>
-    <Servertype></Servertype>
+    <Servertype>Icecast2</Servertype>
     <Login></Login>
     <Password></Password>
     <EnableReconnect>1</EnableReconnect>
@@ -15,11 +15,11 @@
     <ReconnectFirstDelay>0</ReconnectFirstDelay>
     <Mountpoint></Mountpoint>
     <StreamName></StreamName>
-    <StreamDesc>This stream is online for testing purposes!</StreamDesc>
+    <StreamDesc>OpenDSP djing streming!</StreamDesc>
     <StreamGenre>Live Mix</StreamGenre>
     <StreamPublic>0</StreamPublic>
     <StreamWebsite>https://www.mixxx.org</StreamWebsite>
-    <Format></Format>
+    <Format>MP3</Format>
     <Bitrate>128</Bitrate>
     <Channels>2</Channels>
     <EnableMetadata>0</EnableMetadata>
