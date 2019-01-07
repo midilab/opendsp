@@ -1,0 +1,625 @@
+Debug [Main]: SoundSourceProxy - Loading SoundSource plugins "/usr/lib/mixxx/plugins/soundsource" 
+Debug [Main]: SoundSourcePluginLibrary - Dynamically loaded plugin library "/usr/lib/mixxx/plugins/soundsource/libsoundsourcem4a.so" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "aif" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "aiff" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "caf" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "flac" 
+Debug [Main]: SoundSourceProxy -   2 : "Xiph.org libFLAC" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "m4a" 
+Debug [Main]: SoundSourceProxy -   2 : "Nero FAAD2" @ "/usr/lib/mixxx/plugins/soundsource/libsoundsourcem4a.so" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "mp3" 
+Debug [Main]: SoundSourceProxy -   2 : "MAD: MPEG Audio Decoder" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "mp4" 
+Debug [Main]: SoundSourceProxy -   2 : "Nero FAAD2" @ "/usr/lib/mixxx/plugins/soundsource/libsoundsourcem4a.so" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "ogg" 
+Debug [Main]: SoundSourceProxy -   2 : "Xiph.org OggVorbis" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "opus" 
+Debug [Main]: SoundSourceProxy -   2 : "Xiph.org libopusfile" 
+Debug [Main]: SoundSourceProxy - SoundSource providers for file extension "wav" 
+Debug [Main]: SoundSourceProxy -   1 : "libsndfile" 
+Debug [Main]: "Mixxx" "2.1.5" "(git master r96; built on: Dec 15 2018 @ 18:31:15; flags: asan=0 battery=1 buildtime=1 bulk=1 color=0 coreaudio=0 faad=1 ffmpeg=0 hid=1 hss1394=0 ipod=0 localecompare=0 macappstore=0 mad=1 mediafoundation=0 modplug=0 opengles=1 optimize=native opus=1 perftools=0 perftools_profiler=0 profiling=0 qdebug=1 qt_sqlite_plugin=1 qtkeychain=0 shoutcast=1 test=False tsan=0 ubsan=0 vamp=1 verbose=1 vinylcontrol=1 wv=0)" is starting... 
+Debug [Main]: Compile time library versions: 
+Debug [Main]: Qt: 4.8.7 
+Debug [Main]: libshout: 2.4.1 
+Debug [Main]: PortAudio: 1246720 PortAudio V19.6.0-devel, revision 396fe4b6699ae929d3a685b3ef8a7e97396139a4 
+Debug [Main]: RubberBand: 1.8.2 
+Debug [Main]: SoundTouch: 2.0.0 
+Debug [Main]: TagLib: 1.11.1 
+Debug [Main]: ChromaPrint: 1.4.3 
+Debug [Main]: Vorbis: Xiph.Org libVorbis 1.3.6 
+Debug [Main]: libsndfile: libsndfile-1.0.28 
+Debug [Main]: FLAC: 1.3.2 
+Debug [Main]: QDesktopServices::storageLocation(HomeLocation): "/home/opendsp" 
+Debug [Main]: QDesktopServices::storageLocation(DataLocation): "/home/opendsp/.local/share/data//Mixxx" 
+Debug [Main]: QCoreApplication::applicationDirPath() "/usr/bin" 
+Debug [StatsManager]: StatsManager thread starting up. 
+Debug [Main]: Loading resources from  "/usr/share/mixxx/" 
+Warning [Main]: Configuration file is at version "2.1.1" instead of the current 2.1.5 
+Debug [Main]: BroadcastSettings - Profiles folder doesn't exist. Creating it. 
+Debug [Main]: BroadcastSettings - No profiles found. Creating default profile. 
+Debug [Main]: Loading resources from  "/usr/share/mixxx/" 
+Debug [Main]: Loading resources from  "/usr/share/mixxx/" 
+Debug [Main]: Loading translations for locale "C" from translations folder "/usr/share/mixxx/translations/" : fail 
+Debug [Main]: "Error: Unable to import console: no such extension" 
+Debug [Main]: "Error: Unable to import svg: no such extension" 
+Debug [Main]: Loading resources from  "/usr/share/mixxx/" 
+Debug [Main]: ConfigObject: Could not read "/home/opendsp/.mixxx/sandbox.cfg" 
+Debug [Main]: FONT LOADED family: "Open Sans" style: "Regular" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Open Sans" style: "Oblique" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Bold" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Bold Oblique" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Regular" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Bold" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Oblique" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: FONT LOADED family: "Ubuntu" style: "Bold Oblique" point sizes: "6,7,8,9,10,11,12,14,16,18,20,22,24,26,28,36,48,72" 
+Debug [Main]: Compressor attack per frame:  0.000408163 decay per frame:  4.08163e-05 
+Debug [Main]: JACK client name set 
+Debug [Main]: EngineNetworkStream - addWorker: worker added 
+Debug [Main]: EngineNetworkStream - worker slots used: "1 out of 16" 
+Debug [Main]: BroadcastManager - addConnection: created connection for profile "Connection 1" 
+Debug [Main]: WARNING: AudioInput already registered! 
+Debug [Main]: WARNING: AudioInput already registered! 
+Debug [Main]: DbConnection - Available drivers for database connections: ("QSQLITE") 
+Debug [Main]: DbConnection - Opening database connection "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=false) 
+Debug [Main]: DbConnectionPool - Cloned thread-local database connection "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: MixxxMainWindow - Connecting to database 
+Debug [Main]: DbConnectionPooled - Found thread-local database connection "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: MixxxMainWindow - Initializing or upgrading database schema 
+Debug [Main]: SettingsDAO - Failed to prepare query: Returning default value "" for "mixxx.schema.version" 
+Debug [Main]: SchemaManager - Upgrading database schema from version 0 to version 28 
+Debug [Main]: SchemaManager - Loading database schema migrations from ":/schema.xml" 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 1 : "The base schema for the Mixxx SQLITE database." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 1 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 2 : "Add a header_parsed integer column to the library to indicate when a
+      track's tags have been parsed." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 2 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 3 : "Change the location column to be a an integer. Change comment to be
+      varchar(256) and album/artist/title to be varchar(64)." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 3 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 4 : "Add file type column." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 4 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 5 : "Add needs_verification column to library hashes table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 5 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 6 : "Added a ReplayGain Column." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 6 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 7 : "Add timesplayed and rating column. Reset header state." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 7 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 8 : "Added iTunes tables" 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 8 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 9 : "Tables for Traktor library feature" 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 9 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 10 : "Playlist and crate locks" 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 10 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 11 : "Tables for Rhythmbox library feature" 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 11 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 12 : "Add beats column to library table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 12 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 13 : "Add position column to Rhythmbox, iTunes, and Traktor playlist tables." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 13 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 14 : "Add composer column to library table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 14 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 15 : "Add datetime_added to playlists tracks." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 15 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 16 : "Add track analysis table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 16 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 17 : "Add columns for BPM lock and a sub-version string for beats." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 17 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 18 : "Add keys column to library table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 18 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 19 : "Add key_id column to library table for caching the global key. Default to
+      INVALID." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 19 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 20 : "Crates in AutoDJ queue (for automated random-track selection)." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 20 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 21 : "Add grouping and album_artist column to library table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 21 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 22 : "Add grouping and album_artist column to itunes_library table." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 22 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 23 : "Add directories table" 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 23 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 24 : "Add cover art support. Default source is UNKNOWN and default type is NONE." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 24 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 25 : "Add full replay gain support including peak amplitude. The default
+      value for the peak amplitude is "undefined", represented by any
+      negative value. The internal constant for "undefined" is -1.0." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 25 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 26 : "Add new column "tracktotal" column that stores the total number of
+      tracks as a string. The total number of tracks will be reloaded
+      from the corresponding file upon first access when encountering
+      the default value." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 26 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 27 : "Add cue color support. Default color is #FF0000." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 27 
+Debug [Main]: SchemaManager - Upgrading to database schema to version 28 : "Reset replay gain info for all FLAC files after fixing a decoding bug in version 2.1.0." 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: SchemaManager - Upgraded database schema to version 28 
+Debug [Main]: LibraryScanner - Starting thread 
+Debug [Main]: DbConnectionPooled - Found thread-local database connection "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: Library - Connecting database 
+Debug [LibraryScanner 1]: LibraryScanner - Entering thread 
+Debug [LibraryScanner 1]: DbConnection - Opening database connection "MIXXX-2" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=false) 
+Debug [LibraryScanner 1]: DbConnectionPool - Cloned thread-local database connection "MIXXX-2" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [LibraryScanner 1]: DbConnectionPooled - Found thread-local database connection "MIXXX-2" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [LibraryScanner 1]: LibraryScanner - Event loop starting 
+Debug [Main]: Committing transaction on "MIXXX-1" result: true 
+Debug [Main]: Committing transaction on "MIXXX-1" result: true 
+Debug [Main]: CrateFeature::rebuildChildModel() -1 
+Debug [Main]: Default quick links: () 
+Debug [Main]: Committing transaction on "MIXXX-1" result: true 
+Debug [Main]: Traktor Library Location=[ "/home/opendsp/collection.nml" ] 
+Debug [Main]: Checking for access to user's library directories: 
+Debug [AnalyzerQueue 1]: AnalyzerQueue - Entering thread 
+Debug [AnalyzerQueue 1]: DbConnection - Opening database connection "MIXXX-3" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=false) 
+Debug [AnalyzerQueue 1]: DbConnectionPool - Cloned thread-local database connection "MIXXX-3" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [AnalyzerQueue 1]: DbConnectionPooled - Found thread-local database connection "MIXXX-3" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: Committing transaction on "MIXXX-1" result: true 
+Debug [Main]: Creating ControllerManager 
+Debug [Controller]: ControllerManager:slotInitialize 
+Warning [Main]: Cannot connect to the D-Bus session bus.
+To start it, run:
+	eval `dbus-launch --auto-syntax`
+Debug [Main]: RLimit Cur  4294967295 
+Debug [Main]: RLimit Max  4294967295 
+Debug [Main]: ControllerManager::getControllerList 
+Debug [Main]: DbConnectionPooled - Found thread-local database connection "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: VampPluginAdapter - Current VAMP_PATH is: "" 
+Debug [Main]: VampPluginAdapter - Ignoring non-existent path: "/home/opendsp/.local/share/data/Mixxx" 
+Debug [Main]: VampPluginAdapter - Ignoring non-existent path: "/usr/bin" 
+Debug [Main]: VampPluginAdapter - Ignoring non-existent path: "/usr/bin" 
+Debug [Main]: VampPluginAdapter - Setting VAMP_PATH to: "/usr/lib/mixxx/plugins/vamp" 
+Debug [Main]: VampPluginLoader::listPlugins() returned 4 plugins 
+Debug [Main]: Plugin output displayname: "mixxxbpmdetection:0" "SoundTouch BPM Detector (Legacy)" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:0" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:1" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:2" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:3" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:0" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:1" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:2" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:3" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:0" "Tempo and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:1" "Tempo and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:2" "Tempo and Beat Tracker" 
+Debug [Main]: VampPluginLoader::listPlugins() returned 4 plugins 
+Debug [Main]: Plugin output displayname: "mixxxbpmdetection:0" "SoundTouch BPM Detector (Legacy)" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:0" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:1" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:2" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-barbeattracker:3" "Bar and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:0" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:1" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:2" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-keydetector:3" "Key Detector" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:0" "Tempo and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:1" "Tempo and Beat Tracker" 
+Debug [Main]: Plugin output displayname: "qm-tempotracker:2" "Tempo and Beat Tracker" 
+Debug [Main]: DlgPrefKey::loadSettings 
+Debug [Main]: Key plugin ID: "qm-keydetector:2" 
+Debug [Controller]: Extension .midi.xml total 110 presets 
+Debug [Controller]: Extension .hid.xml total 10 presets 
+Debug [Controller]: Extension .bulk.xml total 1 presets 
+Debug [Main]: Set root GL Context widget valid: QGLWidget(0x428e178) true 
+Debug [Main]: Created root GL Context valid: 0x43b61e8 true 
+Debug [Main]: Root GL Context format: 
+Debug [Main]: Double Buffering: true 
+Debug [Main]: Swap interval: -1 
+Debug [Main]: Depth buffer: true 
+Debug [Main]: Direct rendering: true 
+Debug [Main]: Has overlay: false 
+Debug [Main]: RGBA: true 
+Debug [Main]: Sample buffers: false 
+Debug [Main]: Samples: -1 
+Debug [Main]: Stencil buffers: true 
+Debug [Main]: Stereo: false 
+Debug [Main]: LegacySkinParser loading skin: "/usr/share/mixxx/skins/LateNight" 
+Debug [Main]: "Error: Unable to import console: no such extension" 
+Debug [Main]: "Error: Unable to import svg: no such extension" 
+Debug [Main]: 1 "system" 
+Debug [Main]: 2 "9, system" 
+Debug [Main]: WARNING: AudioInput already registered! 
+Debug [Main]: WARNING: AudioInput already registered! 
+Warning [Main]: Requested control does not exist: "[Microphone],show_microphone" Creating it. 
+Warning [Main]: Requested control does not exist: "[EffectRack1],show" Creating it. 
+Warning [Main]: Requested control does not exist: "[Samplers],show_samplers" Creating it. 
+Warning [Main]: Requested control does not exist: "[Vinylcontrol],show_vinylcontrol" Creating it. 
+Warning [Main]: Requested control does not exist: "[PreviewDeck],show_previewdeck" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_mixer" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_eqs" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_eq_kill_buttons" Creating it. 
+Warning [Main]: Requested control does not exist: "[Library],show_coverart" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_4decks" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_4effectunits" Creating it. 
+Warning [Main]: Requested control does not exist: "[Spinny],show_spinnies" Creating it. 
+Warning [Main]: Requested control does not exist: "[Library],show_library" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],show_xfader" Creating it. 
+Warning [Main]: Requested control does not exist: "[Skin],8_hotcues" Creating it. 
+Warning [Main]: Requested control does not exist: "[Master],maximize_library" Creating it. 
+Debug [Main]: Skin is a >=1.12.0 style skin. 
+Debug [Main]: WaveformWidgetFactory::setWaveformWidget - waveform widget added in factory, index 0 
+Warning [Main]: Requested control does not exist: "[Skin],beatgrid_buttons" Creating it. 
+Debug [Main]: WaveformWidgetFactory::setWaveformWidget - waveform widget added in factory, index 1 
+Debug [Main]: WaveformWidgetFactory::setWaveformWidget - waveform widget added in factory, index 2 
+Debug [Main]: WaveformWidgetFactory::setWaveformWidget - waveform widget added in factory, index 3 
+Debug [Main]: WTrackTableView::loadTrackModel() HiddenTableModel(0x4f91288) 
+Debug [Main]: WTrackTableView::loadTrackModel() MissingTableModel(0x4fd4638) 
+Debug [Main]: WTrackTableView::loadTrackModel() PlaylistTableModel(0x4090c28) 
+Debug [Main]: Recordings folder set to "/home/opendsp" 
+Debug [Main]: WTrackTableView::loadTrackModel() QSortFilterProxyModel(0x5048d30) 
+Debug [BrowseThread]: Append last  0 
+Debug [Main]: WTrackTableView::loadTrackModel() AnalysisLibraryTableModel(0x5000eb8) 
+Debug [Main]: AnalysisLibraryTableModel(0x5000eb8) select() took 2 ms 0 
+Debug [Main]: AnalysisLibraryTableModel(0x5000eb8) select() took 0 ms 0 
+Debug [Main]: DlgAnalysis(0x507acc8, name = "DlgAnalysis") analysisActive false 
+Warning [Main]: Requested control does not exist: "[VinylControl],show_vinylcontrol" Creating it. 
+Debug [Main]: WSpinny(): Created QGLWidget, Context Valid: true Sharing: true 
+Debug [Main]: couldn't create image from  "" 
+Debug [Main]: couldn't create image from  "" 
+Debug [Main]: couldn't create image from  "" 
+Debug [Main]: WSpinny(): Created QGLWidget, Context Valid: true Sharing: true 
+Debug [Main]: couldn't create image from  "" 
+Debug [Main]: WSpinny(): Created QGLWidget, Context Valid: true Sharing: true 
+Debug [Main]: couldn't create image from  "" 
+Debug [Main]: WSpinny(): Created QGLWidget, Context Valid: true Sharing: true 
+Debug [Main]: couldn't create image from  "" 
+Warning [Main]: Requested control does not exist: "[Master],show_superknobs" Creating it. 
+Debug [Main]: Unknown property qpoperty-layoutAlignment
+Debug [Main]: Unknown property qpoperty-layoutAlignment
+Debug [Main]: MixxxLibraryFeature::activate() 
+Debug [Main]: WTrackTableView::loadTrackModel() LibraryTableModel(0x32bf990) 
+Debug [Main]: LibraryTableModel(0x32bf990) select() took 0 ms 0 
+Debug [Main]: trying to restore position
+Debug [Main]: WSearchLineEdit::restoreSearch( "" ) 
+Debug [Controller]: ControllerManager: Setting up devices 
+Debug [Controller]: Scanning PortMIDI devices: 
+Debug [Controller]:  Found output device # 0 Midi Through Port-0 
+Debug [Controller]:  Found input device # 1 Midi Through Port-0 
+Debug [Controller]:     Linking to output device # 0 "Midi Through Port-0" 
+Warning [Main]: Could not read sampler bank file "/home/opendsp/.mixxx/samplers.xml" 
+Debug [LibraryScanner 1]: LibraryScanner - slotStartScan() 
+Debug [Main]: SoundManager::setupDevices() 
+Debug [Controller]: Scanning USB Bulk devices: 
+Debug [Controller]: Scanning HID devices: 
+Debug [Main]: SoundDevicePortAudio::open() "9, system" 
+Debug [Main]: framesPerBuffer: 256 
+Debug [Main]: Requested sample rate:  48000 Hz, latency: 5.33333 ms 
+Debug [Main]: Output channels: 2 | Input channels: 0 
+Debug [Main]: Opening stream with id 9 
+Debug [LibraryScanner 1]: LibraryScanner - Recursively scanning library. 
+Debug [LibraryScanner 1]: SqlTransaction - Started new SQL database transaction on "MIXXX-2" 
+Debug [Controller]: ControllerManager::getControllerList 
+Debug [Controller]: Searching for controller preset "Midi_Through_Port-0.midi.xml" in paths: "/home/opendsp/.mixxx/controllers/,/usr/share/mixxx/controllers/" 
+Debug [Controller]: Loading controller preset from "/home/opendsp/.mixxx/controllers/Midi_Through_Port-0.midi.xml" 
+Debug [LibraryScanner 1]: LibraryScanner - slotFinishHashedScan 
+Debug [Main]: Opened PortAudio stream successfully... starting 
+Debug [Main]: Dynamically loaded PortAudio library 
+Debug [Thread (pooled)]: Importing track "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" 
+Debug [Thread (pooled)]: Importing track "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" 
+Debug [Thread (pooled)]: Importing track "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" 
+Debug [Thread (pooled)]: Importing track "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Resolving track by canonical location "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - allocating track ["/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | -1] 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - inserting new track into cache ["/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | -1] QObject(0x0)  
+Debug [Controller]: MidiControllerPresetFileHandler: Input mapping parsing complete. 
+Debug [Controller]: MidiPresetFileHandler: Output mapping parsing complete. 
+Debug [Controller]: Opening controller: "Midi Through Port-0" 
+Debug [Controller]: Controller in script engine is: "Midi Through Port-0" 
+Debug [Controller]: Applying controller preset... 
+Debug [Controller]: ControllerEngine: Watching JS File: "/usr/share/mixxx/controllers/common-controller-scripts.js" 
+Debug [Main]: PortAudio: Started stream successfully 
+Debug [Main]:    Actual sample rate:  48000 Hz, latency: 32 ms 
+Critical []: DEBUG ASSERT: "doubleMin / 2 == 0.0" in function int SoundDevicePortAudio::callbackProcessClkRef(SINT, CSAMPLE*, const CSAMPLE*, const PaStreamCallbackTimeInfo*, PaStreamCallbackFlags) at src/soundio/sounddeviceportaudio.cpp:901
+Warning []: Denormals to zero mode is not working. EQs and effects may suffer high CPU load 
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" of type "mp3" 
+Debug [Main]: Compressor attack per frame:  0.000375 decay per frame:  3.75e-05 
+Debug [Main]: SoundDeviceNetwork - open: "Network stream" 
+Debug [Main]: framesPerBuffer: 256 
+Debug [Main]: Requested sample rate:  48000 Hz, latency: 5333333 ns 
+Debug [Main]: Using "system" as output sound device clock reference 
+Debug [Main]: 2 output sound devices opened 
+Debug [Main]: 0 input  sound devices opened 
+Debug [Controller]: ControllerEngine: Loading "/usr/share/mixxx/controllers/common-controller-scripts.js" 
+Debug [Main]: Displaying main window 
+Debug [Main]: Running Mixxx 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Warning [Engine]: SoundDevicePortAudio: Audio API provides invalid time stamps, syncing waveforms with a CPU Timer DacTime: 0.0737917 EntrytoDac: 0.0373333 TimeSinceLastCb: 0.0051161 diff: 0.0264494 
+Debug [LibraryScanner 1]: SoundSourceProxy - Initializing track metadata and embedded cover art from file "file:///home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" 
+Debug [Main]: ControllerManager::getControllerList 
+Debug [LibraryScanner 1]: SoundSourceProxy - No embedded cover art found in file "file:///home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" 
+Debug [LibraryScanner 1]: TrackDAO: Adding track "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Resolving track by canonical location "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - allocating track ["/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | -1] 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - inserting new track into cache ["/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | -1] QObject(0x0)  
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: SoundSourceProxy - Initializing track metadata and embedded cover art from file "file:///home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" 
+Debug [LibraryScanner 1]: SoundSourceProxy - No embedded cover art found in file "file:///home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" 
+Debug [LibraryScanner 1]: TrackDAO: Adding track "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Resolving track by canonical location "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - allocating track ["/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | -1] 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - inserting new track into cache ["/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | -1] QObject(0x0)  
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" of type "mp3" 
+Warning [Engine]: underflowHappened code: 24 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: SoundSourceProxy - Initializing track metadata and embedded cover art from file "file:///home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" 
+Debug [LibraryScanner 1]: SoundSourceProxy - No embedded cover art found in file "file:///home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" 
+Debug [LibraryScanner 1]: TrackDAO: Adding track "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Resolving track by canonical location "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - allocating track ["/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | -1] 
+Debug [LibraryScanner 1]: GlobalTrackCache - Cache miss - inserting new track into cache ["/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | -1] QObject(0x0)  
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [Controller]: Controller polling started. 
+Debug [LibraryScanner 1]: SoundSourceProxy - Initializing track metadata and embedded cover art from file "file:///home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" 
+Debug [LibraryScanner 1]: SoundSourceProxy - No embedded cover art found in file "file:///home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" 
+Debug [LibraryScanner 1]: TrackDAO: Adding track "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" 
+Debug [LibraryScanner 1]: LibraryScanner - slotFinishUnhashedScan 
+Debug [LibraryScanner 1]: LibraryScanner - Recursive scanning finished cleanly 
+Debug [Main]: Setting input delegate for column 0 QStyledItemDelegate(0x7567820) 
+Debug [Main]: Setting input delegate for column 1 QStyledItemDelegate(0x7572140) 
+Debug [Main]: Setting input delegate for column 2 QStyledItemDelegate(0x71fea60) 
+Debug [Main]: Setting input delegate for column 3 MidiOptionsDelegate(0x52c1778) 
+Debug [LibraryScanner 1]: SqlTransaction - Committed SQL database transaction on "MIXXX-2" 
+Debug [LibraryScanner 1]: DbConnectionPooled - Found thread-local database connection "MIXXX-2" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [LibraryScanner 1]: LibraryScanner - Marking tracks in changed directories as verified 
+Debug [LibraryScanner 1]: LibraryScanner - Marking unchanged directories and tracks as verified 
+Debug [LibraryScanner 1]: LibraryScanner - Checking remaining unverified tracks 
+Debug [LibraryScanner 1]: LibraryScanner - Marking unverified tracks as deleted 
+Debug [LibraryScanner 1]: LibraryScanner - Marking unverified directories as deleted 
+Debug [LibraryScanner 1]: LibraryScanner - Detecting moved files 
+Debug [LibraryScanner 1]: Committing transaction on "MIXXX-2" result: true 
+Debug [LibraryScanner 1]: LibraryScanner - Detecting cover art for unscanned files 
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: SoundSourceProxy - SoundSourceProvider "MAD: MPEG Audio Decoder" created a SoundSource for file "file:///home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" of type "mp3" 
+Debug [LibraryScanner 1]: TagLib - No cover art: None or empty list of ID3v2 APIC frames 
+Debug [LibraryScanner 1]: LibraryScanner - Scan finished cleanly 
+Debug [LibraryScanner 1]: Scan took: 205367328 ns. 0 unchanged directories. 1 changed/added directories. 0 tracks verified from changed/added directories. 4 new tracks.
+Debug [Main]: Setting input delegate for column 4 ControlDelegate(0x621d280) 
+Debug [Main]: Setting output delegate for column 0 QStyledItemDelegate(0x77615e0) 
+Debug [Main]: Setting output delegate for column 1 QStyledItemDelegate(0x77613c0) 
+Debug [Main]: Setting output delegate for column 2 QStyledItemDelegate(0x77614a0) 
+Debug [Main]: Setting output delegate for column 3 QStyledItemDelegate(0x7761450) 
+Debug [Main]: Setting output delegate for column 4 QStyledItemDelegate(0x7761440) 
+Debug [Main]: Setting output delegate for column 5 ControlDelegate(0x79eeb68) 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Debug [Main]: GlobalTrackCache - Evicting track ["/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | "/home/opendsp/data/djing/set/14 A Tribe Called Quest - Scenario.mp3" | 1] Track(0x67d6cad8) 
+Debug [Main]: GlobalTrackCache - Deleting Track(0x67d6cad8) 
+Debug [Main]: GlobalTrackCache - Evicting track ["/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | "/home/opendsp/data/djing/set/09 A Tribe Called Quest - Check The Rhime.mp3" | 2] Track(0x67da67c0) 
+Debug [Main]: GlobalTrackCache - Deleting Track(0x67da67c0) 
+Debug [Main]: GlobalTrackCache - Evicting track ["/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | "/home/opendsp/data/djing/set/03 A Tribe Called Quest - Rap Promoter.mp3" | 3] Track(0x67da6968) 
+Debug [Main]: GlobalTrackCache - Deleting Track(0x67da6968) 
+Debug [Main]: GlobalTrackCache - Evicting track ["/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | "/home/opendsp/data/djing/set/11 A Tribe Called Quest - Jazz (We've Got).mp3" | 4] Track(0x67da9148) 
+Debug [Main]: GlobalTrackCache - Deleting Track(0x67da9148) 
+Debug [Main]: BaseTrackCache(0x2cca978) updateIndexWithQuery took 2 ms 
+Debug [Main]: BaseTrackCache(0x2cca978) updateIndexWithQuery took 1 ms 
+Debug [Main]: LibraryTableModel(0x32bf990) select() took 3 ms 4 
+Debug [Main]: MissingTableModel(0x4fd4638) select() took 0 ms 0 
+Debug [Main]: HiddenTableModel(0x4f91288) select() took 0 ms 0 
+Debug [Main]: AnalysisLibraryTableModel(0x5000eb8) select() took 1 ms 4 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Warning [Engine]: underflowHappened code: 24 
+Debug [Main]: Destroying MixxxMainWindow 
+Debug [Main]: 1 ms saving configuration 
+Debug [Main]: 2 ms deleting skin 
+Warning [Engine]: underflowHappened code: 24 
+Debug [Main]: ~DlgAutoDJ() 
+Debug [Main]: 6604 ms deleting menubar 
+Debug [Main]: 6605 ms deleting SoundManager 
+Debug [Main]: 6623 ms deleting ControllerManager 
+Debug [Controller]: Controller polling stopped. 
+Debug [Controller]: Deleting PortMIDI devices... 
+Debug [Controller]: ControllerEngine shutting down... 
+Debug [Controller]: Deleting USB Bulk devices... 
+Debug [Controller]: Deleting HID devices... 
+Debug [Main]: 6630 ms deleting VinylControlManager 
+Debug [Main]: ~CoverArtCache() 
+Debug [Main]: 6634 ms deleting PlayerManager 
+Debug [AnalyzerQueue 1]: DbConnection - Closing database connection: "MIXXX-3" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [AnalyzerQueue 1]: AnalyzerQueue - Exiting thread 
+Debug [Main]: AnalyzerWaveform - ~AnalyzerWaveform(): 
+Debug [Main]: 6647850524 ns deactivating GlobalTrackCache 
+Debug [Main]: 6647 ms deleting Library 
+Debug [Main]: Wait to finish browser background thread 
+Debug [Main]: Browser background thread terminated! 
+Debug [Main]: Committing transaction on "MIXXX-1" result: true 
+Debug [Main]: PlaylistDAO::getHiddenType returns PLHT_UNKNOWN for playlistId  2 
+Debug [Main]: Library - Disconnecting database 
+Debug [Main]: TrackDAO::finish() 
+Debug [Main]: Clearing played information for this session 
+Debug [Main]: Cleaning LibraryHashes/track_locations tables. 
+Debug [Main]: SqlTransaction - Started new SQL database transaction on "MIXXX-1" 
+Debug [Main]: SqlTransaction - Committed SQL database transaction on "MIXXX-1" 
+Debug [Main]: TrackCollection - ~TrackCollection() 
+Debug [Main]: ~TrackDAO() 
+Debug [LibraryScanner 1]: LibraryScanner - Event loop stopped 
+Debug [LibraryScanner 1]: DbConnection - Closing database connection: "MIXXX-2" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Warning [LibraryScanner 1]: QSqlDatabasePrivate::removeDatabase: connection 'MIXXX-2' is still in use, all queries will cease to work.
+Debug [LibraryScanner 1]: LibraryScanner - Exiting thread 
+Debug [Main]: ~TrackDAO() 
+Debug [Main]: 6676 ms closing database connection(s) 
+Debug [Main]: DbConnection - Closing database connection: "MIXXX-1" QSqlDatabase(driver=""QSQLITE"", database=""/home/opendsp/.mixxx/mixxxdb.sqlite"", host=""localhost"", port=-1, user=""mixxx"", open=true) 
+Debug [Main]: 6679 ms deleting RecordingManager 
+Debug [Main]: Delete RecordingManager 
+Debug [Main]: 6680 ms deleting BroadcastManager 
+Debug [Main]: DlgPrefBroadcast - broadcastEnabledChanged() 0 
+Debug [Main]: 6693 ms deleting EngineMaster 
+Debug [Main]: in ~EngineMaster() 
+Debug [Main]: 6817 ms deleting DlgPreferences 
+Debug [Main]: 6856 ms deleting EffectsManager 
+Debug [Main]: 7015 ms deleting SettingsManager 
+Debug [StatsManager]: StatsManager thread shutting down. 
+Debug [Main]: StatsManager shutdown report: 
+Debug [Main]: ===================================== 
+Debug [Main]: ALL STATS 
+Debug [Main]: ===================================== 
+Debug [Main]: Stat("AnalyzerQueue process","count=2")
+Debug [Main]: Stat("BrowseThread","count=4")
+Debug [Main]: Stat("BrowseThread_duration","count=2,average=4.88389e+06ns,min=3698ns,max=9.76408e+06ns,variance=4.76326e+13ns^2,stddev=6.90164e+06ns")
+Debug [Main]: Stat("CachingReaderWorker [Channel1]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Channel2]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Channel3]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Channel4]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [PreviewDeck1]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Sampler1]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Sampler2]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Sampler3]","count=3")
+Debug [Main]: Stat("CachingReaderWorker [Sampler4]","count=3")
+Debug [Main]: Stat("EngineMaster::applyEffectsInPlaceAndMixChannels_0active","count=56144,sum=1.05748e+08ns,average=1883.51ns,min=885ns,max=177762ns,variance=6.62776e+06ns^2,stddev=2574.44ns")
+Debug [Main]: Stat("EngineMaster::process","count=28072")
+Debug [Main]: Stat("EngineMaster::processChannels","count=14036,sum=4.9582e+08ns,average=35324.9ns,min=5052ns,max=294170ns,variance=5.7798e+08ns^2,stddev=24041.2ns")
+Debug [Main]: Stat("EngineMaster::process_duration","count=14036,average=180224ns,min=59480ns,max=1.13564e+06ns,variance=8.78466e+09ns^2,stddev=93726.5ns")
+Debug [Main]: Stat("EngineSideChain","count=275")
+Debug [Main]: Stat("EngineSideChain::process","count=292")
+Debug [Main]: Stat("EngineSideChain::process_duration","count=146,average=16230.8ns,min=2500ns,max=281668ns,variance=5.48943e+08ns^2,stddev=23429.5ns")
+Debug [Main]: Stat("EngineSideChain::writeSamples","count=28072")
+Debug [Main]: Stat("EngineSideChain::writeSamples wake up","count=296")
+Debug [Main]: Stat("EngineSideChain::writeSamples wake up_duration","count=148,average=32645.6ns,min=4375ns,max=128595ns,variance=3.30558e+08ns^2,stddev=18181.2ns")
+Debug [Main]: Stat("EngineSideChain::writeSamples_duration","count=14036,average=6269.28ns,min=2656ns,max=214638ns,variance=6.12257e+07ns^2,stddev=7824.69ns")
+Debug [Main]: Stat("EngineWorkerScheduler","count=2")
+Debug [Main]: Stat("ImportFilesTask::run","count=1,sum=311253ns,average=311253ns,min=311253ns,max=311253ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("LibraryScanner","count=2")
+Debug [Main]: Stat("LibraryScanner::addNewTrack","count=4,sum=6.89227e+07ns,average=1.72307e+07ns,min=6.31684e+06ns,max=3.78895e+07ns,variance=1.97859e+14ns^2,stddev=1.40662e+07ns")
+Debug [Main]: Stat("LibraryScanner::queueTask","count=3,sum=362556ns,average=120852ns,min=68230ns,max=219273ns,variance=7.27666e+09ns^2,stddev=85303.3ns")
+Debug [Main]: Stat("LibraryScanner::slotDirectoryHashedAndScanned","count=1,sum=3.0903e+06ns,average=3.0903e+06ns,min=3.0903e+06ns,max=3.0903e+06ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("LibraryScanner_duration","count=1,average=1.06552e+11ns,min=1.06552e+11ns,max=1.06552e+11ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("MixxxMainWindow::connectMenuBar","count=1,sum=207555ns,average=207555ns,min=207555ns,max=207555ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("MixxxMainWindow::createMenuBar","count=1,sum=3.57073e+07ns,average=3.57073e+07ns,min=3.57073e+07ns,max=3.57073e+07ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("MixxxMainWindow::initialize","count=1,sum=3.32204e+10ns,average=3.32204e+10ns,min=3.32204e+10ns,max=3.32204e+10ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("MixxxMainWindow::runtime","count=1,sum=1.08846e+11ns,average=1.08846e+11ns,min=1.08846e+11ns,max=1.08846e+11ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("MixxxMainWindow::~finalize","count=1,sum=7.01555e+09ns,average=7.01555e+09ns,min=7.01555e+09ns,max=7.01555e+09ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("RecursiveScanDirectoryTask::run","count=2,sum=1.14804e+06ns,average=574018ns,min=560319ns,max=587716ns,variance=3.75298e+08ns^2,stddev=19372.6ns")
+Debug [Main]: Stat("SkinLoader::loadConfiguredSkin","count=1,sum=8.81348e+09ns,average=8.81348e+09ns,min=8.81348e+09ns,max=8.81348e+09ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("SkinLoader::parseSkin","count=1,sum=8.79865e+09ns,average=8.79865e+09ns,min=8.79865e+09ns,max=8.79865e+09ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("SoundDevicePortAudio::callbackProcess output 9, system","count=14036,sum=8.21815e+07ns,average=5855.05ns,min=1666ns,max=113647ns,variance=2.68942e+07ns^2,stddev=5185.96ns")
+Debug [Main]: Stat("SoundDevicePortAudio::callbackProcess prepare 9, system","count=14036,sum=2.72984e+09ns,average=194489ns,min=66979ns,max=1.17543e+06ns,variance=9.69882e+09ns^2,stddev=98482.6ns")
+Debug [Main]: Stat("SoundDevicePortAudio::callbackProcessClkRef 9, system","count=28072")
+Debug [Main]: Stat("SoundDevicePortAudio::callbackProcessClkRef 9, system_duration","count=14036,average=266163ns,min=88542ns,max=2.59097e+06ns,variance=1.94407e+10ns^2,stddev=139430ns")
+Debug [Main]: Stat("VinylControlProcessor","count=2")
+Debug [Main]: Stat("VsyncThread real time error","count=5,sum=5,average=1,min=1,max=1,variance=0^2,stddev=0")
+Debug [Main]: Stat("VsyncThread usleep for VSync","count=3832")
+Debug [Main]: Stat("VsyncThread vsync render","count=3842")
+Debug [Main]: Stat("VsyncThread vsync swap","count=3842")
+Debug [Main]: Stat("WOverview::paintEvent","count=10,sum=263128ns,average=26312.8ns,min=19375ns,max=40052ns,variance=5.63827e+07ns^2,stddev=7508.84ns")
+Debug [Main]: Stat("WVuMeter::paintEvent","count=1688,sum=1.30684e+08ns,average=77419.5ns,min=29167ns,max=367607ns,variance=8.05805e+08ns^2,stddev=28386.7ns")
+Debug [Main]: Stat("WaveformWidgetFactory::render() 0waveforms","count=2,sum=141459ns,average=70729.5ns,min=55417ns,max=86042ns,variance=4.68945e+08ns^2,stddev=21655.1ns")
+Debug [Main]: Stat("WaveformWidgetFactory::render() 4waveforms","count=1919,sum=4.35292e+09ns,average=2.26833e+06ns,min=52813ns,max=8.42176e+06ns,variance=1.56682e+12ns^2,stddev=1.25173e+06ns")
+Debug [Main]: Stat("WaveformWidgetFactory::swap() 0waveforms","count=1,sum=25573ns,average=25573ns,min=25573ns,max=25573ns,variance=0ns^2,stddev=0ns")
+Debug [Main]: Stat("WaveformWidgetFactory::swap() 4waveforms","count=1919,sum=2.11938e+08ns,average=110442ns,min=3020ns,max=9.18533e+06ns,variance=4.56757e+11ns^2,stddev=675838ns")
+Debug [Main]: Stat("control [Master],audio_latency_overload_count","count=1,sum=0,average=0,min=0,max=2.22507e-308,variance=0^2,stddev=0")
+Debug [Main]: Stat("control [Master],latency","count=2,sum=32,average=16,min=0,max=32,variance=512^2,stddev=22.6274")
+Debug [Main]: Stat("control [Master],num_auxiliaries","count=5,sum=10,average=2,min=0,max=4,variance=2.5^2,stddev=1.58114")
+Debug [Main]: Stat("control [Master],num_decks","count=4,sum=7,average=1.75,min=0,max=4,variance=2.91667^2,stddev=1.70783")
+Debug [Main]: Stat("control [Master],num_microphones","count=5,sum=10,average=2,min=0,max=4,variance=2.5^2,stddev=1.58114")
+Debug [Main]: Stat("control [Master],num_preview_decks","count=2,sum=1,average=0.5,min=0,max=1,variance=0.5^2,stddev=0.707107")
+Debug [Main]: Stat("control [Master],num_samplers","count=5,sum=10,average=2,min=0,max=4,variance=2.5^2,stddev=1.58114")
+Debug [Main]: Stat("control [Master],samplerate","count=3,sum=92100,average=30700,min=0,max=48000,variance=7.1067e+08^2,stddev=26658.4")
+Debug [Main]: ===================================== 
+Debug [Main]: Mixxx shutdown complete with code 0 
