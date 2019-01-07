@@ -1,0 +1,6 @@
+<!DOCTYPE SoundManagerConfig>
+<SoundManagerConfig force_network_clock="0" latency="3" deck_count="2" api="JACK Audio Connection Kit" samplerate="48000" sync_buffers="2">
+ <SoundDevice name="9, system">
+  <output channel="0" type="Master" index="0" channel_count="2"/>
+ </SoundDevice>
+</SoundManagerConfig>

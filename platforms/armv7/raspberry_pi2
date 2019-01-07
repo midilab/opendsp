@@ -184,16 +184,15 @@ install() {
 		retVal=$?
 	done
 
-	# resize script for first boot time
-	cat <<EOF > opendsp/boot/resize_data_partition.sh
+	# first run script
+	cat <<EOF > opendsp/boot/opendsp_1st_run.sh
 #!/bin/bash -v
 
 set -e
 
-systemctl stop opendsp
 systemctl stop smb
 systemctl stop nmb
-umount -v /home/opendsp/data || true
+umount -v /home/opendsp/data
 
 parted /dev/mmcblk0 <<\EOF
 resizepart
@@ -202,13 +201,11 @@ resizepart
 q
 \EOF
 
-e2fsck /dev/mmcblk0p2
-resize2fs /dev/mmcblk0p2
+e2fsck /dev/mmcblk0p3
+resize2fs /dev/mmcblk0p3
 
 # set output of onboard always to jack
 amixer cset numid=3 1
-
-
 
 EOF
 
@@ -279,35 +276,8 @@ tunning() {
 	echo "disable_splash=1" >> opendsp/boot/config.txt
 	echo "avoid_warnings=1" >> opendsp/boot/config.txt
 	
-	# enabling threadirqs and boot read only file system and other system options
+	# boot read only file system
 	sed -i 's/ rw/ ro /' opendsp/boot/cmdline.txt	
-	
-	# rtirq setup for raspberry. we assume opendsp will run at 95 priority
-	cat <<EOF > opendsp/etc/rtirq.conf	
-RTIRQ_NAME_LIST="DMA bcm2835 VCHIQ vc4 3f00b880 3f200000 3f804000 3f805000 dwc uart-p"
-
-# Highest priority.
-RTIRQ_PRIO_HIGH=90
-
-# Priority decrease step.
-RTIRQ_PRIO_DECR=3
-
-# Lowest priority.
-RTIRQ_PRIO_LOW=51
-
-# Whether to reset all IRQ threads to SCHED_OTHER.
-RTIRQ_RESET_ALL=0
-
-# Process names which will be forced to the
-# highest realtime priority range (99-91)
-# (space separated list, from highest to lower priority).
-# RTIRQ_HIGH_LIST="timer"
-
-# On kernel configurations that support it,
-# which services should be NOT threaded 
-# (space separated list).
-RTIRQ_NON_THREADED="ksoftirqd"
-EOF
 	
 	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab
@@ -330,7 +300,7 @@ install_packages() {
 	mkdir opendsp/root/opendsp
 	cp ../packages/armv7/* opendsp/root/opendsp/
 
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "linux-raspberrypi-rt-opendsp" "linux-raspberrypi-rt-opendsp-headers" "novnc" "opendspd")
+	declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "novnc" "opendspd")
 	
 	for i in "${package[@]}"
 	do

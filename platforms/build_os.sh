@@ -18,7 +18,7 @@ hostname=opendsp
 opendsp_install() {
 	
 	echo $1 > opendsp/etc/hostname
-	echo "127.0.1.1 $1" >> opendsp/etc/hosts
+	echo "127.0.0.1 $1" >> opendsp/etc/hosts
 	
 	echo "" > opendsp/etc/motd
 	cat <<EOF > opendsp/etc/issue
@@ -40,8 +40,6 @@ opendsp_tunning() {
 	#
 	# post install opendsp realtime setup
 	#
-	# enable rtirq
-	chroot opendsp systemctl enable rtirq
 	
 	# set cpu for performance mode
 	sed -i '/governor/d' opendsp/etc/default/cpupower
@@ -62,7 +60,6 @@ opendsp_tunning() {
 	# disable some services
 	chroot opendsp systemctl disable systemd-random-seed || true
 	#systemctl enable avahi-daemon
-	#systemctl disable raspi-config
 	#systemctl disable cron
 	#systemctl disable rsyslog
 	#systemctl disable ntp
@@ -124,17 +121,45 @@ tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0      
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 
-#lrwxrwxrwx 1 opendsp opendsp   31 Dec 20 11:24 .mixxx -> /home/opendsp/data/djing/mixxx/
-#lrwxrwxrwx 1 opendsp opendsp   39 Dec 25  2018 .projectM -> /home/opendsp/data/visualizer/projectM/
+	#lrwxrwxrwx 1 opendsp opendsp   31 Dec 20 11:24 .mixxx -> /home/opendsp/data/djing/mixxx/
+	#lrwxrwxrwx 1 opendsp opendsp   39 Dec 25  2018 .projectM -> /home/opendsp/data/visualizer/projectM/
 
 	# create config dir link on data partition for apps that need write access
 	#ln -s /home/
 	# disable some systems
 	#chroot opendsp systemctl disable systemd-timesyncd
 
-	# /etc/create_ap.conf
-	#SSID=OpenDSP
-	#PASSPHRASE=opendsp_
+	cat <<EOF >> opendsp/etc/create_ap.conf
+CHANNEL=default
+GATEWAY=10.0.0.1
+WPA_VERSION=2
+ETC_HOSTS=0
+DHCP_DNS=gateway
+NO_DNS=0
+HIDDEN=0
+MAC_FILTER=0
+MAC_FILTER_ACCEPT=/etc/hostapd/hostapd.accept
+ISOLATE_CLIENTS=0
+SHARE_METHOD=nat
+IEEE80211N=0
+IEEE80211AC=0
+HT_CAPAB=[HT40+]
+VHT_CAPAB=
+DRIVER=nl80211
+NO_VIRT=0
+COUNTRY=
+FREQ_BAND=2.4
+NEW_MACADDR=
+DAEMONIZE=0
+NO_HAVEGED=0
+WIFI_IFACE=wlan0
+INTERNET_IFACE=eth0
+SSID=OpenDSP
+PASSPHRASE=opendspd
+USE_PSK=0
+EOF
+
+	chroot opendsp systemctl enable create_ap
 
 }
 
@@ -169,7 +194,7 @@ opendsp_install $hostname
 install_packages
 
 # platform specific tunnings
-#tunning
+tunning
 
 # generic and non platform dependent opendsp tunning parameters for reatime kernel and ecosystem setup
 opendsp_tunning

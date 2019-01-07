@@ -158,7 +158,7 @@ install() {
 	done
 
 	# resize script for first boot time
-	cat <<EOF > opendsp/boot/resize_data_partition.sh
+	cat <<EOF > opendsp/boot/opendsp_1st_run.sh
 #!/bin/bash -v
 
 set -e
@@ -232,7 +232,7 @@ tunning() {
 		#   Mode 0666
 		#EndSection
 		retVal=$?
-	done	
+	done
 	
 	# take uart usage off for console, we need it for MIDI uart
 	sed -i 's/ console=ttySAC2,115200n8//' opendsp/boot/boot.txt
@@ -254,7 +254,7 @@ tunning() {
 /dev/mmcblk1p1  /                       ext4    defaults,noatime,ro     0       1
 /dev/mmcblk1p2  /home/opendsp/data      ext4    defaults,noatime,rw     0       1
 EOF
-		
+	
 	## Remount /dev/shm to prevent memory allocation errors
 	#sudo mount -o remount,size=128M /dev/shm
 }	
