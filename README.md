@@ -17,7 +17,7 @@ The opensource community gives you a very huge number of different applications 
 
 # Pre release
 
-Images avaliable as pre-release. All the distro ecosystem are functional but the opendsp service are not ready for full MIDI/OSC user interface support. The final release will happen when we have opendsp service https://github.com/midilab/opendspd ready for final release.  
+Images avaliable as pre-release. All the distro ecosystem are functional but the opendsp service are not ready for full MIDI/OSC user interface support. 
 
 Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/tag/v0.8b
 
@@ -28,6 +28,8 @@ Its based on Ingen and Ecasound setup to support LV2 plugins.
 Ingen:
 Ecasound:
 LV2 Plugins collection:
+
+djing: a complete djing environment with all your music colletiction easily managble via network share. based on Mixxx.
 
 ## Platform image downloads
  
@@ -42,7 +44,4 @@ With vc4 hardware acelerator support and 256mb video memory
 
 * Get a full OpenDSP interface support for MIDI, OSC and keyboard.
 
-* mix app: A Dj setup just like native instruments traktor, with support for vinyl timecode also.
-Its based on Mixxx.
-
-* vjing app: A Vj setup for video performances with effects  
+* vjing app: A Vj setup for video performances with effects and video mapping support
