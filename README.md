@@ -19,6 +19,8 @@ The opensource community gives you a very huge number of different applications 
 
 Images avaliable as pre-release. All the distro ecosystem are functional but the opendsp service are not ready for full MIDI/OSC user interface support. The final release will happen when we have opendsp service https://github.com/midilab/opendspd ready for final release.  
 
+Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/tag/v0.8b
+
 ## OpenDSP Applications
 
 plugmod: a multitrack plugin host, similar to old muse receptor hardware. Each track has dedicated channel strip with EQ, Sends and Audio processing plugin support. The number of tracks are limited to your hardware CPU horse power.
