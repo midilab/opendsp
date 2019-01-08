@@ -5,7 +5,9 @@
 ╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
 
-Realtime OS for headless audio and video DSP computing, based on ArchLinux.
+Operational System for headless audio and video DSP computing, based on ArchLinux.
+
+![Image of OpenDSP Plugmod and DX7  view](https://raw.githubusercontent.com/midilab/opendsp/master/doc/plugmod-opendsp.jpg)
 
 The idea behind this project is to allows a computer, embeded or pc without monitor, to emulate and behave like the most common audio and video production expensive hardware gears on the market. All the interface is done via MIDI or OSC protocol. 
 
