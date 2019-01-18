@@ -4,7 +4,7 @@
 
 _pkgname=calf
 pkgname="${_pkgname}-git"
-pkgver=0.0.60.r2413.38d1b2b5
+pkgver=0.90.1.r2534.e5c08dc2
 pkgrel=1
 pkgdesc="LV2/JACK audio plug-ins for musicians (git version)"
 arch=('armv7h' 'i686' 'x86_64')
@@ -14,7 +14,7 @@ depends=('fluidsynth' 'lv2-git')
 makedepends=('git')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
-install="$pkgname.install"
+#install="$pkgname.install"
 source=("${_pkgname}::git+https://github.com/calf-studio-gear/calf")
 md5sums=('SKIP')
 
@@ -28,6 +28,10 @@ pkgver() {
 
 build() {
   cd "${srcdir}/${_pkgname}"
+
+  # fix for archlinux package naming and version problem
+  sed -i 's/lv2core >= 6/lv2 >= 1.15/' configure
+
   ./autogen.sh \
     --prefix="/usr" \
     --enable-static=no \

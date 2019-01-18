@@ -1,7 +1,0 @@
-<!DOCTYPE SamplerBank>
-<samplerbank>
- <sampler group="[Sampler1]"/>
- <sampler group="[Sampler2]"/>
- <sampler group="[Sampler3]"/>
- <sampler group="[Sampler4]"/>
-</samplerbank>
