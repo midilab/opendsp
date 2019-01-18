@@ -30,7 +30,7 @@ build() {
   cd "${srcdir}/${_pkgname}"
 
   # fix for archlinux package naming and version problem
-  sed -i 's/lv2core >= 6/lv2 >= 1.15/' configure
+  sed -i 's/lv2core >= 6/lv2 >= 1.15/' configure.ac
 
   ./autogen.sh \
     --prefix="/usr" \
@@ -40,6 +40,11 @@ build() {
 
   export CFLAGS="$CFLAGS -O3"
   export CXXFLAGS="$CXXFLAGS -O3"
+
+  sed -i 's/<lv2.h>/"\/usr\/include\/lv2\/lv2.h"/' src/makerdf.cpp
+  sed -i 's/"lv2.h"/"\/usr\/include\/lv2\/lv2.h"/' src/calf/lv2_options.h
+  sed -i 's/"lv2.h"/"\/usr\/include\/lv2\/lv2.h"/' src/calf/lv2_ui.h
+  sed -i 's/<lv2.h>/"\/usr\/include\/lv2\/lv2.h"/' src/calf/lv2wrap.h
 
   make
 }
