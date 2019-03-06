@@ -10,7 +10,7 @@ pkgdesc="Free, open source software for digital DJ'ing."
 arch=('armv7h')
 url='https://www.mixxx.org'
 license=('GPL')
-depends=('fftw' 'libid3tag' 'libmad' 'libogg' 'libshout' 'libsndfile' 'portaudio' 'portmidi'
+depends=('fftw' 'libid3tag' 'libmad' 'soundtouch' 'libogg' 'libshout' 'libsndfile' 'portaudio' 'portmidi'
          'taglib' 'qt4' 'vamp-plugin-sdk' 'libusbx' 'protobuf' 'faad2' 'libmp4v2'
          'rubberband' 'chromaprint' 'sqlite' 'opus' 'opusfile' 'upower' 'hidapi' 'libebur128')
 makedepends=('mesa' 'scons' 'libshout' 'glu')
@@ -20,23 +20,9 @@ md5sums=('49e1257c206143640ff4c7aff8fa3d83')
 build() {
   cd "${srcdir}/${pkgname}-release-${pkgver}"
   export SCONSFLAGS="-j $(nproc)"
-  #export CFLAGS="$CFLAGS -O3"
-  #export CXXFLAGS="$CXXFLAGS -O3"
-  #sed -i '/neon/d' build/features.py
-  #sed -i '/-march=native/d' build/features.py
-#optimize: Set to:
-#  portable: sse2 CPU (>= Pentium 4)
-#  fastbuild: portable, but without costly optimization steps
-#  native: optimized for the CPU of this system
-#  legacy: pure i386 code  off: no optimization
-#    default: portable
-#    actual: native
-# ffmpeg=1
-  #sed -i 's/mp4.h/mp4v2\/mp4v2.h/' .sconf_temp/conftest_35.c
   sed -i 's/mp4.h/mp4v2\/mp4v2.h/' plugins/soundsourcem4a/soundsourcem4a.h
 
-  scons build=release optimize=native opengles=1 virtualize=0 localecompare=1 qt_sqlite_plugin=1 opus=1 \
-    qtdir=/usr/lib/qt4 prefix=/usr faad=1 mad=1 hid=1 
+  scons build=release optimize=native opengles=1 virtualize=0 ffmpeg=1 localecompare=0 qt_sqlite_plugin=1 opus=1 qtdir=/usr/lib/qt4 prefix=/usr faad=1 mad=1 hid=1 
 }
 
 package() {
