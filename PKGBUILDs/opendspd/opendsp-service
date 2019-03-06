@@ -19,15 +19,11 @@ from opendspd import opendspd
 
 if __name__ == '__main__':
 
-    # get opendsp manager singleton instance
-    odsp = opendspd.Manager()
+    # get opendsp core singleton instance
+    opendsp = opendspd.Core()
 
     # initing opendsp
-    odsp.init()
+    opendsp.init()
 
     # daemonize us \_/
-    odsp.run_manager()
-    
-    # in case we stop odsp, destroy the object
-    del odsp
-
+    opendsp.run()

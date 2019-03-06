@@ -175,7 +175,7 @@ resizepart
 q
 \EOF
 
-e2fsck /dev/mmcblk1p2
+e2fsck -p -f /dev/mmcblk1p2
 resize2fs /dev/mmcblk1p2
 
 EOF

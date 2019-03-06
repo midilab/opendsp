@@ -34,13 +34,6 @@ post_install() {
 		# enable our service
 		systemctl enable opendsp
 		
-		# setup visualizer projectm to hold on user data partition
-		mkdir -v /home/opendsp/data/visualizer/projectM
-		cp -Rf /usr/share/projectM/* /home/opendsp/data/visualizer/projectM/
-		# force projectM to read our $HOME/.projectM/config.inp instead of default
-		rm /usr/share/projectM/config.inp
-		ln -s /home/opendsp/data/visualizer/projectM/ /home/opendsp/.projectM
-		
 		# setup sane permitions
 		chown -R opendsp:opendsp /home/opendsp/			
 		

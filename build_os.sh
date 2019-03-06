@@ -1,16 +1,13 @@
 #!/bin/bash 
 # example to build an OpenDSP OS for armv7 version of raspberry pi3/pi2
-# ./build_os armv7/raspberry_pi
+# ./build_os platforms/armv7/raspberry_pi
 
 set -e
 
 # globals
-platform=${1%%/*}
 device=${1##*/}
-image_manage=$1
-action=$2
 
-image_name=opendsp_${platform}_${device}-$(date "+%Y-%m-%d").img
+image_name=opendsp_${device}-$(date "+%Y-%m-%d").img
 hostname=opendsp
 
 #
@@ -33,6 +30,41 @@ opendsp_install() {
 
 EOF
 
+	# base dependencies for opendsp
+	chroot opendsp pacman -S cpupower xorg-server xorg-xinit xorg-server-common xorg-server-xvfb xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils jack samba parted sudo openbox create_ap
+	
+	#declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "novnc" "opendspd")
+
+	# add default opendsp user and setup his environment
+	chroot opendsp useradd -m -G audio,video,uucp,lock,tty opendsp
+	
+	# change pass
+	chroot opendsp sh -c "echo 'opendsp:opendsp' | chpasswd"
+	
+	# X11 needs config for session control
+	#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
+	# or to add
+	echo "allowed_users = anybody" >> opendsp/etc/X11/Xwrapper.config
+	echo "needs_root_rights = yes" >> opendsp/etc/X11/Xwrapper.config
+
+	# xinitrc: anything for now... we just dont need a window manager
+	echo "while [ 1 ]; do" > opendsp/home/opendsp/.xinitrc
+	echo "  sleep 10000" >> opendsp/home/opendsp/.xinitrc
+	echo "done" >> opendsp/home/opendsp/.xinitrc
+
+	# allow x11 forward for plugmod ingen edit modules
+	echo "X11Forwarding yes" >> opendsp/etc/ssh/sshd_config
+	echo "PermitUserEnvironment yes" >> opendsp/etc/ssh/sshd_config
+	mkdir opendsp/home/opendsp/.ssh/
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.ssh/environment
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.profile
+	
+	# set sudo permition to enable opendspd changes realtime priority of process
+	#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
+	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> opendsp/etc/sudoers
+
+	# setup sane permitions
+	chroot opendsp chown -R opendsp:opendsp /home/opendsp/			
 }
 
 opendsp_tunning() {
@@ -111,7 +143,23 @@ EOF
 	mkdir opendsp/var/cache/samba
 	mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
 	mkdir opendsp/var/lib/samba
+    cat <<EOF >> opendsp/etc/systemd/system/sambafix.service
+[Unit]
+Description=OpenDSP Remote Control Service
+After=remote-fs.service
+
+[Service]
+Type=simple
+User=root
+Group=root
+WorkingDirectory=/home/opendsp/
+ExecStart=/bin/sh -c '/usr/bin/cp -Rf /var/cache/samba.cp/* /var/cache/samba/; /usr/bin/cp -Rf /var/lib/samba.cp/* /var/lib/samba/'
+
+[Install]
+WantedBy=multi-user.target
+EOF
 	chroot opendsp systemctl enable sambafix
+	
 	cat <<EOF >> opendsp/etc/fstab
 # ram memory runtime filesystems
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
@@ -163,6 +211,39 @@ EOF
 
 }
 
+finish() {
+
+	image_name=$1
+
+	# just in case, sometimes they can lock /dev/
+	killall gpg-agent || true
+	killall pacman || true
+	 
+	# remove installed packages on /var/cache/pacman/pkg/
+	rm opendsp/var/cache/pacman/pkg/*
+
+	# remove our systemd resolv.conf
+	rm -rf opendsp/run/systemd/
+
+	# after all remove qemu
+	rm opendsp/usr/bin/qemu-arm-static
+
+	sync
+
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		#umount --recursive --lazy opendsp/ || true 
+		umount --recursive opendsp/ || true
+		retVal=$?
+	done
+
+	rm -rf opendsp
+
+	# release the image
+	losetup -d $device
+	
+}
+
 compress() {
 	zip $1.zip $1
 }
@@ -170,7 +251,7 @@ compress() {
 #
 # Platform create script
 #
-script=${platform}/${device}
+script=${1}
 if [ ! -f "$script" ]
 then
 	echo "$0: platform script '${script}' not found."
@@ -191,7 +272,7 @@ install
 opendsp_install $hostname
 
 # opendsp meta install
-install_packages
+#install_packages
 
 # platform specific tunnings
 tunning

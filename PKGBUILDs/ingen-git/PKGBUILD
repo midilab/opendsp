@@ -1,22 +1,21 @@
-# Maintainer: Christopher Arndt <aur -at- chrisarndt -dot- de>
-# Contributor: <skrylar@UFO>
+# Maintainer: Midilab <aur -at- midilab -dot- co>
 
 _pkgname=ingen
 pkgname="${_pkgname}-git"
 pkgver=0.5.1.r2735.cb0ecc89
 pkgrel=1
 pkgdesc="A modular plugin host for JACK and LV2."
-arch=('armv7h' 'i686' 'x86_64')
+arch=('arm' 'armv6h' 'armv7h' 'aarch64')
 url="http://drobilla.net/software/${_pkgname}/"
 license=('GPL')
-depends=('alsa-lib' 'ganv-git' 'jack' 'lilv-git' 'portaudio' 'suil-git' 'serd-git' 'sord-git' 'raul-git' 'lv2-git')
+depends=('alsa-lib' 'ganv' 'jack' 'lilv' 'portaudio' 'suil' 'serd' 'sord' 'raul' 'lv2')
 makedepends=('python2')
 optdepends=(
     'lv2-plugins: various useful LV2 plug-in packages'
 )
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
-source=("${_pkgname}::git+http://git.drobilla.net/cgit.cgi/ingen.git/")
+source=("${_pkgname}::git+https://github.com/drobilla/ingen.git/")
 md5sums=('SKIP')
 
 

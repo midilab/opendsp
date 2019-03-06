@@ -12,15 +12,15 @@
 # echo ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register
 
 boot_size=128
-root_size=3300
-home_size=256
+root_size=4300
+data_size=256
 device=""
 
 prepare() {
 
 	image_name=$1
 
-	image_size=$(($boot_size+$root_size+$home_size+64))
+	image_size=$(($boot_size+$root_size+$data_size+64))
 
 	dd if=/dev/zero of=$image_name  bs=1M  count=$image_size
 		
@@ -43,7 +43,7 @@ n
 
 
 
-+$(($home_size))M
++$(($data_size))M
 p
 w
 EOF
@@ -52,14 +52,14 @@ EOF
 	device="$(losetup --show -f -P "$image_name")"
 	bootpart="${device}p1"
 	rootpart="${device}p2"
-	homepart="${device}p3"
+	datapart="${device}p3"
 
 	# setup boot partition
 	mkfs.fat -n BOOT $bootpart
 	# setup root partition
 	mkfs.ext4 -L ROOT $rootpart
 	# setup user land partition
-	mkfs.ext4 -L OPENDSP $homepart
+	mkfs.ext4 -L OPENDSP $datapart
 
 	fdisk -l $image_name
 
@@ -75,7 +75,7 @@ EOF
 	mkdir -v opendsp/home
 	mkdir -v opendsp/home/opendsp
 	mkdir -v opendsp/home/opendsp/data
-	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
+	mount -v -t ext4 -o sync $datapart opendsp/home/opendsp/data
 	
 }
 
@@ -87,7 +87,7 @@ mount_img() {
 	device="$(losetup --show -f -P "$image_name")"
 	bootpart="${device}p1"
 	rootpart="${device}p2"
-	homepart="${device}p3"
+	datapart="${device}p3"
 
 	# mount root
 	mkdir -v opendsp
@@ -97,7 +97,7 @@ mount_img() {
 	mount -v -t vfat -o sync $bootpart opendsp/boot
 	
 	# mount user land
-	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
+	mount -v -t ext4 -o sync $datapart opendsp/home/opendsp/data
 	
 	# good idea to have those mounted as we chroot in
 	mount -t proc /proc opendsp/proc
@@ -201,11 +201,10 @@ resizepart
 q
 \EOF
 
-e2fsck /dev/mmcblk0p3
+e2fsck -p -f /dev/mmcblk0p3
 resize2fs /dev/mmcblk0p3
 
-# set output of onboard always to jack
-amixer cset numid=3 1
+mount /home/opendsp/data
 
 EOF
 
@@ -217,7 +216,7 @@ tunning() {
 	# delete first ocurrence of gpu_men
 	#sed -i '/gpu_mem/d' opendsp/boot/cmdline.txt		
 	
-	echo "gpu_mem=256" >> opendsp/boot/config.txt
+	###echo "gpu_mem=256" >> opendsp/boot/config.txt
 	##echo "avoid_warnings=2" >> opendsp/boot/config.txt
 	echo "dtoverlay=vc4-kms-v3d" >> opendsp/boot/config.txt
 	
@@ -275,6 +274,8 @@ tunning() {
 	sed -i 's/ console=tty1/ console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0/' opendsp/boot/cmdline.txt
 	echo "disable_splash=1" >> opendsp/boot/config.txt
 	echo "avoid_warnings=1" >> opendsp/boot/config.txt
+	# get more current from usb, default is 0.6a and doing this we got 1.2a
+	echo "max_usb_current=1" >> opendsp/boot/config.txt
 	
 	# boot read only file system
 	sed -i 's/ rw/ ro /' opendsp/boot/cmdline.txt	
@@ -294,57 +295,3 @@ EOF
 	#sudo mount -o remount,size=128M /dev/shm
 }	
 
-install_packages() {
-
-	# install opendsp packages
-	mkdir opendsp/root/opendsp
-	cp ../packages/armv7/* opendsp/root/opendsp/
-
-	declare -a package=("mididings-git" "lv2-git" "ganv-git" "raul-git" "serd-git" "sord-git" "suil-git" "lilv-git"  "ingen-git" "jamrouter-git" "mod-ttymidi" "distrho-lv2-git" "midifilter.lv2-git" "fabla-git" "drmr-falktx-git" "swh-lv2-git" "zam-plugins-git" "dpf-plugins-lv2-git" "openav-luppp-git" "mixxx" "novnc" "opendspd")
-	
-	for i in "${package[@]}"
-	do
-		retVal=-1
-		while [ $retVal -ne 0 ]; do
-			#chroot opendsp pacman --noconfirm -U "/root/opendsp/${i}.pkg.tar.xz" || true
-			chroot opendsp pacman -U "/root/opendsp/${i}.pkg.tar.xz" || true
-			retVal=$?
-		done
-	done
-	
-	rm -rf opendsp/root/opendsp/
-	
-}
-
-finish() {
-
-	image_name=$1
-
-	# just in case, sometimes they can lock /dev/
-	killall gpg-agent || true
-	killall pacman || true
-	 
-	# remove installed packages on /var/cache/pacman/pkg/
-	rm opendsp/var/cache/pacman/pkg/*
-
-	# remove our systemd resolv.conf
-	rm -rf opendsp/run/systemd/
-
-	# after all remove qemu
-	rm opendsp/usr/bin/qemu-arm-static
-
-	sync
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		#umount --recursive --lazy opendsp/ || true 
-		umount --recursive opendsp/ || true
-		retVal=$?
-	done
-
-	rm -rf opendsp
-
-	# release the image
-	losetup -d $device
-	
-}

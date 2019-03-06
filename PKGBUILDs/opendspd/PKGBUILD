@@ -7,7 +7,7 @@ pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings-git mod-ttymidi jamrouter-git xdotool ingen-git mda-lv2-git calf-git ecasound xwax projectm-jack samba cpupower parted openbox create_ap)
+depends=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings-git mod-ttymidi jamrouter-git xdotool ingen-git mda.lv2 calf ecasound xwax mixxx projectm-jack samba cpupower parted openbox create_ap)
 install="$pkgname.install"
 source=("git+https://github.com/midilab/opendspd.git")
 md5sums=('SKIP')
@@ -40,5 +40,5 @@ package()
   install -vD ../../systemd/sambafix.service  -m 0644 $pkgdir/etc/systemd/system/sambafix.service
   install -vD ../../rc_ssh  -m 0644 $pkgdir/home/opendsp/.ssh/rc
   install -vd -m 0755 $pkgdir/home/opendsp/data/
-  cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
+  #cp -Rf ../../app-data/* $pkgdir/home/opendsp/data/
 }
