@@ -1,0 +1,54 @@
+# Maintainer: Giancarlo Razzolini <grazzolini@archlinux.org>
+# Contributor: Alexander F R\303\270dseth <xyproto@archlinux.org>
+# Contributor: Lukas Fleischer <lfleischer@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: Denis A. Altoe Falqueto <denisfalqueto@gmail.com>
+
+pkgbase=projectm
+pkgname=('projectm' 'projectm-jack')
+pkgver=3.1.1
+pkgrc="-rc3"
+pkgrel=4
+arch=('any')
+url='https://github.com/projectM-visualizer/projectm'
+license=('LGPL')
+makedepends=('mesa-libgl' 'glm' 'jack' 'ftgl' 'glew')
+source=("https://github.com/projectM-visualizer/$pkgbase/releases/download/v$pkgver$pkgrc/projectM-$pkgver$pkgrc.tar.gz")
+sha256sums=('SKIP')
+
+prepare() {
+    cd "projectM-$pkgver$pkgrc" 
+    find . -exec touch {} \;
+    aclocal; automake
+}
+
+build() {
+    cd "projectM-$pkgver$pkgrc"
+    ./configure --prefix=/usr --enable-gles
+    make
+}
+
+package_projectm() {
+    pkgdesc='Music visualizer which uses 3D accelerated iterative image based rendering'
+    depends=('libgl' 'glm' 'ftgl' 'glew')
+
+    cd "$srcdir/projectM-$pkgver$pkgrc"
+    make DESTDIR="$pkgdir" install-data-am
+    cd "$srcdir/projectM-$pkgver$pkgrc/src"
+    make DESTDIR="$pkgdir" install-am
+    cd "$srcdir/projectM-$pkgver$pkgrc/src/libprojectM"
+    make DESTDIR="$pkgdir" install
+    cd "$srcdir/projectM-$pkgver$pkgrc/src/NativePresets"
+    make DESTDIR="$pkgdir" install
+
+    find "$pkgdir" -iname "\.*" -delete
+}
+
+package_projectm-jack() {
+    pkgdesc='Music visualizer which uses 3D accelerated iterative image based rendering (jack)'
+    depends=('projectm' 'jack')
+
+    cd "$srcdir/projectM-$pkgver$pkgrc/src/projectM-jack"
+    make DESTDIR="$pkgdir" install
+}
+
