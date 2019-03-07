@@ -30,14 +30,14 @@ post_install() {
 		# set sudo permition to enable opendspd changes realtime priority of process
 		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
 		echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
-
-		# enable our service
-		systemctl enable opendsp
 		
 		# setup sane permitions
 		chown -R opendsp:opendsp /home/opendsp/			
 		
 	fi	
+
+	# enable our service
+	systemctl enable opendsp
 
 }
 
