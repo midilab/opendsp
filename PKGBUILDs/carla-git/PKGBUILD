@@ -1,0 +1,63 @@
+pkgname=carla-git
+pkgver=2.1.alpha2.r139.g3486530a
+pkgrel=1
+epoch=1
+pkgdesc="Audio Plugin Host"
+arch=("armv7h" "i686" "x86_64")
+url="http://kxstudio.sf.net/carla"
+license=("GPL2")
+conflicts=("carla")
+provides=("carla")
+depends=(
+    'ffmpeg'
+    'file'
+    'fluidsynth'
+    'liblo'
+    'python-pyqt5'
+    'qt5-svg'
+)
+makedepends=(
+    'git'
+    'gtk2'
+    'gtk3'
+)
+optdepends=(
+    'gtk2: LV2 GTK2 UI support'
+    'gtk3: LV2 GTK3 UI support'
+    'python-pyliblo: OSC control support'
+    'python-rdflib: LADSPA-RDF support'
+)
+source=("$pkgname"::"git://github.com/falkTX/Carla.git")
+md5sums=('SKIP')
+
+
+pkgver() {
+  cd "$srcdir/$pkgname"
+  git describe --long --tags | sed "s/\([^-]*-g\)/r\1/;s/-/./g;s/^v//"
+}
+
+build() {
+  cd "$srcdir/$pkgname"
+
+  sed -i 's/\-mtune=generic \-msse \-msse2 \-mfpmath=sse//g' source/tests/Makefile
+  sed -i 's/\-mtune=generic \-msse \-msse2 \-mfpmath=sse//g' source/Makefile.mk
+  sed -i 's/\-mtune=generic \-msse \-msse2 \-mfpmath=sse//g' data/linux/build-deps.sh
+
+  make \
+    HAVE_QT4=false \
+    MOC_QT5=/usr/bin/moc-qt5 \
+    RCC_QT5=/usr/bin/rcc-qt5 \
+    UIC_QT5=/usr/bin/uic-qt5
+}
+
+package() {
+  cd "$srcdir/$pkgname"
+  make \
+    HAVE_QT4=false \
+    MOC_QT5=/usr/bin/moc-qt5 \
+    RCC_QT5=/usr/bin/rcc-qt5 \
+    UIC_QT5=/usr/bin/uic-qt5 \
+    DESTDIR="$pkgdir/" \
+    PREFIX=/usr \
+    install
+}
