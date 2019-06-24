@@ -1,0 +1,71 @@
+# Maintainer: David Runge 
+# Contributor: Ray Rashif 
+# Contributor: Eric Belanger 
+# Contributor: Tom Newsom 
+
+pkgname=ecasound
+pkgver=2.9.2
+pkgrel=1
+pkgdesc="Command-line multitrack audio processor"
+arch=('armv7h' 'x86_64')
+url="https://ecasound.seul.org/ecasound/"
+license=('GPL' 'LGPL')
+groups=('pro-audio')
+depends=('audiofile' 'liblo' 'lilv')
+makedepends=('lv2' 'python2' 'ruby')
+optdepends=('python2: ecamonitor, ECI API'
+            'ruby: ECI API'
+            'mpg123: MP3 decoding'
+            'lame: MP3 encoding'
+            'vorbis-tools: Ogg Vorbis decoding/encoding'
+            'faad2: AAC decoding'
+            'faac: AAC encoding'
+            'timidity++: MIDI file input'
+            'libmikmod: tracker module')
+source=("https://ecasound.seul.org/download/$pkgname-$pkgver.tar.gz")
+options=('staticlibs')
+sha512sums=('fca6b37b5f669ba8616e48afe24fbfd53da3cb4987d2d6a2d6167843de34371a4c2cdceb6faf677462d6efb4069dd1d27ffafc1ceb19de56f4a051f077ada07b')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+
+  # install ruby integration to vendor_ruby
+  sed -e 's/sitedir/vendordir/' -i configure.ac
+
+  # lv2core is deprecated in favor of lv2:
+  # https://sourceforge.net/p/ecasound/bugs/52/
+  sed -e 's/lv2core/lv2/g' -i configure.ac
+  sed -e 's/lv2core/lv2/g' -i configure
+ 
+  # fix python2 shebang:
+  # https://sourceforge.net/p/ecasound/mailman/message/36698740/
+  sed -e 's/env python/env python2/' \
+      -i 'ecatools/ecamonitor' \
+      -i "examples/"*.py \
+      -i "pyecasound/"*.py
+
+  autoreconf -vfi
+}
+build() {
+  cd "$pkgname-$pkgver"
+  export PYTHONPATH="/usr/bin/python2"
+  sed -e 's/lv2core/lv2/g' -i configure
+
+  ./configure --prefix=/usr \
+              --with-python-includes=/usr/include/python2.7 \
+              --with-python-modules=/usr/lib/python2.7 \
+              --enable-liboil=no \
+              --enable-liblilv=yes \
+              --enable-liblo=yes
+  make
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+  # docs
+  install -vDm 644 {AUTHORS,BUGS,NEWS,README,RELNOTES,TODO} \
+    -t "${pkgdir}/usr/share/doc/${pkgname}/"
+}
+
+# vim:set ts=2 sw=2 et:

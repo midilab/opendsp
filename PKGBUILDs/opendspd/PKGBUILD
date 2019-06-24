@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendspd
-pkgver=120.6833c8d
+pkgver=140.3400838
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
@@ -44,6 +44,8 @@ package()
   cp -Rf * $pkgdir/home/opendsp/.config/openbox/scripts/
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
+  install -vD mod/ecosystem.cfg -m 0644 $pkgdir/home/opendsp/data/mod/
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
-  cp -Rf mod/* $pkgdir/home/opendsp/data/mod/
+  mkdir -p $pkgdir/etc/skel/opendsp-mod
+  cp -Rf mod/* $pkgdir/etc/skel/opendsp-mod/
 }
