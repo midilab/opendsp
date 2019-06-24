@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendsp-factory
-pkgver=2.476257d
+pkgver=4.bb7e91c
 pkgrel=1
 pkgdesc='OpenDSP Service Factory Data'
 arch=(any)
@@ -32,7 +32,8 @@ package()
 {
   cd "${srcdir}/${pkgname}"
   mkdir $pkgdir/home
-  mkdir $pkgdir/home/opendsp
-  mkdir $pkgdir/home/opendsp/data
-  cp -Rf data/* $pkgdir/home/opendsp/data/
+  # copy user home config
+  cp -r home $pkgdir/home/opendsp
+  # copy data
+  cp -Rf data $pkgdir/home/opendsp/data
 }
