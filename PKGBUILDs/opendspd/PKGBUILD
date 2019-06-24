@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendspd
-pkgver=100.4dcc470
+pkgver=103.72068df
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
@@ -34,16 +34,13 @@ package()
   cd "${srcdir}/${pkgname}/src"
   python setup.py install --root="$pkgdir"
   install -vD opendsp-daemon   -m 0755 $pkgdir/usr/bin/opendspd
-  install -vD ../../../resources/rc_ssh  -m 0644 $pkgdir/home/opendsp/.ssh/rc
-  install -vD ../../../resources/Xresources  -m 0644 $pkgdir/home/opendsp/.Xresources
   cd "${srcdir}/${pkgname}/services"
   install -vD opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
   install -vD vdisplay.service  -m 0644 $pkgdir/etc/systemd/system/vdisplay.service
   install -vD display.service  -m 0644 $pkgdir/etc/systemd/system/display.service
   install -vD sambafix.service  -m 0644 $pkgdir/etc/systemd/system/sambafix.service
   cd "${srcdir}/${pkgname}/data"
-  mkdir $pkgdir/home/opendsp/data/
-  mkdir $pkgdir/home/opendsp/data/mod
+  mkdir -p $pkgdir/home/opendsp/data/mod
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
   cp -Rf mod/* $pkgdir/home/opendsp/data/mod/
 }
