@@ -20,6 +20,12 @@ prepare() {
 
 build() {
   cd "${pkgname}-${pkgver}"
+
+  #export CFLAGS="$CFLAGS -marm -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -Ofast"
+  #export CXXFLAGS="$CXXFLAGS -marm -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -Ofast"
+  export CFLAGS="$CFLAGS -march=native -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -Ofast"
+  export CXXFLAGS="$CXXFLAGS -march=native -mfpu=neon-vfpv4 -mvectorize-with-neon-quad -Ofast"
+
   make PREFIX="/usr" lv2
 }
 

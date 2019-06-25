@@ -23,9 +23,21 @@ sha256sums=(
 
 prepare() {
     cd "$srcdir/Rack"
-    #git submodule update
-    git submodule sync 
-    git submodule update --init --recursive
+    #git submodule init
+    #git submodule sync
+    #git submodule update --init --recursive
+    cd "$srcdir/Rack/dep/speexdsp/"
+    git checkout resample-aarch64
+    cd "$srcdir/Rack/dep/tinythread/"
+    git checkout
+    cp ../../../../*.h .
+    cd "$srcdir/Rack" 
+    sed -i '/ARM_CPU_FLAGS/d' arch.mk
+    patch src/asset.cpp < ../../asset.patch
+    CFLAGS="$CFLAGS -mfpu=neon -mfloat-abi=hard"
+    #ARM_CPU_FLAGS
+    sed -i 's/shell pkg-config --libs gtk+-2.0/shell pkg-config --libs x11 xrandr xi xxf86vm glew glfw3 gtk+-2.0/' Makefile
+    #sed -i 's/shell pkg-config --libs gtk+-2.0/shell pkg-config --static --libs --print-requires --print-requires-private x11 xrandr xi xxf86vm glew glfw3/' Makefile
 }
 
 build() {
