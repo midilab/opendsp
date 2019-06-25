@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendspd
-pkgver=103.72068df
+pkgver=120.6833c8d
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
@@ -39,6 +39,9 @@ package()
   install -vD vdisplay.service  -m 0644 $pkgdir/etc/systemd/system/vdisplay.service
   install -vD display.service  -m 0644 $pkgdir/etc/systemd/system/display.service
   install -vD sambafix.service  -m 0644 $pkgdir/etc/systemd/system/sambafix.service
+  cd "${srcdir}/${pkgname}/tools"
+  mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
+  cp -Rf * $pkgdir/home/opendsp/.config/openbox/scripts/
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
