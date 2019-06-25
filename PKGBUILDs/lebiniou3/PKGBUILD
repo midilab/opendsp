@@ -25,6 +25,8 @@ build() {
   sed -i 's/MagickWand-7/MagickWand-6/g' src/Makefile
   sed -i 's/MagickCore-7/MagickCore-6/g' src/Makefile
 
+  patch plugins/stable/input/jackaudio/jackaudio.c < ../../jackaudio.patch
+
   make
 }
 
