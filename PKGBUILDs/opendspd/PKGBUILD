@@ -44,7 +44,7 @@ package()
   cp -Rf * $pkgdir/home/opendsp/.config/openbox/scripts/
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
-  install -vD mod/ecosystem.cfg -m 0644 $pkgdir/home/opendsp/data/mod/
+  #install -vD mod/ecosystem.cfg -m 0644 $pkgdir/home/opendsp/data/mod/
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
   mkdir -p $pkgdir/etc/skel/opendsp-mod
   cp -Rf mod/* $pkgdir/etc/skel/opendsp-mod/
