@@ -1,0 +1,26 @@
+pkgname=lebiniou-data
+pkgver=3.28
+pkgrel=1
+pkgdesc='to create live visuals based on your audio performances or existing tracks'
+arch=('any')
+url='https://dl.biniou.net/'
+license=('MIT')
+depends=('sdl2_ttf' 'libcaca' 'libmagick6' 'imagemagick')
+makedepends=('imagemagick')
+provides=("lebiniou-data=${pkgver}")
+conflicts=('lebiniou-data')
+md5sums=('SKIP')
+source=("https://dl.biniou.net/biniou/tar/lebiniou-data-${pkgver}.tar.gz")
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  autoreconf -i
+  ./configure --prefix="/usr"
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}/" install
+}
+
