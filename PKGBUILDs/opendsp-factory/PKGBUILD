@@ -1,0 +1,38 @@
+# Maintainer: Midilab <contact@midilab.co>
+
+pkgname=opendsp-factory
+pkgver=2.476257d
+pkgrel=1
+pkgdesc='OpenDSP Service Factory Data'
+arch=(any)
+url='http://midilab.co/opendsp-factory'
+license=('GPL')
+depends=(opendspd)
+source=("git+https://github.com/midilab/opendsp-factory.git")
+md5sums=('SKIP')
+
+pkgver()
+{
+  cd "$pkgname"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #echo $(git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
+}
+
+prepare() 
+{
+  cd "${srcdir}/${pkgname}"
+}
+
+build() 
+{
+  cd "${srcdir}/${pkgname}"
+}
+
+package()
+{
+  cd "${srcdir}/${pkgname}"
+  mkdir $pkgdir/home
+  mkdir $pkgdir/home/opendsp
+  mkdir $pkgdir/home/opendsp/data
+  cp -Rf data/* $pkgdir/home/opendsp/data/
+}
