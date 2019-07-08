@@ -1,0 +1,6 @@
+post_install() {
+  echo 'If you wish to use jack (or jack2), use this command the first time'
+  echo 'you start milkytracker: SDL_AUDIODRIVER=jack milkytracker'
+  echo 'Then select the jack driver in milkytracker and connect the audio'
+  echo 'with a program like qjackctl.'
+}

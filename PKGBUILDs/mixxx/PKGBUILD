@@ -1,31 +1,33 @@
-# Maintainer: Lukas Fleischer <lfleischer@archlinux.org>
-# Contributor: Ali H. Caliskan <ali.h.caliskan AT gmail DOT com>
-# Contributor: Ryan Coyner <rcoyner@gmail.com>
-# Contributor: Stefan Husmann <stefan-husmann@t-online.de>
 
-pkgname=mixxx
-pkgver=2.1.5
-pkgrel=2
-pkgdesc="Free, open source software for digital DJ'ing."
-arch=('armv7h')
-url='https://www.mixxx.org'
-license=('GPL')
-depends=('fftw' 'libid3tag' 'libmad' 'soundtouch' 'libogg' 'libshout' 'libsndfile' 'portaudio' 'portmidi'
-         'taglib' 'qt4' 'vamp-plugin-sdk' 'libusbx' 'protobuf' 'faad2' 'libmp4v2'
-         'rubberband' 'chromaprint' 'sqlite' 'opus' 'opusfile' 'upower' 'hidapi' 'libebur128')
-makedepends=('mesa' 'scons' 'libshout' 'glu')
-source=("https://github.com/${pkgname}dj/${pkgname}/archive/release-${pkgver}.tar.gz")
-md5sums=('49e1257c206143640ff4c7aff8fa3d83')
+pkgname=mixxx-git
+pkgver=r6869
+pkgrel=1
+pkgdesc="Digital DJ mixing software. Git master branch (development/alpha)."
+arch=('armv7h' 'i686' 'x86_64')
+url="http://www.mixxx.org/"
+license=('GPL2')
+groups=('pro-audio')
+depends=('libmad' 'faad2' 'qt5-script' 'qt5-svg' 'qt5-x11extras' 'taglib' 'libmp4v2' 'rubberband' 'portaudio' 'portmidi' 'protobuf' 'libshout' 'libid3tag' 'opusfile' 'chromaprint' 'lilv' 'upower')
+makedepends=('git' 'scons' 'pkgconfig' 'glu' 'qt5-tools')
+provides=("${pkgname%-*}")
+conflicts=("${pkgname%-*}")
+source=("${pkgname%-*}::git+https://github.com/mixxxdj/mixxx.git")
+md5sums=('SKIP')
+
+pkgver() {
+   cd "$srcdir/${pkgname%-*}"
+#  echo "$(git describe --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g')"
+   echo "r$(git log --pretty=oneline --first-parent | wc -l)"
+}
 
 build() {
-  cd "${srcdir}/${pkgname}-release-${pkgver}"
+  cd "$srcdir/${pkgname%-*}"
   export SCONSFLAGS="-j $(nproc)"
-  sed -i 's/mp4.h/mp4v2\/mp4v2.h/' plugins/soundsourcem4a/soundsourcem4a.h
-
-  scons build=release optimize=native opengles=1 virtualize=0 ffmpeg=1 localecompare=0 qt_sqlite_plugin=1 opus=1 qtdir=/usr/lib/qt4 prefix=/usr faad=1 mad=1 hid=1 
+  LIBS="-ldl -lm"
+  scons qtdir=/usr/lib/qt prefix=/usr install_root="$pkgdir/usr" virtualize=0 opus=1 optimize=native opengles=1 machine=armhf build=release faad=1 modplug=1
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-release-${pkgver}"
-  scons qtdir=/usr/lib/qt4 prefix=/usr install_root="${pkgdir}/usr" install
+  cd "$srcdir/${pkgname%-*}"
+  scons qtdir=/usr/lib/qt prefix=/usr install_root="$pkgdir/usr" install
 }
