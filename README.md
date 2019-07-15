@@ -22,31 +22,82 @@ The opensource community gives you a very huge number of different applications 
 
 # Pre release
 
-Images avaliable as pre-release. All the distro ecosystem are functional but the opendsp service are not ready for full MIDI/OSC user interface support. 
+On second release v0.9.0, the image avaliable on the link above:  
 
-Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/tag/v0.8b
+Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/download/v0.9.0/opendsp_0.9.0-raspberry_pi2-pi3.zip
+  
+## OpenDSP Apps
 
-## OpenDSP Applications
+OpenDSP application is a sub-set of N applications with a predefined state relation between then called Mod.
+  
+A Mod can have any number of applications and audio/video connections between then as far as you processor can handle it all.  
+  
+By merging different applications you can achieve different kinda of DSP tasks to use as a standalone dedicated audio/video gear in an automated way via MIDI and OSC protocols or via common mouse/keyboard and monitor desktop station.  
+  
+You can write your own Mod with a very few lines of configuration, just check some examples at mod/ directory of user data partition.  
 
-plugmod: a multitrack plugin host, similar to old muse receptor hardware. Each track has dedicated channel strip with EQ, Sends and Audio processing plugin support. The number of tracks are limited to your hardware CPU horse power.
-Its based on Ingen and Ecasound setup to support LV2 plugins.
-Ingen:
-Ecasound:
-LV2 Plugins collection:
+Examples can be found inside data/ directory.  
+  
+## App main interface
 
-djing: a complete djing environment with all your music colletiction easily managble via network share. based on Mixxx.
+By making use of Mod config files you can define your own with a few lines of configuration  
+  
+On the above example you setup a standalone tracker with visualization responds to audio on your screen and a keyboard used as a midi controller to play some sunvox synthesizers.    
 
-## Platform image downloads
- 
-* Raspberry 2 and 3 (32bits)  
-With vc4 hardware acelerator support and 256mb video memory  
+```ini
+[app1]
+name: sunvox-lofi
+path: /projects/sunvox/
+project: Transient - Can It Be Beautiful.sunvox
+display: virtual
+midi_input: "opendsp:1"
+audio_output: "opendsp:1, opendsp:2"
 
-* Raspberry 2 and 3 (32bits) with hifiberry support  
+[app2]
+name: lebiniou
+path: /projects/lebiniou/
+args: -x 640 -y 480
+project: "opendsp,opendsp2"
+display: native
+audio_input: "sunvox:1, sunvox:2"
 
-* PiSound  
+[app3]
+name: input2midi
+path: /projects/input2midi/
+project: inputtomidi.json
+midi_output: "opendsp:1"
+```
 
-## Roadmap
+## Ecosystem DSP applications
 
-* Get a full OpenDSP interface support for MIDI, OSC and keyboard.
+You can create Mods ussing the following opensource applications ecosystem:
 
-* vjing app: A Vj setup for video performances with effects and video mapping support
++ loopers  
+– giada  
+– luppp  
++ djing  
+– mixxx  
+– wxax  
++ daw/sequencer  
+– lmms  
+– hydrogen  
+– qtractor  
+– non-daw  
+– non-mixer  
+– non-sequencer  
++ trackers  
+– sunvox  
+– milkytrack  
++ modular synthesis  
+– carla  
+– carla-rack  
+– ingen  
++ video  
+– lebiniou  
+– xjadeo  
+– vlc  
++ modular programming  
+– puredata  
+– non-session-manager  
++ audio plugins  
+410 audio plugins, from effects to classic synthesizer emulations  
