@@ -1,14 +1,4 @@
-```shell
-
- ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
-██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
-██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
-╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
-opendsp login:
-
-```
+# OpenDSP
 
 Operational System for headless audio and video DSP computing, based on ArchLinux.
 
@@ -22,7 +12,7 @@ The opensource community gives you a very huge number of different applications 
 
 # Pre release
 
-This pre-release is fully functional and quite stable, but keep in mind that it is a pre-release, the image avaliable on the link above:  
+This pre-release is fully functional and quite stable, the image avaliable on the link above:  
 
 Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/download/v0.9.4/opendsp_0.9.4-raspberry_pi2_3.zip
   
@@ -98,6 +88,6 @@ You can create Mods ussing the following opensource applications ecosystem:
 – vlc  
 + modular programming  
 – puredata  
-– non-session-manager  
+– processing
 + audio plugins  
 410 audio plugins, from effects to classic synthesizer emulations  
