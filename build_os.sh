@@ -144,7 +144,7 @@ EOF
 	mkdir opendsp/var/lib/samba
     cat <<EOF >> opendsp/etc/systemd/system/sambafix.service
 [Unit]
-Description=OpenDSP Remote Control Service
+Description=sambafix for samba on read only file system
 After=remote-fs.service
 
 [Service]
