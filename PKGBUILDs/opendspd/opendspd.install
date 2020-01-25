@@ -36,8 +36,8 @@ post_install() {
 	# setup sane permitions
 	chown -R opendsp:opendsp /home/opendsp/	
 
-	ln -s /home/opendsp/data/djing/mixxx/ /home/opendsp/.mixxx
-	ln -s /home/opendsp/data/visualizer/projectM/ /home/opendsp/.projectM
+	#ln -s /home/opendsp/data/djing/mixxx/ /home/opendsp/.mixxx
+	#ln -s /home/opendsp/data/visualizer/projectM/ /home/opendsp/.projectM
 
 	# enable our service
 	systemctl enable opendsp

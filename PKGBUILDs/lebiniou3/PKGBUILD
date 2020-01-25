@@ -15,7 +15,7 @@ source=("https://dl.biniou.net/biniou/tar/lebiniou-${pkgver}.tar.gz")
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
   autoreconf -fi
-  ./configure --prefix="/usr"
+  ./configure --prefix="/usr" --enable-opengl
   
   sed -i 's/ImageMagick-7/ImageMagick-6/g' Makefile
   sed -i 's/MagickWand-7/MagickWand-6/g' Makefile

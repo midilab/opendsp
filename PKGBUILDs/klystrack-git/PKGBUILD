@@ -1,7 +1,7 @@
 
 pkgname=klystrack-git
-pkgver=1.7.5.r25.gc136d33
-pkgrel=2
+pkgver=1.7.5.r27.g5701430
+pkgrel=1
 pkgdesc="Tracker for making chiptune-like music on a modern computer"
 arch=('armv7h' 'i686' 'x86_64')
 url="http://kometbomb.github.io/klystrack/"
@@ -35,6 +35,8 @@ prepare() {
 
 build() {
   cd "$srcdir/$_gitname"
+  export CFLAGS="$CFLAGS -Ofast"
+  export CXXFLAGS="$CXXFLAGS -Ofast"
   make
 }
 

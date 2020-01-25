@@ -19,7 +19,8 @@ makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 conflicts=('linux' 'linux-rt' 'linux-raspberry')
 options=('!strip')
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
-        'https://www.kernel.org/pub/linux/kernel/projects/rt/4.9/patch-4.9.35-rt25.patch.gz'
+        #'https://www.kernel.org/pub/linux/kernel/projects/rt/4.9/older/patch-4.9.35-rt25.patch.gz'
+	'patch-4.9.35-rt25.patch'
 	'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 
 	'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
 	'dwc_otg-rt.patch'
@@ -29,13 +30,14 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '99-linux.hook')
 md5sums=('9df3b7691e8b2eda0bf404aa892ccfd6'
-         '039baf602bbd1f50f5025b8824333b48'
+         #'039baf602bbd1f50f5025b8824333b48'
+	 '8b2e2ddb16a4092205b76eae50bd2108'
 	 '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
 	 'f01d2fe5fdfaffdbb650bbcb78052d0c'
-         '7c6b37a1353caccf6d3786bb4161c218'
-         '60bc3624123c183305677097bcd56212'
-         '3c8160e1b8addde15a3663bd4c579890'
+         'f420204063164684b4d578c199e32a57'
+         '8e33bea2db5219b21381d056afd690eb'
+         '1b38d98637c21e78dd49f3ce52bed516'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334')
 

@@ -1,13 +1,13 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=opendspd
-pkgver=120.6833c8d
+pkgver=152.790320e
 pkgrel=1
 pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings mod-ttymidi xdotool ingen-git ecasound samba cpupower projectm projectm-sdl pd pd-gem pd-lua parted openbox create_ap)
+depends=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb xterm x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack mididings xdotool samba cpupower parted openbox create_ap)
 install="$pkgname.install"
 source=("git+https://github.com/midilab/opendspd.git")
 md5sums=('SKIP')
@@ -44,6 +44,9 @@ package()
   cp -Rf * $pkgdir/home/opendsp/.config/openbox/scripts/
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
+  #install -vD mod/ecosystem.cfg -m 0644 $pkgdir/home/opendsp/data/mod/
+  cp -Rf mod/* $pkgdir/home/opendsp/data/mod/ 
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
-  cp -Rf mod/* $pkgdir/home/opendsp/data/mod/
+  mkdir -p $pkgdir/etc/skel/opendsp-mod
+  cp -Rf mod/* $pkgdir/etc/skel/opendsp-mod/
 }

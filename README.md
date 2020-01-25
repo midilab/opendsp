@@ -1,30 +1,34 @@
-```shell
+# OpenDSP
 
- ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
-██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
-██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
-╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
-opendsp login:
+OpenDSP is a Realtime Operational System aimed for audio and video
+Digital Signal Processing on embeded devices like raspberry or
+headless personal computers.
 
-```
+OpenDSP Service is a Framework to create DSP gears that can
+fully interface with any MIDI or OSC compilant device. The source code are in python and is avaliable at:  https://github.com/midilab/opendspd/
 
-Operational System for headless audio and video DSP computing, based on ArchLinux.
+The OpenDSP OS and Service together gives you the power to emulate a lot of different expensive proprietary DSP machines or to create your self a new one for your needs.
 
-![Image of OpenDSP Plugmod and DX7  view](https://raw.githubusercontent.com/midilab/opendsp/master/doc/plugmod-opendsp.jpg)
+Achieve professional realtime low-latency audio and video processing on low budget computers!
 
-The idea behind this project is to allows a computer, embeded or pc without monitor, to emulate and behave like the most common audio and video production expensive hardware gears on the market. All the interface is done via MIDI or OSC protocol. 
+OpenDSP is Good for:
++ Musicians
++ DJs
++ Audio and Video Producers
++ Video Art Producers and Performers
++ Multimedia Interactive Instalations
++ Theatre Sound Technicians
++ DSP Students and Researches
 
-You can for example emulate a legendary Akai MPC or a Yamaha DX7 synthesizer, you can use it as as DJ system with or without vinyl timecode support. You can use it as a effect box and emulate classics like Roland Space Echo delay machine. You can use it as a mixing platform with support to the most common daily audio engeneering tools like compressors, limiters, expanders, multiband equalizers and so on...  
+You can, for example, emulate a legendary Akai MPC or a Yamaha DX7 synthesizer, you can use it as as DJ system with or without vinyl timecode support. You can use it as a effect box and emulate classics like Roland Space Echo delay machine. You can use it as a mixing platform with support to the most common daily audio engeneering tools like compressors, limiters, expanders, multiband equalizers and so on...  
 
 The opensource community gives you a very huge number of different applications that  
 
 # Pre release
 
-On second release v0.9.0, the image avaliable on the link above:  
+This pre-release is fully functional and quite stable, the image avaliable on the link above:  
 
-Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/download/v0.9.0/opendsp_0.9.0-raspberry_pi2-pi3.zip
+Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/download/v0.9.4/opendsp_0.9.4-raspberry_pi2_3.zip
   
 ## OpenDSP Apps
 
@@ -98,6 +102,6 @@ You can create Mods ussing the following opensource applications ecosystem:
 – vlc  
 + modular programming  
 – puredata  
-– non-session-manager  
+– processing
 + audio plugins  
 410 audio plugins, from effects to classic synthesizer emulations  

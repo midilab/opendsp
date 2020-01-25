@@ -3,7 +3,7 @@
 
 _pkgname="raul"
 pkgname="${_pkgname}-git"
-pkgver=0.8.10.r587.a6b5e9b
+pkgver=0.8.10.r592.045e70d
 pkgrel=1
 epoch=1
 pkgdesc="Realtime Audio Utility Library aimed at audio and musical applications"
@@ -25,11 +25,11 @@ pkgver() {
 
 build(){
   cd "${srcdir}/${_pkgname}"
-  python2 waf configure --prefix="/usr"
-  python2 waf build ${MAKEFLAGS}
+  python waf configure --prefix="/usr"
+  python waf build ${MAKEFLAGS}
 }
 
 package() {
   cd "${srcdir}/${_pkgname}"
-  python2 waf install --destdir=${pkgdir}
+  python waf install --destdir=${pkgdir}
 }
