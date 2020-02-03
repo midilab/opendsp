@@ -1,37 +1,48 @@
 pkgname=lebiniou
-pkgver=3.31
+pkgver=3.40
 pkgrel=1
 pkgdesc='to create live visuals based on your audio performances or existing tracks'
 arch=('any')
 url='https://dl.biniou.net/'
 license=('MIT')
-depends=('sdl2_ttf' 'libcaca' 'libmagick6' 'imagemagick')
+depends=('fftw' 'libxml2' 'ffmpeg' 'sdl2_ttf' 'libcaca' 'jack' 'libmagick6' 'imagemagick')
 makedepends=('imagemagick')
 provides=("lebiniou=${pkgver}")
 conflicts=('lebiniou')
 md5sums=('SKIP')
-source=("https://dl.biniou.net/biniou/tar/lebiniou-${pkgver}.tar.gz")
+#source=("https://dl.biniou.net/biniou/tar/lebiniou-${pkgver}.tar.gz")
+source=("https://gitlab.com/lebiniou/lebiniou/-/archive/version-3.40/lebiniou-version-${pkgver}.tar.gz")
 
 build() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
-  autoreconf -fi
-  ./configure --prefix="/usr" --enable-opengl
-  
-  sed -i 's/ImageMagick-7/ImageMagick-6/g' Makefile
-  sed -i 's/MagickWand-7/MagickWand-6/g' Makefile
-  sed -i 's/MagickCore-7/MagickCore-6/g' Makefile
-  
-  sed -i 's/ImageMagick-7/ImageMagick-6/g' src/Makefile
-  sed -i 's/MagickWand-7/MagickWand-6/g' src/Makefile
-  sed -i 's/MagickCore-7/MagickCore-6/g' src/Makefile
+  cd "${srcdir}/${pkgname}-version-${pkgver}"
 
-  patch plugins/stable/input/jackaudio/jackaudio.c < ../../jackaudio.patch
+  autoreconf -i
+  export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/lib/imagemagick6/pkgconfig"
+  export PATH="$PATH:/usr/bin/core_perl"
+
+  export CFLAGS="$CFLAGS -O3"
+  export CXXFLAGS="$CXXFLAGS -O3"
+
+  ./configure --enable-opengl --prefix="/usr"
+
+  sed -i 's/GL_so-GL.$(OBJEXT)/GL_so-GL.$(OBJEXT) ..\/..\/..\/..\/src\/lebiniou-context_gl.$(OBJEXT)/g' plugins/stable/output/GL/Makefile
+  sed -i 's/GLCube_so-GLCube.$(OBJEXT)/GLCube_so-GLCube.$(OBJEXT) ..\/..\/..\/..\/src\/lebiniou-context_gl.$(OBJEXT)/g' plugins/stable/main/GLCube/Makefile
+
+  #sed -i 's/ImageMagick-7/ImageMagick-6/g' Makefile
+  #sed -i 's/MagickWand-7/MagickWand-6/g' Makefile
+  #sed -i 's/MagickCore-7/MagickCore-6/g' Makefile
+  
+  #sed -i 's/ImageMagick-7/ImageMagick-6/g' src/Makefile
+  #sed -i 's/MagickWand-7/MagickWand-6/g' src/Makefile
+  #sed -i 's/MagickCore-7/MagickCore-6/g' src/Makefile
+
+  #patch plugins/stable/input/jackaudio/jackaudio.c < ../../jackaudio.patch
 
   make
 }
 
 package() {
-  cd "${srcdir}/${pkgname}-${pkgver}"
+  cd "${srcdir}/${pkgname}-version-${pkgver}"
   make DESTDIR="${pkgdir}/" install
 }
 
