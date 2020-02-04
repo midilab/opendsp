@@ -108,8 +108,7 @@ opendsp_tunning() {
 	cat <<EOF > opendsp/etc/samba/smb.conf	
 [global]
   workgroup = OpenDSPGroup
-  server string = "Use this share to access all your opendsp user data" 
-  guest account = opendsp
+  server string = "Opendsp user data"
   passdb backend = tdbsam
   load printers = no
   printing = bsd
@@ -117,16 +116,16 @@ opendsp_tunning() {
   disable spoolss = yes
   show add printer wizard = no
   security = user
-  map to guest = Bad User
-  create mask = 0644
-  directory mask = 0755  
 
 [user]
-  comment = OpenDSP user data 
+  comment = OpenDSP user data
+  valid users = opendsp
   path = /home/opendsp/data
   writable = yes
   printable = no
-  public = yes
+  public = no
+  create mask = 0644
+  directory mask = 0755
 EOF
 	
 	# setup samba share for user data
@@ -145,7 +144,7 @@ EOF
 	mkdir opendsp/var/lib/samba
     cat <<EOF >> opendsp/etc/systemd/system/sambafix.service
 [Unit]
-Description=OpenDSP Remote Control Service
+Description=sambafix for samba on read only file system
 After=remote-fs.service
 
 [Service]

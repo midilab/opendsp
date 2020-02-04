@@ -185,14 +185,22 @@ install() {
 	done
 
 	# first run script
-	cat <<EOF > opendsp/boot/opendsp_1st_run.sh
+	cat <<EOF > /usr/bin/resizesd
 #!/bin/bash -v
 
 set -e
 
-systemctl stop smb
-systemctl stop nmb
-umount -v /home/opendsp/data
+read -p "Do you want to resize your data partition? Press enter to continue"
+
+echo "Stoping OpenDSP and services..."
+
+systemctl stop opendsp || true
+systemctl stop smb || true
+systemctl stop nmb || true
+sleep 5
+umount -v /home/opendsp/data || true
+
+echo "Resizing..."
 
 parted /dev/mmcblk0 <<\EOF
 resizepart
@@ -204,7 +212,11 @@ q
 e2fsck -p -f /dev/mmcblk0p3
 resize2fs /dev/mmcblk0p3
 
-mount /home/opendsp/data
+read -p "Done! Press enter to reboot your machine..."
+
+mount -o remount,rw /
+rm /usr/bin/resizesd
+shutdown -r now
 
 EOF
 
