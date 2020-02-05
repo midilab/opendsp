@@ -1,6 +1,6 @@
 
 pkgname=klystrack-git
-pkgver=1.7.5.r27.g5701430
+pkgver=1.7.6.make.fix.r4.g6dac9eb
 pkgrel=1
 pkgdesc="Tracker for making chiptune-like music on a modern computer"
 arch=('armv7h' 'i686' 'x86_64')
@@ -35,8 +35,8 @@ prepare() {
 
 build() {
   cd "$srcdir/$_gitname"
-  export CFLAGS="$CFLAGS -Ofast"
-  export CXXFLAGS="$CXXFLAGS -Ofast"
+  #export CFLAGS="$CFLAGS -Ofast"
+  #export CXXFLAGS="$CXXFLAGS -Ofast"
   make
 }
 
