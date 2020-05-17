@@ -27,9 +27,9 @@ The opensource community gives you a very huge number of different applications 
 # Pre release
 
 This pre-release is fully functional and quite stable, the image avaliable on the link above:  
-
-Download Raspberry PI2 and PI3: https://github.com/midilab/opendsp/releases/download/v0.9.4/opendsp_0.9.4-raspberry_pi2_3.zip
   
+[**Download Raspberry PI2 and PI3 0.10**](https://github.com/midilab/opendsp/releases/download/v0.10.0/opendsp_0.10.0-raspberry_pi2_3.zip)
+    
 ## OpenDSP Apps
 
 OpenDSP application is a sub-set of N applications with a predefined state relation between then called Mod.
