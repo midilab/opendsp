@@ -1,0 +1,32 @@
+# Maintainer: Midilab <contact@midilab.co>
+
+pkgname=sooperlooper-lv2-plugin
+pkgver=54.d3e8002
+pkgrel=1
+pkgdesc='LV2 version of Sooperlooper - by mod devices'
+arch=(any)
+url='https://www.moddevices.com/'
+license=('GPL')
+depends=()
+source=("git+https://github.com/moddevices/sooperlooper-lv2-plugin")
+md5sums=('SKIP')
+
+pkgver()
+{
+  cd "${pkgname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() 
+{
+  cd "${srcdir}/${pkgname}"
+  make
+}
+
+package()
+{
+  export INSTALL_PATH="/usr/lib/lv2"
+  mkdir -p "${pkgdir}/usr/lib/lv2"
+  cd "${srcdir}/${pkgname}"
+  make DESTDIR="$pkgdir" PREFIX="/usr" install
+}
