@@ -1,27 +1,20 @@
-# Maintainer: Leonard de Ruijter <alderuijter@gmail.com>
-# Contributor: speps <speps at aur dot archlinux dot org>
+# Maintainer: Midilab <contact@gmidilab.co>
 
 pkgname=mididings
 pkgver=r706.bbec99a
 pkgrel=1
 pkgdesc="A MIDI router and processor based on Python, supporting ALSA and JACK MIDI"
-arch=('armv7h')
-#url="http://das.nasophon.de/mididings/"
+arch=('armv5h' 'armv6h' 'armv7h' 'armv8h')
 license=('GPL')
-depends=('boost-libs' 'python-decorator' 'jack' 'libsmf')
+depends=('boost-libs' 'python-decorator' 'jack')
 makedepends=('boost')
-optdepends=('python-dbus: to send DBUS messages'
-            'python-pyliblo: to send or receive OSC messages'
+optdepends=('python-pyliblo: to send or receive OSC messages'
             'python-pyinotify: to automatically restart when a script changes')
-#source=("http://das.nasophon.de/download/$pkgname-$pkgver.tar.gz")
-#md5sums=('5d4b642a1b76817b742f01cda60c0a3f')
-
 source=("${pkgname}::git://github.com/dsacre/mididings.git")
-sha256sums=('SKIP') # update with 'updpkgsums'
+sha256sums=('SKIP')
 
 pkgver() {
     cd "${srcdir}/${pkgname}"
-    #git describe --long | sed -r 's/([^-]*-g)/r\1/;s/-/./g'
     echo r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 

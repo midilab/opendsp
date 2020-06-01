@@ -1,4 +1,5 @@
 #!/bin/bash 
+# dependency: psmisc wget bsdtar 
 # example to manage a OpenDSP image for armv7 version of raspberry pi3/pi2
 # ./manage_img.sh mount platform/armv7/raspberry_pi opendsp-...img
 # ./manage_img.sh umount platform/armv7/raspberry_pi /dev/loop0
@@ -22,6 +23,19 @@ fi
 source ${script}
  
 case $action in
+	"create") 
+		device=${2##*/}
+		image_name=opendsp_${device}-$(date "+%Y-%m-%d").img
+		prepare_img $image_name
+		install_img
+		tunning_img
+		exit 0 ;;
+	"install") 
+		install_img
+		exit 0 ;;
+	"tune") 
+		tunning_img
+		exit 0 ;;
 	"mount") 
 		mount_img $target
 		exit 0 ;;

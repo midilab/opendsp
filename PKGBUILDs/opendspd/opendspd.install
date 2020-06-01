@@ -4,21 +4,34 @@ post_install() {
 	if [ `grep -c '^opendsp:' /etc/passwd` = 0 ]
 	then
 	
+		echo "opendsp" > opendsp/etc/hostname
+		echo "127.0.0.1 opendsp" >> opendsp/etc/hosts
+		
+		echo "" > opendsp/etc/motd
+		cat <<EOF > opendsp/etc/issue
+
+
+ ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
+██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
+██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
+██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
+╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
+ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
+
+EOF
+
 		# create user
 		useradd -m -G audio,video,uucp,lock,tty opendsp
 		# change pass
 		echo "opendsp:opendsp" | chpasswd
 		
 		# X11 needs config for session control
-		#sed -i 's/allowed_users=console/allowed_users=anybody/' /etc/X11/Xwrapper.config
-		# or to add
 		echo "allowed_users = anybody" >> /etc/X11/Xwrapper.config
 		echo "needs_root_rights = yes" >> /etc/X11/Xwrapper.config
 
-		# xinitrc: anything for now... we just dont need a window manager
-		echo "while [ 1 ]; do" > /home/opendsp/.xinitrc
-		echo "  sleep 10000" >> /home/opendsp/.xinitrc
-		echo "done" >> /home/opendsp/.xinitrc
+		# xinitrc
+		echo "[[ -f ~/.Xresources ]] && xrdb ~/.Xresources" > /home/opendsp/.xinitrc
+		echo "exec openbox-session" >> /home/opendsp/.xinitrc
 
 		# allow x11 forward for plugmod ingen edit modules
 		echo "X11Forwarding yes" >> /etc/ssh/sshd_config
@@ -28,20 +41,68 @@ post_install() {
 		echo "export XAUTHORITY=/tmp/.Xauthority" >> /home/opendsp/.profile
 		
 		# set sudo permition to enable opendspd changes realtime priority of process
-		#echo "opendsp ALL=(ALL) NOPASSWD:/usr/sbin/chrt" >> /etc/sudoers
 		echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers		
+
+		# set cpu for performance mode
+		sed -i '/governor/d' opendsp/etc/default/cpupower
+		echo "governor='performance'" >> opendsp/etc/default/cpupower
+		systemctl enable cpupower
+		# get a better swappiness for realtime environment
+		echo "vm.swappiness=10" >> opendsp/etc/sysctl.conf
+
+		# set realtime environment for DSPing
+		echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
+		echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
 		
+		# disable some services
+		systemctl disable systemd-random-seed || true
+		#systemctl enable avahi-daemon
+		#systemctl disable cron
+		#systemctl disable rsyslog
+		#systemctl disable ntp
+		#systemctl disable triggerhappy
+		#systemctl disable serial-getty@ttyAMA0.service
+		#systemctl disable getty@tty1.service
+		
+		# newer archlinux versions need to generate ssh keys by our own
+		#ssh-keygen -P "" -f /etc/ssh/ssh_host_rsa_key
+		
+		# enable service at boot time
+		systemctl enable smb
+		systemctl enable nmb	
+	
+		# setup samba share for user data
+		# run for the first time to create dir structure
+		# we need to run it on first boot for later read-only main partition usage of samba
+		systemctl start smb
+		systemctl start nmb	
+		systemctl stop nmb
+		systemctl stop smb	
+		smbpasswd -a opendsp -n
+
+		# little hack that enable us to start samba on read only file system
+		mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
+		mkdir opendsp/var/cache/samba
+		mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
+		mkdir opendsp/var/lib/samba
+		systemctl enable sambafix
+		cat <<EOF >> opendsp/etc/fstab
+# ram memory runtime filesystems
+tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+# samba fix for read only environment
+tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
+EOF
+
+		systemctl enable create_ap
 	fi	
 	
 	# setup sane permitions
 	chown -R opendsp:opendsp /home/opendsp/	
 
-	#ln -s /home/opendsp/data/djing/mixxx/ /home/opendsp/.mixxx
-	#ln -s /home/opendsp/data/visualizer/projectM/ /home/opendsp/.projectM
-
 	# enable our service
 	systemctl enable opendsp
-
 }
 
 post_upgrade() {
