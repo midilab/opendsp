@@ -49,7 +49,6 @@ package()
   mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
   cp *.py $pkgdir/home/opendsp/.config/openbox/scripts/
   cp changepasswd $pkgdir/usr/bin/changepassword
-  cp resizesd-raspberrypi $pkgdir/usr/bin/resizesd
   cd "${srcdir}/${pkgname}/conf"
   cp smb.conf $pkgdir/etc/samba/
   cp create_ap.conf $pkgdir/etc/
