@@ -3,6 +3,7 @@
 # example to manage a OpenDSP image for armv7 version of raspberry pi3/pi2
 # ./manage_img.sh mount platform/armv7/raspberry_pi opendsp-...img
 # ./manage_img.sh umount platform/armv7/raspberry_pi /dev/loop0
+# ./manage_img.sh create platform/armv7/raspberry_pi 
 
 set -e
 

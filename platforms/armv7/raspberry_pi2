@@ -123,6 +123,12 @@ install_img() {
 		retVal=$?
 	done
 
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp ssh-keygen -A || true
+		retVal=$?  
+	done
+
 	# delete tar install image
 	rm ArchLinuxARM-rpi-2-latest.tar.gz
 }	
@@ -159,7 +165,6 @@ mount_img() {
 	# copy temporarly our resolv.conf to get internet connection
 	mkdir -p opendsp/run/systemd/resolve/
 	cp /etc/resolv.conf opendsp/run/systemd/resolve/
-	
 }
 
 umount_img() {
