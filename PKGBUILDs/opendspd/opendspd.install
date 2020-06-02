@@ -4,11 +4,11 @@ post_install() {
 	if [ `grep -c '^opendsp:' /etc/passwd` = 0 ]
 	then
 	
-		echo "opendsp" > opendsp/etc/hostname
-		echo "127.0.0.1 opendsp" >> opendsp/etc/hosts
+		echo "opendsp" > /etc/hostname
+		echo "127.0.0.1 opendsp" >> /etc/hosts
 		
-		echo "" > opendsp/etc/motd
-		cat <<EOF > opendsp/etc/issue
+		echo "" > /etc/motd
+		cat <<EOF > /etc/issue
 
 
  ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
@@ -44,15 +44,15 @@ EOF
 		echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers		
 
 		# set cpu for performance mode
-		sed -i '/governor/d' opendsp/etc/default/cpupower
-		echo "governor='performance'" >> opendsp/etc/default/cpupower
+		sed -i '/governor/d' /etc/default/cpupower
+		echo "governor='performance'" >> /etc/default/cpupower
 		systemctl enable cpupower
 		# get a better swappiness for realtime environment
-		echo "vm.swappiness=10" >> opendsp/etc/sysctl.conf
+		echo "vm.swappiness=10" >> /etc/sysctl.conf
 
 		# set realtime environment for DSPing
-		echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
-		echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
+		echo "@audio 	- rtprio 	99" >> /etc/security/limits.conf
+		echo "@audio 	- memlock 	unlimited" >> /etc/security/limits.conf
 		
 		# disable some services
 		systemctl disable systemd-random-seed || true
@@ -81,15 +81,12 @@ EOF
 		smbpasswd -a opendsp -n
 
 		# little hack that enable us to start samba on read only file system
-		mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
-		mkdir opendsp/var/cache/samba
-		mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
-		mkdir opendsp/var/lib/samba
+		mv /var/cache/samba /var/cache/samba.cp
+		mkdir /var/cache/samba
+		mv /var/lib/samba /var/lib/samba.cp
+		mkdir /var/lib/samba
 		systemctl enable sambafix
-		cat <<EOF >> opendsp/etc/fstab
-# ram memory runtime filesystems
-tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
-tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
+		cat <<EOF >> /etc/fstab
 # samba fix for read only environment
 tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0

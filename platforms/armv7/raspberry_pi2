@@ -92,7 +92,6 @@ install_img() {
 	#tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
 
 	# prepare for chroot using qemu
-	echo  ':arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || true
 	cp /usr/bin/qemu-arm-static opendsp/usr/bin/
 
 	# good idea to have those mounted as we chroot in
@@ -297,7 +296,7 @@ tunning_img() {
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
 	sed -i 's/ console=tty1/ console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0/' opendsp/boot/cmdline.txt
 	# boot read only file system
-	sed -i 's/ rw/ ro /' opendsp/boot/cmdline.txt	
+	sed -i 's/ rw/ ro/' opendsp/boot/cmdline.txt	
 	
 	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab
@@ -308,6 +307,9 @@ tunning_img() {
 /dev/mmcblk0p1  /boot                   vfat    ro,auto,exec            0       2
 /dev/mmcblk0p2  /                       ext4    defaults,noatime,ro     0       1
 /dev/mmcblk0p3  /home/opendsp/data      ext4    defaults,noatime,rw     0       1
+# ram memory runtime filesystems
+tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 
 	# install xf86 drivers for vc4 broadcom GPU

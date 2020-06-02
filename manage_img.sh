@@ -36,6 +36,10 @@ case $action in
 	"tune") 
 		tunning_img
 		exit 0 ;;
+	"burn") 
+		#zip $1.zip $1
+		#dd bs=1M if=$image_name of=$media_device status=progress
+		exit 0 ;;
 	"mount") 
 		mount_img $target
 		exit 0 ;;
