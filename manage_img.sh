@@ -28,8 +28,8 @@ source ${script}
 # Opendsp create generic functions
 install_opendsp() {
 			
-	echo $1 > opendsp/etc/hostname
-	echo "127.0.0.1 $1" >> opendsp/etc/hosts
+	echo "opendsp" > opendsp/etc/hostname
+	echo "127.0.0.1 opendsp" >> opendsp/etc/hosts
 	
 	echo "" > opendsp/etc/motd
 	cat <<EOF > opendsp/etc/issue
@@ -102,6 +102,9 @@ EOF
 	# newer archlinux versions need to generate ssh keys by our own
 	chroot opendsp ssh-keygen -A
 
+	# setup samba
+	echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
+
 	cat <<EOF >> opendsp/etc/samba/smb.conf
 [global]
   workgroup = OpenDSPGroup
@@ -129,7 +132,12 @@ EOF
 	chroot opendsp systemctl enable smb
 	chroot opendsp systemctl enable nmb	
 
-	# setup samba share for user data
+	# setup samba share for user data over readolny fs
+	cat <<EOF >> opendsp/etc/fstab
+# samba fix for read only environment
+tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
+EOF
 	# run for the first time to create dir structure
 	# we need to run it on first boot for later read-only main partition usage of samba
 	#chroot opendsp systemctl start smb
@@ -160,12 +168,7 @@ ExecStart=/bin/sh -c '/usr/bin/cp -Rf /var/cache/samba.cp/* /var/cache/samba/; /
 [Install]
 WantedBy=multi-user.target
 EOF
-	chroot opendsp systemctl enable sambafix
-	cat <<EOF >> opendsp/etc/fstab
-# samba fix for read only environment
-tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
-tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
-EOF
+	chroot opendsp systemctl enable sambafix || true
 
 	# setup create_ap wifi access point
 	cat <<EOF >> opendsp/etc/create_ap.conf

@@ -223,6 +223,7 @@ tunning_img() {
 	echo 'read -p "Done! Press enter to reboot your machine..."' >> opendsp/usr/bin/resizesd
 	echo 'mount -o remount,rw /' >> opendsp/usr/bin/resizesd
 	echo 'rm /usr/bin/resizesd' >> opendsp/usr/bin/resizesd
+	echo 'rm -r /home/opendsp/data/lost+found' >> opendsp/usr/bin/resizesd
 	echo 'shutdown -r now' >> opendsp/usr/bin/resizesd
 
 	# setup boot/config.txt
