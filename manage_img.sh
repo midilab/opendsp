@@ -26,7 +26,7 @@ source ${script}
 
 #
 # Opendsp create generic functions
-opendsp_install() {
+install_opendsp() {
 			
 	echo $1 > opendsp/etc/hostname
 	echo "127.0.0.1 $1" >> opendsp/etc/hosts
@@ -51,7 +51,7 @@ EOF
 				liblo python-pyliblo cython python-decorator python-appdirs \
 				python-certifi python-packaging python-pillow python-psutil \
 				python-pyparsing python-pyserial python-six python-tornado \
-				python-virtualenv python-jack-client jack mididings xdotool \
+				python-virtualenv python-jack-client jack xdotool \
 				samba cpupower parted openbox create_ap
 	
 	# add default opendsp user and setup his environment
@@ -101,19 +101,6 @@ EOF
 	
 	# newer archlinux versions need to generate ssh keys by our own
 	chroot opendsp ssh-keygen -A
-	
-	# enable service at boot time
-	chroot opendsp systemctl enable smb
-	chroot opendsp systemctl enable nmb	
-
-	# setup samba share for user data
-	# run for the first time to create dir structure
-	# we need to run it on first boot for later read-only main partition usage of samba
-	chroot opendsp systemctl start smb
-	chroot opendsp systemctl start nmb	
-	chroot opendsp systemctl stop nmb
-	chroot opendsp systemctl stop smb	
-	chroot opendsp smbpasswd -a opendspd -n
 
 	cat <<EOF >> opendsp/etc/samba/smb.conf
 [global]
@@ -137,6 +124,21 @@ EOF
   create mask = 0644
   directory mask = 0755
 EOF
+
+	# enable service at boot time
+	chroot opendsp systemctl enable smb
+	chroot opendsp systemctl enable nmb	
+
+	# setup samba share for user data
+	# run for the first time to create dir structure
+	# we need to run it on first boot for later read-only main partition usage of samba
+	#chroot opendsp systemctl start smb
+	chroot opendsp /usr/bin/smbd --foreground --no-process-group &
+	#chroot opendsp systemctl start nmb	
+	chroot opendsp /usr/bin/nmbd --foreground --no-process-group &
+	kill -9 `pgrep nmbd` || true
+	kill -9 `pgrep smbd` || true
+	chroot opendsp smbpasswd -a opendsp -n
 
 	# little hack that enable us to start samba on read only file system
 	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
@@ -296,12 +298,17 @@ case $action in
 	"install") 
 		install_img
 		exit 0 ;;
+	"install_opendsp") 
+		install_opendsp
+		exit 0 ;;
 	"tune") 
 		tunning_img
 		exit 0 ;;
+	"compress") 
+		zip $2.zip $2
+		exit 0 ;;
 	"burn") 
-		#zip $1.zip $1
-		#dd bs=1M if=$image_name of=$media_device status=progress
+		dd bs=1M if=$2 of=$3 status=progress
 		exit 0 ;;
 	"mount") 
 		mount_img $target

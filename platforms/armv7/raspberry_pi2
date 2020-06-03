@@ -12,7 +12,7 @@
 # bash -c 'echo ":arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:POCF" > /proc/sys/fs/binfmt_misc/register'
 
 boot_size=128
-root_size=4300
+root_size=6000
 data_size=256
 device=""
 
@@ -172,9 +172,9 @@ umount_img() {
 	device_name=$1	
 	
 	# just in case, sometimes they can lock /dev/
-	killall gpg-agent || true
-	killall pacman || true
-	 
+	kill -9 `pgrep gpg-agent` || true
+	kill -9 `pgrep pacman` || true
+	
 	# remove installed packages on /var/cache/pacman/pkg/
 	rm opendsp/var/cache/pacman/pkg/* || true
 
