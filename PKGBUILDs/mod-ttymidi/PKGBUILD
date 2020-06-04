@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=mod-ttymidi
-pkgver=36.028ce4e
+pkgver=60.512edcc
 pkgrel=1
 pkgdesc='Jack version of ttymidi - by mod devices'
 arch=(any)

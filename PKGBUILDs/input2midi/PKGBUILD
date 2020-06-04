@@ -1,7 +1,7 @@
 # Maintainer: Midilab <contact@midilab.co>
 
 pkgname=input2midi
-pkgver=1.a0563d1
+pkgver=2.8a8b0e0
 pkgrel=1
 pkgdesc='Multi Input to Midi'
 arch=(any)
