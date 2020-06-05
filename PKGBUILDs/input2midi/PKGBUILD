@@ -15,7 +15,6 @@ pkgver()
 {
   cd "$pkgname"
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-  #echo $(git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g')
 }
 
 prepare() 
@@ -32,8 +31,6 @@ package()
 {
   cd "${srcdir}/${pkgname}"
   python setup.py install --root="$pkgdir"
-  install -vd -m 0755 $pkgdir/usr/lib/python3.7/site-packages/input2midi/
-  cp -Rf input2midi/lib $pkgdir/usr/lib/python3.7/site-packages/input2midi/
   install -vD run -m 0755 $pkgdir/usr/bin/input2midi
   install -vd -m 0755 $pkgdir/usr/share/input2midi/
   install -vD inputtomidi.json -m 0755 $pkgdir/usr/share/input2midi/

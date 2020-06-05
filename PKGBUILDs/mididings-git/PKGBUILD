@@ -21,12 +21,13 @@ pkgver() {
 prepare() {
   cd "$srcdir/$pkgname"
   
-  # for python3.7 async is now a reserved word, lets patch it
+  # for python3 async is now a reserved word, lets patch it
   sed -i 's/async/a_sync/' mididings/units/call.py
 }
 
 build() {
   cd "$srcdir/$pkgname"
+  # do you want smf?
   ./setup.py build #--enable-smf
 }
 
