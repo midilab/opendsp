@@ -75,6 +75,12 @@ EOF
 	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.ssh/environment
 	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.profile
 	
+	# create a place for x11vnc data to live on
+	mkdir -p opendsp/home/opendsp/.vnc/
+
+	# allows ddns to find us
+	sed -i 's/#hostname/hostname/' opendsp/etc/dhcpcd.conf
+
 	# set sudo permition to enable opendspd changes realtime priority of process
 	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> opendsp/etc/sudoers
 
