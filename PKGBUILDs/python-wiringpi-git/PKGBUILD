@@ -1,5 +1,5 @@
 pkgname=python-wiringpi-git
-pkgver=153.08cf3e4
+pkgver=156.3db3547
 pkgrel=1
 pkgdesc="Python-wrapped version of Gordon Henderson's WiringPI."
 url="https://github.com/WiringPi/WiringPi-Python"
