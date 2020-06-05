@@ -46,7 +46,7 @@ package()
   cd "${srcdir}/${pkgname}/tools"
   mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
   cp *.py $pkgdir/home/opendsp/.config/openbox/scripts/
-  cp changepasswd $pkgdir/usr/bin/changepassword
+  install -vD changepasswd -m 0755 $pkgdir/usr/bin/changepassword
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
   cp -Rf mod/* $pkgdir/home/opendsp/data/mod/ 
