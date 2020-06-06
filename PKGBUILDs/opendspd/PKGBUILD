@@ -7,9 +7,9 @@ pkgdesc='OpenDSP Service'
 arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
-depends=(sudo xorg-server xorg-xinit xorg-server-common \
+depends=(sudo xorg-server xorg-xinit xorg-server-common noto-fonts \
          xorg-server-xvfb tint2 openbox rxvt-unicode x11vnc \
-         alsa-firmware alsa-lib alsa-plugins alsa-utils \
+         alsa-firmware alsa-lib alsa-plugins alsa-utils patchage qjackctl \
          python-setuptools python-pip liblo python-pyliblo cython \
          python-decorator python-appdirs python-certifi python-packaging \
          python-pillow python-psutil python-pyparsing python-pyserial \
@@ -43,9 +43,13 @@ package()
   install -vD opendsp.service -m 0644 $pkgdir/etc/systemd/system/opendsp.service
   install -vD vdisplay.service  -m 0644 $pkgdir/etc/systemd/system/vdisplay.service
   install -vD display.service  -m 0644 $pkgdir/etc/systemd/system/display.service
-  cd "${srcdir}/${pkgname}/openbox"
+  cd "${srcdir}/${pkgname}/skel"
+  mkdir -p $pkgdir/etc/skel/opendsp/
+  cp -rf * $pkgdir/etc/skel/opendsp/
   mkdir -p $pkgdir/home/opendsp/.config/openbox/
-  cp -rf * $pkgdir/home/opendsp/.config/openbox/
+  cp -rf openbox/* $pkgdir/home/opendsp/.config/openbox/
+  mkdir -p $pkgdir/home/opendsp/.config/tint2/
+  cp -rf tint2/* $pkgdir/home/opendsp/.config/tint2/
   cd "${srcdir}/${pkgname}/tools"
   mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
   cp *.py $pkgdir/home/opendsp/.config/openbox/scripts/
@@ -54,6 +58,5 @@ package()
   mkdir -p $pkgdir/home/opendsp/data/mod
   cp -Rf mod/* $pkgdir/home/opendsp/data/mod/ 
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
-  mkdir -p $pkgdir/etc/skel/opendsp-mod
-  cp -Rf mod/* $pkgdir/etc/skel/opendsp-mod/
+  cp -Rf mod $pkgdir/etc/skel/opendsp/
 }
