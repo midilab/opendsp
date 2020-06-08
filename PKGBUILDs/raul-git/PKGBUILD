@@ -23,6 +23,11 @@ pkgver() {
   echo "$ver.r$(git rev-list --count HEAD).$(git rev-parse --short HEAD)"
 }
 
+prepare(){
+  cd "${srcdir}/${_pkgname}"
+  git clone https://github.com/drobilla/autowaf.git waflib
+}
+
 build(){
   cd "${srcdir}/${_pkgname}"
   python waf configure --prefix="/usr"

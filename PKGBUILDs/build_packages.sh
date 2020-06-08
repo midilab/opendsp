@@ -13,8 +13,9 @@ declare -a opendsp_base=("mididings-git" "mod-ttymidi" "jamrouter-git" "python-w
 declare -a opendsp_audio=("raul-git" "ingen-git" "distrho-lv2-git" "midifilter.lv2-git" "non-daw-git" "klystrack-git" "milktracker-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "fabla-git" "drmr-falktx-git" "mod-sooper-looper-lv2")
 
 pack() {
+   local -n packs=$1
    echo "BUILDING PACKS..."
-   for i in "${1[@]}"
+   for i in "${packs[@]}"
    do
       cd "$i"
       echo "building $i"
@@ -36,9 +37,9 @@ fi
 sudo swapon /swapfile || true
 
 # start pack
-#pack(rt_kernels)
-#pack(opendsp_base)
-pack(opendsp_audio)
+#pack rt_kernels
+#pack opendsp_base
+pack opendsp_audio
 
 sudo swapoff -a
 sudo rm -f /swapfile
