@@ -18,7 +18,6 @@ conflicts=("${_pkgname}")
 source=("${_pkgname}::git+https://github.com/drobilla/ingen.git/")
 md5sums=('SKIP')
 
-
 pkgver() {
   cd "$srcdir/${_pkgname}"
 
@@ -26,6 +25,11 @@ pkgver() {
   local rev=$(git rev-list --count HEAD)
   local githash=$(git rev-parse --short HEAD)
   echo "${ver}.r${rev}.${githash}"
+}
+
+prepare(){
+  cd "${srcdir}/${_pkgname}"
+  git clone https://github.com/drobilla/autowaf.git waflib
 }
 
 build() {
