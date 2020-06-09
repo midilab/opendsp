@@ -8,7 +8,7 @@ arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
 depends=(carla cadence bchoppr beatslash-lv2 ecasound \
-        qtractor milkytrack giada luppp mixxx wxax lmms hydrogen \
+        qtractor milkytracker giada luppp mixxx wxax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
         helm-synth infamousplugins ir.lv2 jalv lilv \
@@ -16,8 +16,8 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound \
         mephisto.lv2 midi_matrix.lv2 midimsg-lv2 moony.lv2 \
         padthv1 qmidiarp samplv1 setbfree sfizz sratom \
         suil synthv1 vm.lv2 x42-plugins xmonk.lv2 zynaddsubfx \
-        raul-git ingen-git distrho-lv2-git midifilter.lv2-git \
-        non-daw-git klystrack-git milktracker-git \
+        raul-git ingen distrho-lv2 midifilter.lv2 \
+        non-daw klystrack \
         dpf-plugins-git swh-lv2-git zam-plugins-git fabla-git \
         drmr-falktx-git mod-sooper-looper-lv2)
 
@@ -33,7 +33,7 @@ build()
 
 package()
 {
-  #cd "${srcdir}/${pkgname}/src"
+  cd "${srcdir}/${pkgname}/src"
   #install -vD opendsp-daemon   -m 0755 $pkgdir/usr/bin/opendspd
   #cd "${srcdir}/${pkgname}/skel"
   #mkdir -p $pkgdir/etc/skel/opendsp/
@@ -43,4 +43,3 @@ package()
   #mkdir -p $pkgdir/home/opendsp/.config/tint2/
   #cp -rf tint2/* $pkgdir/home/opendsp/.config/tint2/
 }
-
