@@ -8,7 +8,7 @@ sudo pacman -S base-devel cmake git
 
 declare -a rt_kernels=("linux-raspberrypi-rt-opendsp" "linux-odroid-xu3-rt-opendsp")
 
-declare -a opendsp_base=("mididings-git" "mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "python-rtmidi" "opendspd")
+declare -a opendsp_base=("mididings-git" "mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "python-rtmidi" "opendspd" "opendsp-mods-factory")
 
 declare -a opendsp_audio=("raul-git" "ingen-git" "distrho-lv2-git" "non-daw-git" "klystrack-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "sunvox" "mod-sooper-looper-lv2" "opendsp-audio-modular")
 

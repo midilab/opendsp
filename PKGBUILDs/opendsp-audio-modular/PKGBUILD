@@ -19,7 +19,7 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-gem \
         raul ingen distrho-lv2 \
         non-timeline non-mixer non-session-manager non-sequencer klystrack \
         dpf-plugins-lv2-git swh-lv2 zamplugins \
-        drmr-falktx-git sooperlooper-lv2-plugin)
+        drmr-falktx-git sooperlooper-lv2-plugin opendsp-mods-factory-audio)
 
 # processing
 # "/home/opendsp/.processing:/home/opendsp/data/app/processing/"
