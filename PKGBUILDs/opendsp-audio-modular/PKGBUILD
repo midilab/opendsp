@@ -21,36 +21,71 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound \
         dpf-plugins-lv2-git swh-lv2 zamplugins \
         drmr-falktx-git sooperlooper-lv2-plugin)
 
-prepare() 
-{
-  cd "${srcdir}"
-}
-
-build() 
-{
-  cd "${srcdir}"
-}
+# processing
+# "/home/opendsp/.processing:/home/opendsp/data/app/processing/"
+# lebiniou 
+# "/home/opendsp/.java:/home/opendsp/data/app/java/"
+# "/home/opendsp/.lebiniou:/home/opendsp/data/app/lebiniou/"
+# projectm
+# "/home/opendsp/.projectM:/home/opendsp/data/app/projectm/"
 
 package()
 {
   cd "${srcdir}"
   # symlink our apps that need realtime rw access
-  paths=("/home/opendsp/.config/falkTX:/home/opendsp/data/app/carla/" "/home/opendsp/.config/SunVox:/home/opendsp/data/app/sunvox/")
+  paths=(
+         # Puredata setup
+         "/home/opendsp/.pdsettings:/home/opendsp/data/app/puredata/pdsettings"
+         "/home/opendsp/.config/Pd/org.puredata.pd.pd-gui:/home/opendsp/data/app/puredata/org.puredata.pd.pd-gui/"
+         # falktx stuffs (carla, cadence...)
+         "/home/opendsp/.config/falkTX:/home/opendsp/data/app/falktx/" 
+         # ingen modular audio
+         "/home/opendsp/.config/ingen:/home/opendsp/data/app/ingen/"
+         # patchage
+         "/home/opendsp/.config/patchagerc:/home/opendsp/data/app/patchage/patchagerc"
+         # rncbc stuffs
+         "/home/opendsp/.config/rncbc.org:/home/opendsp/data/app/rncbc.org/"
+         # audio player
+         "/home/opendsp/.local/share/vlc:/home/opendsp/data/app/vlc-local/"
+         "/home/opendsp/.config/vlc:/home/opendsp/data/app/vlc/"
+         # loopers 
+         "/home/opendsp/.config/openAV/luppp:/home/opendsp/data/app/luppp/"
+         "/home/opendsp/.giada:/home/opendsp/data/app/giada/"
+         # gui
+         "/home/opendsp/.fltk:/home/opendsp/data/app/fltk/"
+         # daws/sequencers/trackers
+         "/home/opendsp/.hydrogen:/home/opendsp/data/app/hydrogen/"
+         "/home/opendsp/.lmmsrc.xml:/home/opendsp/data/app/lmms/lmmsrc.xml"
+         "/home/opendsp/.non:/home/opendsp/data/app/non/"
+         "/home/opendsp/.non-daw:/home/opendsp/data/app/non-daw/"
+         "/home/opendsp/.non-mixer:/home/opendsp/data/app/non-mixer/"
+         "/home/opendsp/.config/milkytracker:/home/opendsp/data/app/milkytracker/"
+         "/home/opendsp/.config/SunVox:/home/opendsp/data/app/sunvox/"
+         # djing
+         "/home/opendsp/.mixxx:/home/opendsp/data/app/mixxx/"
+         # synths
+         "/home/opendsp/.helm:/home/opendsp/data/app/helm/"
+         "/home/opendsp/.local/share/DigitalSuburban/Dexed:/home/opendsp/data/app/dexed/")
+
   for path in "${paths[@]}"; do
       # split by `:`
       data=($(echo $path | tr ":" "\n"))
-      source=${data[0]}
-      destination=${data[1]}
+      src=${data[0]}
+      dst=${data[1]}
       
       # the destination is a file or a dir?
-      if ! [ -z ${destination##*/} ]
+      if ! [ -z ${dst##*/} ]
+      then
         # the destinatoin is a file
-        desitnation=${destination%/*}
+        dst=${dst%/*}
       fi
 
-      mkdir -p $pkgdir/${source%/*}
-      mkdir -p $pkgdir/$destination
+      mkdir -p $pkgdir/${src%/*}
+      mkdir -p $pkgdir/$dst
 
-      ln -s $source $pkgdir/$destination
+      ln -sr $pkgdir/$dst $pkgdir/$src
   done
+
+  chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }
+
