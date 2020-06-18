@@ -34,12 +34,23 @@ build()
 package()
 {
   cd "${srcdir}"
-  #install -vD opendsp-daemon   -m 0755 $pkgdir/usr/bin/opendspd
-  #cd "${srcdir}/${pkgname}/skel"
-  #mkdir -p $pkgdir/etc/skel/opendsp/
-  #cp -rf * $pkgdir/etc/skel/opendsp/
-  #mkdir -p $pkgdir/home/opendsp/.config/openbox/
-  #cp -rf openbox/* $pkgdir/home/opendsp/.config/openbox/
-  #mkdir -p $pkgdir/home/opendsp/.config/tint2/
-  #cp -rf tint2/* $pkgdir/home/opendsp/.config/tint2/
+  # symlink our apps that need realtime rw access
+  paths=("/home/opendsp/.config/falkTX:/home/opendsp/data/app/carla/" "/home/opendsp/.config/SunVox:/home/opendsp/data/app/sunvox/")
+  for path in "${paths[@]}"; do
+      # split by `:`
+      data=($(echo $path | tr ":" "\n"))
+      source=${data[0]}
+      destination=${data[1]}
+      
+      # the destination is a file or a dir?
+      if ! [ -z ${destination##*/} ]
+        # the destinatoin is a file
+        desitnation=${destination%/*}
+      fi
+
+      mkdir -p $pkgdir/${source%/*}
+      mkdir -p $pkgdir/$destination
+
+      ln -s $source $pkgdir/$destination
+  done
 }
