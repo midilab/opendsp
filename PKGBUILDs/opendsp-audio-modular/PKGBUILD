@@ -77,11 +77,13 @@ package()
       if ! [ -z ${dst##*/} ]
       then
         # the destinatoin is a file
-        dst=${dst%/*}
+        mkdir -p $pkgdir/${dst%/*}
+      else
+        # the destination is a dir
+        mkdir -p $pkgdir/$dst
       fi
 
       mkdir -p $pkgdir/${src%/*}
-      mkdir -p $pkgdir/$dst
 
       ln -sr $pkgdir/$dst $pkgdir/$src
   done
