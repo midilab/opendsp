@@ -50,6 +50,7 @@ package()
   cp -rf openbox/* $pkgdir/home/opendsp/.config/openbox/
   mkdir -p $pkgdir/home/opendsp/.config/tint2/
   cp -rf tint2/* $pkgdir/home/opendsp/.config/tint2/
+  cp applications/* .local/share/applications/
   cd "${srcdir}/${pkgname}/tools"
   mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
   cp *.py $pkgdir/home/opendsp/.config/openbox/scripts/
@@ -59,4 +60,7 @@ package()
   cp -Rf mod/* $pkgdir/home/opendsp/data/mod/ 
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
   cp -Rf mod $pkgdir/etc/skel/opendsp/
+
+  # fix permitions
+  chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }

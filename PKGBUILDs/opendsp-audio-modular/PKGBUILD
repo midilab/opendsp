@@ -86,6 +86,7 @@ package()
       ln -sr $pkgdir/$dst $pkgdir/$src
   done
 
+  # fix permitions
   chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }
 

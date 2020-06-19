@@ -23,6 +23,9 @@ package_opendsp-mods-factory-audio()
   mkdir -p $pkgdir/home/opendsp/data/mod/
   # copy audio modules
   cp -r factory/audio/* $pkgdir/home/opendsp/data/mod/
+
+  # fix permitions
+  chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }
 
 package_opendsp-mods-factory-video()
@@ -31,4 +34,7 @@ package_opendsp-mods-factory-video()
   mkdir -p $pkgdir/home/opendsp/data/mod/
   # copy video modules
   cp -r factory/video/* $pkgdir/home/opendsp/data/mod/
+
+  # fix permitions
+  chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }
