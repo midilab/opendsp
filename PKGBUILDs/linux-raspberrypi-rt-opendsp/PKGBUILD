@@ -157,6 +157,9 @@ _package() {
 
   # install boot files
   install -m644 ../config.txt ../cmdline.txt "${pkgdir}/boot"
+
+  # install rtirq config
+  install -m644 ../rtirq.conf "${pkgdir}/etc"
 }
 
 _package-headers() {

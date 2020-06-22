@@ -11,7 +11,7 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-gem \
         qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
-        helm-synth infamousplugins ir.lv2 jalv lilv \
+        helm-synth infamousplugins ir.lv2 jalv lilv vlc \
         liquidsfz lsp-plugins lv2 lv2file lv2lint lvtk mda.lv2\
         mephisto.lv2 midi_matrix.lv2 midimsg-lv2 moony.lv2 \
         padthv1 qmidiarp samplv1 setbfree sfizz sratom \
