@@ -9,6 +9,9 @@ url='http://midilab.co/opendsp'
 license=('GPL')
 depends=(omxplayer pd-gem pd-lua projectm-sdl lebiniou lebiniou-data) # processing)
 
+# processing install
+# curl https://processing.org/download/install-arm.sh | sudo sh
+
 package()
 {
   cd "${srcdir}"
