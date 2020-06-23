@@ -5,9 +5,9 @@ pkgver=0.1
 pkgrel=1
 pkgdesc='OpenDSP Audio Modular meta package'
 arch=(any)
-url='http://midilab.co/opendspd'
+url='http://midilab.co/opendsp'
 license=('GPL')
-depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-gem \
+depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
         qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \

@@ -24,7 +24,7 @@ package() {
   cd $srcdir/noVNC-${pkgver}
   cp -Rf ../../websockify/ utils/
   mkdir -p $pkgdir/usr/share/novnc $pkgdir/usr/share/doc/novnc $pkgdir/usr/bin
-  mv vnc.html index.html
+  mv vnc_lite.html index.html
   cp -a app core vendor utils vnc.html index.html $pkgdir/usr/share/novnc/
   cp -a LICENSE.txt README.md $pkgdir/usr/share/doc/novnc
   cat >$pkgdir/usr/bin/novnc <<EOF

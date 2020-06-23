@@ -12,7 +12,7 @@ declare -a opendsp_base=("mididings-git" "mod-ttymidi" "jamrouter-git" "python-w
 
 declare -a opendsp_audio=("raul-git" "ingen-git" "distrho-lv2-git" "non-daw-git" "klystrack-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "sunvox" "mod-sooper-looper-lv2" "opendsp-mods-factory-audio" "opendsp-audio-modular")
 
-declare -a opendsp_video=("mesa-rpi" "mesa-rpi-git" "sdl2-rpi" "lebiniou3" "lebiniou3-data" "processing" "opendsp-mods-factory-video" "opendsp-video-modular")
+declare -a opendsp_video=("mesa-rpi" "mesa-rpi-git" "sdl2-rpi" "lebiniou3" "lebiniou3-data" "processing" "opendsp-mods-factory-video" "opendsp-video-processing")
 
 pack() {
    local -n packs=$1
