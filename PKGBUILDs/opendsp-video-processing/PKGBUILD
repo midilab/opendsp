@@ -44,7 +44,7 @@ package()
   done
 
   # copy apps skel configs for opendsp
-  cp -Rf ../skel/* $pkgdir/home/opendsp/data/app/
+  #cp -Rf ../skel/* $pkgdir/home/opendsp/data/app/
 
   # fix permitions
   chown -R opendsp:opendsp $pkgdir/home/opendsp/
