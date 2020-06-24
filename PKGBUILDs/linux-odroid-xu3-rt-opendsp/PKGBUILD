@@ -20,18 +20,23 @@ source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
         'config'
         'linux.preset'
         '99-linux.hook'
-	'patch-4.9.61-rt52.patch')
+	'patch-4.9.61-rt52.patch'
+	'i2c_freeze.patch')
 md5sums=('3f8d0f62d28a141ea45890d9ea8e7315'
          'e0e6c1f6b11d0c6e9ec389b456b6095b'
          'a84976d500db50cee07177eccfe2f455'
          '79fa396e3f9a09a85156d6d7c2d34b58'
-	 'b71ff96ffa1557d1a90385017d2b976c')
+	 'b71ff96ffa1557d1a90385017d2b976c'
+	 'b97f3932c0eb706cc26845392988d8ce')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   # applying realtime patch
   patch -Np1 -i ../patch-4.9.61-rt52.patch
+
+  # fix for preempt on i2c for full rt
+  patch -i ../i2c_freeze.patch drivers/i2c/busses/i2c-exynos5.c
 
   cat "${srcdir}/config" > ./.config
 

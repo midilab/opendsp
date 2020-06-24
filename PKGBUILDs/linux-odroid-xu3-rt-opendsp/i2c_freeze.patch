@@ -1,0 +1,58 @@
+diff --git a/drivers/i2c/busses/i2c-exynos5.c b/drivers/i2c/busses/i2c-exynos5.c
+index b02428498f6d..9a2a32f42c54 100644
+--- a/drivers/i2c/busses/i2c-exynos5.c
++++ b/drivers/i2c/busses/i2c-exynos5.c
+@@ -189,7 +189,7 @@ struct exynos5_i2c {
+ 	struct device		*dev;
+ 	int			state;
+ 
+-	spinlock_t		lock;		/* IRQ synchronization */
++	raw_spinlock_t		lock;		/* IRQ synchronization */
+ 
+ 	/*
+ 	 * Since the TRANS_DONE bit is cleared on read, and we may read it
+@@ -414,7 +414,7 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
+ 
+ 	i2c->state = -EINVAL;
+ 
+-	spin_lock(&i2c->lock);
++	raw_spin_lock(&i2c->lock);
+ 
+ 	int_status = readl(i2c->regs + HSI2C_INT_STATUS);
+ 	writel(int_status, i2c->regs + HSI2C_INT_STATUS);
+@@ -513,7 +513,7 @@ static irqreturn_t exynos5_i2c_irq(int irqno, void *dev_id)
+ 		complete(&i2c->msg_complete);
+ 	}
+ 
+-	spin_unlock(&i2c->lock);
++	raw_spin_unlock(&i2c->lock);
+ 
+ 	return IRQ_HANDLED;
+ }
+@@ -602,7 +602,7 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
+ 	 * Enable interrupts before starting the transfer so that we don't
+ 	 * miss any INT_I2C interrupts.
+ 	 */
+-	spin_lock_irqsave(&i2c->lock, flags);
++	raw_spin_lock_irqsave(&i2c->lock, flags);
+ 	writel(int_en, i2c->regs + HSI2C_INT_ENABLE);
+ 
+ 	if (stop == 1)
+@@ -610,7 +610,7 @@ static void exynos5_i2c_message_start(struct exynos5_i2c *i2c, int stop)
+ 	i2c_auto_conf |= i2c->msg->len;
+ 	i2c_auto_conf |= HSI2C_MASTER_RUN;
+ 	writel(i2c_auto_conf, i2c->regs + HSI2C_AUTO_CONF);
+-	spin_unlock_irqrestore(&i2c->lock, flags);
++	raw_spin_unlock_irqrestore(&i2c->lock, flags);
+ }
+ 
+ static int exynos5_i2c_xfer_msg(struct exynos5_i2c *i2c,
+@@ -747,7 +747,7 @@ static int exynos5_i2c_probe(struct platform_device *pdev)
+ 	/* Clear pending interrupts from u-boot or misc causes */
+ 	exynos5_i2c_clr_pend_irq(i2c);
+ 
+-	spin_lock_init(&i2c->lock);
++	raw_spin_lock_init(&i2c->lock);
+ 	init_completion(&i2c->msg_complete);
+ 
+ 	i2c->irq = ret = platform_get_irq(pdev, 0);
