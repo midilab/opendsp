@@ -1,14 +1,14 @@
 # ODROID-XU3/4
-# Maintainer: Kevin Mihelich 
+# Maintainer: Kevin Mihelich <kevin@archlinuxarm.org>
 
 buildarch=4
 
 pkgbase=linux-odroid-xu3
-_commit=dca98889e8e548715668c7aadfb4a47d480f16f0
+_commit=be592282a08a2493692448e365e46b52ac715b3f
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
-_desc="ODROID-XU3/XU4/HC1"
-pkgver=4.9.218
+_desc="ODROID-XU3/4"
+pkgver=4.9.61
 pkgrel=1
 arch=('armv7h')
 url="https://github.com/hardkernel/linux"
@@ -17,21 +17,21 @@ depends=('rtirq')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
-	'patch-4.9.218-rt141.patch'
         'config'
         'linux.preset'
-        '99-linux.hook')
-md5sums=('b6b7d59032a77d4b59561d45f5635350'
-	 'c10046c3012691972e1b1ff2cbf6a7a8'
-         'fa82235d9adec006f6bef86db52fdcf5'
-         'c0079f067681a9abb12d9611fe3ecf2a'
-         '79fa396e3f9a09a85156d6d7c2d34b58')
-         
+        '99-linux.hook'
+	'patch-4.9.61-rt52.patch')
+md5sums=('3f8d0f62d28a141ea45890d9ea8e7315'
+         '0c9d9774fbc724dab0565390dc50ade7'
+         'a84976d500db50cee07177eccfe2f455'
+         '79fa396e3f9a09a85156d6d7c2d34b58'
+	 'b71ff96ffa1557d1a90385017d2b976c')
+
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   # applying realtime patch
-  patch -Np1 -i ../patch-4.9.218-rt141.patch
+  patch -Np1 -i ../patch-4.9.61-rt52.patch
 
   cat "${srcdir}/config" > ./.config
 
@@ -178,6 +178,10 @@ _package-headers() {
 
   cp arch/${KARCH}/kernel/asm-offsets.s "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/kernel/"
 
+  # add docbook makefile
+  install -D -m644 Documentation/DocBook/Makefile \
+    "${pkgdir}/usr/lib/modules/${_kernver}/build/Documentation/DocBook/Makefile"
+
   # add dm headers
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/md"
   cp drivers/md/*.h "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/md"
@@ -253,4 +257,3 @@ for _p in ${pkgname[@]}; do
     _package${_p#${pkgbase}}
   }"
 done
-

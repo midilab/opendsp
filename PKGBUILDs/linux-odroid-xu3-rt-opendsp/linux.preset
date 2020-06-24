@@ -1,7 +1,7 @@
 # mkinitcpio preset file for the linux-odroid-xu3 package
 
 ALL_config="/etc/mkinitcpio.conf"
-ALL_kver="4.14.87-1-ARCH"
+ALL_kver="4.9.13-1-ARCH"
 
 PRESETS=('default')
 
