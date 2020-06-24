@@ -4,7 +4,7 @@
 buildarch=4
 
 pkgbase=linux-odroid-xu3
-_commit=a5ad06fc4b7b22f6df0c21b7052a82e039305a14
+_commit=dca98889e8e548715668c7aadfb4a47d480f16f0
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="ODROID-XU3/XU4/HC1"
@@ -17,12 +17,12 @@ depends=('rtirq')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
-        'patch-4.9.218-rt141.patch'
+	'patch-4.9.218-rt141.patch'
         'config'
         'linux.preset'
         '99-linux.hook')
-md5sums=('79134fcd30d25caba3f706809cdae6e7'
-         'c10046c3012691972e1b1ff2cbf6a7a8'
+md5sums=('b6b7d59032a77d4b59561d45f5635350'
+	 'c10046c3012691972e1b1ff2cbf6a7a8'
          'fa82235d9adec006f6bef86db52fdcf5'
          'c0079f067681a9abb12d9611fe3ecf2a'
          '79fa396e3f9a09a85156d6d7c2d34b58')
@@ -130,8 +130,8 @@ _package() {
   mv "$pkgdir/lib" "$pkgdir/usr"
 
   # install rtirq config skel
-  mkdir -p "${pkgdir}/etc/rtirq/"
-  install -m644 ../../rtirq.conf "${pkgdir}/etc/rtirq/"
+  mkdir -p "${pkgdir}/etc/skel/rtirq/"
+  install -m644 ../../rtirq.conf "${pkgdir}/etc/skel/rtirq/"
 }
 
 _package-headers() {
