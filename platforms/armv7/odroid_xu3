@@ -194,14 +194,23 @@ tunning_img() {
 	echo 'rm -r /home/opendsp/data/lost+found || true' >> opendsp/usr/bin/resizesd
 	echo 'shutdown -r now' >> opendsp/usr/bin/resizesd
 
-	sudo chmod 755 opendsp/usr/bin/resizesd
+	chmod 755 opendsp/usr/bin/resizesd
 
 	# take uart usage off for console, we need it for MIDI uart
 	sed -i 's/ console=ttySAC2,115200n8//' opendsp/boot/boot.txt
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
-	sed -i 's/ console=tty1/ console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
+	sed -i 's/console=tty1/console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
 	# enabling threadirqs and boot read only file system and other system options
 	sed -i 's/ rw/ ro/' opendsp/boot/boot.txt
+
+	# needs to install mkimage
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman -S uboot-mkimage || true
+		retVal=$?  
+	done
+
+	chroot opendsp mkimage -A arm -C none -T script -n 'Boot script for quiet ODROID-U3' -d /boot/boot.txt /boot/boot.scr
 
 	# set read only file systems
 	cat <<EOF > opendsp/etc/fstab
