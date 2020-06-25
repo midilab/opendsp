@@ -20,7 +20,7 @@ source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
         'config'
         'linux.preset'
         '99-linux.hook')
-md5sums=('a8bef40edc2779dd3ee11a1b368f005e'
+md5sums=('6201373509cc03ea705da2d0d6856f7e'
          '636571288e4e20ccb03c1ca38355cdfe'
          '24f9062f89a961a2906ac2b74d760fa2'
          'c0079f067681a9abb12d9611fe3ecf2a'
