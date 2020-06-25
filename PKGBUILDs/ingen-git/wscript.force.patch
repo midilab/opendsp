@@ -1,0 +1,13 @@
+--- wscript	2020-06-25 13:43:38.000000000 +0000
++++ wscript.force	2020-06-25 13:43:33.000000000 +0000
+@@ -122,6 +122,10 @@
+                             mandatory     = False)
+         if not Options.options.no_jack_session:
+             conf.define('INGEN_JACK_SESSION', 1)
++    # force those because of buggy check on some platforms
++    conf.define('HAVE_SOCKET', True)
++    conf.define('HAVE_JACK_METADATA', True)
++    conf.define('HAVE_JACK_PORT_RENAME', True)
+ 
+     if Options.options.debug_urids:
+         conf.define('INGEN_DEBUG_URIDS', 1)

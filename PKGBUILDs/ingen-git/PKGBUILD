@@ -2,7 +2,7 @@
 
 _pkgname=ingen
 pkgname="${_pkgname}-git"
-pkgver=0.5.1.r2789.f48f9d69
+pkgver=0.5.1.r2843.e2d69c69
 pkgrel=1
 pkgdesc="A modular plugin host for JACK and LV2."
 arch=('arm' 'armv6h' 'armv7h' 'aarch64')
@@ -15,8 +15,9 @@ optdepends=(
 )
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
-source=("${_pkgname}::git+https://github.com/drobilla/ingen.git/")
-md5sums=('SKIP')
+source=("${_pkgname}::git+https://github.com/drobilla/ingen.git/"
+        "wscript.force.patch")
+md5sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd "$srcdir/${_pkgname}"
@@ -30,6 +31,12 @@ pkgver() {
 prepare(){
   cd "${srcdir}/${_pkgname}"
   git clone https://github.com/drobilla/autowaf.git waflib
+
+  # patch file to fix error on those that dont have the HAVE_POSIX_MEMALIGN
+  sed -i 's/LV2_buf/void/' src/server/Buffer.cpp  
+
+  # on some platforms autowaf are buggy for sockets and jack related
+  patch < ../wscript.force.patch  
 }
 
 build() {
