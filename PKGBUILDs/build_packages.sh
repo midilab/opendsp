@@ -2,7 +2,7 @@
 
 set -e
 
-sudo pacman -Syyu
+sudo pacman -Syu
 
 sudo pacman -S base-devel cmake git
 

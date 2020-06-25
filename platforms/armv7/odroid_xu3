@@ -1,6 +1,6 @@
 #!/bin/bash
 
-root_size=6000
+root_size=8000
 home_size=256
 device=""
 
