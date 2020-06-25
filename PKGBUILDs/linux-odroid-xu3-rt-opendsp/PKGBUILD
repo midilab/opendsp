@@ -30,7 +30,7 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   # applying realtime patch
-  patch -Np1 -i ../patch-4.14.87-rt49.patch
+  patch -Np1 -i ../patch-4.9.35-rt25.patch
 
   cat "${srcdir}/config" > ./.config
 
