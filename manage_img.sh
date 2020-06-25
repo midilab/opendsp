@@ -96,11 +96,11 @@ EOF
 	echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
 	
 	# disable some services
-	chroot opendsp systemctl disable systemd-random-seed || true
+	#chroot opendsp systemctl disable systemd-random-seed || true
 	#chroot opendsp systemctl enable avahi-daemon
 	#chroot opendsp systemctl disable cron
 	#chroot opendsp systemctl disable rsyslog
-	#chroot opendsp ystemctl disable ntp
+	#chroot opendsp systemctl disable ntp
 	#chroot opendsp systemctl disable triggerhappy
 	#chroot opendsp systemctl disable serial-getty@ttyAMA0.service
 	#chroot opendsp systemctl disable getty@tty1.service
@@ -109,7 +109,7 @@ EOF
 	chroot opendsp ssh-keygen -A
 
 	# setup samba
-	echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
+	chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
 
 	cat <<EOF >> opendsp/etc/samba/smb.conf
 [global]
