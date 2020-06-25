@@ -4,11 +4,11 @@
 buildarch=4
 
 pkgbase=linux-odroid-xu3
-_commit=4266a7e06450fe8bd52c06d9850b689cb14b7df2
+_commit=067572bc5d33aa39fdbb632679e43965141ea382
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="ODROID-XU3/XU4/HC1"
-pkgver=4.9.35
+pkgver=4.9.219
 pkgrel=1
 arch=('armv7h')
 url="https://github.com/hardkernel/linux"
@@ -16,12 +16,12 @@ license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("https://github.com/hardkernel/linux/archive/${_commit}.tar.gz"
-        'patch-4.9.35-rt25.patch'
+        'patch-4.9.219-rt142.patch'
         'config'
         'linux.preset'
         '99-linux.hook')
 md5sums=('a8bef40edc2779dd3ee11a1b368f005e'
-         '8b2e2ddb16a4092205b76eae50bd2108'
+         '636571288e4e20ccb03c1ca38355cdfe'
          '24f9062f89a961a2906ac2b74d760fa2'
          'c0079f067681a9abb12d9611fe3ecf2a'
          '79fa396e3f9a09a85156d6d7c2d34b58')
@@ -30,7 +30,7 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   # applying realtime patch
-  patch -Np1 -i ../patch-4.9.35-rt25.patch
+  patch -Np1 -i ../patch-4.9.219-rt142.patch
 
   cat "${srcdir}/config" > ./.config
 
