@@ -129,8 +129,9 @@ _package() {
   mkdir -p "${pkgdir}/usr"
   mv "$pkgdir/lib" "$pkgdir/usr"
 
-  # install rtirq config
-  install -m644 ../../rtirq.conf "${pkgdir}/etc"
+  # install rtirq config skel
+  mkdir -p "${pkgdir}/etc/rtirq/"
+  install -m644 ../../rtirq.conf "${pkgdir}/etc/rtirq/"
 }
 
 _package-headers() {
