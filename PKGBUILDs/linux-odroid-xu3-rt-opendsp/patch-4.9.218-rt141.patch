@@ -3514,7 +3514,7 @@ index 381cb50a673c..dc8785233d94 100644
  		}
  	}
 diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 58be2eaa5aaa..b90e8b28f7c1 100644
+index 24fc09cf7f17..3a49552974ec 100644
 --- a/block/blk-mq.c
 +++ b/block/blk-mq.c
 @@ -177,6 +177,9 @@ static void blk_mq_rq_ctx_init(struct request_queue *q, struct blk_mq_ctx *ctx,
@@ -4084,7 +4084,7 @@ index 74fcf10da374..fd4020c99b9e 100644
 +
  #endif
 diff --git a/drivers/char/random.c b/drivers/char/random.c
-index 4cbc73173701..c033135f2a67 100644
+index 81b65d0e7563..aba13eddeab6 100644
 --- a/drivers/char/random.c
 +++ b/drivers/char/random.c
 @@ -263,6 +263,7 @@
@@ -4146,29 +4146,19 @@ index 4cbc73173701..c033135f2a67 100644
  
  	fast_mix(fast_pool);
  	add_interrupt_bench(cycles);
-@@ -1668,7 +1665,7 @@ void get_random_bytes_arch(void *buf, int nbytes)
- 
- 		if (!arch_get_random_long(&v))
- 			break;
--		
-+
- 		memcpy(p, &v, chunk);
- 		p += chunk;
- 		nbytes -= chunk;
-@@ -2122,18 +2119,22 @@ struct batched_entropy {
-  * the goal of being quite fast and not depleting entropy.
+@@ -2122,6 +2119,7 @@ struct batched_entropy {
+  * goal of being quite fast and not depleting entropy.
   */
  static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_long);
 +static DEFINE_LOCAL_IRQ_LOCK(batched_entropy_long_lock);
  unsigned long get_random_long(void)
  {
  	unsigned long ret;
- 	struct batched_entropy *batch;
+@@ -2130,13 +2128,13 @@ unsigned long get_random_long(void)
+ 	if (arch_get_random_long(&ret))
+ 		return ret;
  
 -	batch = &get_cpu_var(batched_entropy_long);
-+	if (arch_get_random_long(&ret))
-+		return ret;
-+
 +	batch = &get_locked_var(batched_entropy_long_lock, batched_entropy_long);
  	if (batch->position % ARRAY_SIZE(batch->entropy_long) == 0) {
  		extract_crng((u8 *)batch->entropy_long);
@@ -4180,7 +4170,7 @@ index 4cbc73173701..c033135f2a67 100644
  	return ret;
  }
  EXPORT_SYMBOL(get_random_long);
-@@ -2145,18 +2146,23 @@ unsigned int get_random_int(void)
+@@ -2148,6 +2146,8 @@ unsigned int get_random_int(void)
  }
  #else
  static DEFINE_PER_CPU(struct batched_entropy, batched_entropy_int);
@@ -4189,12 +4179,11 @@ index 4cbc73173701..c033135f2a67 100644
  unsigned int get_random_int(void)
  {
  	unsigned int ret;
- 	struct batched_entropy *batch;
+@@ -2156,13 +2156,13 @@ unsigned int get_random_int(void)
+ 	if (arch_get_random_int(&ret))
+ 		return ret;
  
 -	batch = &get_cpu_var(batched_entropy_int);
-+	if (arch_get_random_int(&ret))
-+		return ret;
-+
 +	batch = &get_locked_var(batched_entropy_int_lock, batched_entropy_int);
  	if (batch->position % ARRAY_SIZE(batch->entropy_int) == 0) {
  		extract_crng((u8 *)batch->entropy_int);
@@ -25515,11 +25504,11 @@ index 1afec32de6f2..11fa431046a8 100644
  	dump_stack();
 diff --git a/localversion-rt b/localversion-rt
 new file mode 100644
-index 000000000000..234720dc343d
+index 000000000000..09a4d4e4f010
 --- /dev/null
 +++ b/localversion-rt
 @@ -0,0 +1 @@
-+-rt142
++-rt141
 diff --git a/mm/Kconfig b/mm/Kconfig
 index ea074a9d4958..ef45be9d5f40 100644
 --- a/mm/Kconfig
