@@ -152,7 +152,10 @@ EOF
 	chroot opendsp /usr/bin/nmbd --foreground --no-process-group &
 	kill -9 `pgrep nmbd` || true
 	kill -9 `pgrep smbd` || true
+	# add opendsp user
 	chroot opendsp smbpasswd -a opendsp -n
+	# set opendsp default password
+	chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp
 
 	# little hack that enable us to start samba on read only file system
 	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
@@ -301,8 +304,8 @@ case $action in
 		image_name=opendsp_${device}-$(date "+%Y-%m-%d").img
 		prepare_img $image_name
 		install_img
-		install_opendsp
 		tunning_img
+		install_opendsp
 		echo "image ready! please umount it to get it ready to burn..."
 		exit 0 ;;
 	"install") 
