@@ -303,6 +303,7 @@ case $action in
 		install_img
 		install_opendsp
 		tunning_img
+		echo "image ready! please umount it to get it ready to burn..."
 		exit 0 ;;
 	"install") 
 		install_img
