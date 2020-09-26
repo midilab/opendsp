@@ -54,14 +54,15 @@ package()
   cp applications/* $pkgdir/home/opendsp/.local/share/applications/
   cd "${srcdir}/${pkgname}/tools"
   mkdir -p $pkgdir/home/opendsp/.config/openbox/scripts/
-  cp *.py $pkgdir/home/opendsp/.config/openbox/scripts/
-  install -vD changepasswd -m 0755 $pkgdir/usr/bin/changepassword
+  cp openbox/scripts/*.py $pkgdir/home/opendsp/.config/openbox/scripts/
+  install -vD bin/changepasswd -m 0755 $pkgdir/usr/bin/changepassword
+  install -vD bin/opendspd-update -m 0755 $pkgdir/usr/bin/opendspd-update
+  install -vD bin/vlc-youtube-update -m 0755 $pkgdir/usr/bin/vlc-youtube-update
   cd "${srcdir}/${pkgname}/data"
   mkdir -p $pkgdir/home/opendsp/data/mod
   cp -Rf mod/* $pkgdir/home/opendsp/data/mod/ 
   install -vD system.cfg  -m 0644 $pkgdir/home/opendsp/data/
   cp -Rf mod $pkgdir/etc/skel/opendsp/
-
   # fix permitions
   chown -R opendsp:opendsp $pkgdir/home/opendsp/
 }
