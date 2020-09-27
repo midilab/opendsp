@@ -28,7 +28,7 @@ The opensource community gives you a very huge number of different applications 
 
 This pre-release is fully functional and quite stable, the image avaliable on the link above:  
   
-[**Download Raspberry PI2 and PI3 0.10**](https://github.com/midilab/opendsp/releases/download/v0.10.0/opendsp_0.10.0-raspberry_pi2_3.zip)
+[**Download Raspberry PI2 and PI3 0.11**](https://github.com/midilab/opendsp/releases/download/v0.11.0/opendsp_0.11.0-raspberry_pi2_3.zip)
     
 ## OpenDSP Apps
 
