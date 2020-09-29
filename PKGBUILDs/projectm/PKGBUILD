@@ -1,0 +1,40 @@
+# $Id$
+# Maintainer: Lukas Sabota <lukas@lwsabota.com>
+# Contributor: Giancarlo Razzolini <grazzolini@archlinux.org>
+# Contributor: Alexander F Rødseth <xyproto@archlinux.org>
+# Contributor: Lukas Fleischer <lfleischer@archlinux.org>
+# Contributor: Alexander Baldeck <alexander@archlinux.org>
+# Contributor: Denis A. Altoe Falqueto <denisfalqueto@gmail.com>
+
+_gitname=projectm
+pkgname=projectm-git
+pkgver=2113.572298fc3
+pkgrel=1
+conflicts=('projectm' 'projectm-sdl' 'projectn-jack')
+provides=('projectm' 'projectm-sdl' 'projectm-jack')
+pkgdesc="Music visualizer which uses 3D accelerated iterative image based rendering (git version)"
+arch=('armv7h' 'x86_64' 'i686')
+url='https://github.com/projectM-visualizer/projectm'
+license=('LGPL')
+depends=('sdl2' 'libxext' 'glm')
+source=("git+https://github.com/projectM-visualizer/${_gitname}.git")
+sha256sums=(SKIP)
+
+pkgver() {
+  cd "${_gitname}"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd "${_gitname}"
+  ./autogen.sh
+  ./configure --prefix=/usr --enable-jack --enable-sdl --disable-pulseaudio --enable-qt --enable--gles
+#--disable-pulseaudio --disable-esd --disable-video-mir --disable-video-wayland --enable-video-kmsdrm --disable-video-rpi --disable-video-x11 --host=arm-raspberry-linux-gnueabihf
+   make
+}
+
+package() {
+  cd "${_gitname}"
+  DESTDIR="$pkgdir" make install
+  DESTDIR="$pkgdir" install -Dm644 "${srcdir}/${_gitname}/src/COPYING" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
