@@ -8,7 +8,7 @@
 
 _gitname=projectm
 pkgname=projectm-git
-pkgver=2113.572298fc3
+pkgver=2114.d85d41b69
 pkgrel=1
 conflicts=('projectm' 'projectm-sdl' 'projectn-jack')
 provides=('projectm' 'projectm-sdl' 'projectm-jack')
@@ -27,6 +27,8 @@ pkgver() {
 
 build() {
   cd "${_gitname}"
+
+  sed -i 's/config_file = read_config();/if (argc >= 3) { config_file = std::string(argv[2]); } else { config_file = read_config(); }/g' src/projectM-jack/qprojectM-jack.cpp
   ./autogen.sh
   ./configure --prefix=/usr --enable-jack --enable-sdl --disable-pulseaudio --enable-qt --enable--gles
 #--disable-pulseaudio --disable-esd --disable-video-mir --disable-video-wayland --enable-video-kmsdrm --disable-video-rpi --disable-video-x11 --host=arm-raspberry-linux-gnueabihf
