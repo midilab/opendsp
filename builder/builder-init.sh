@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 
 # defaults
-arch='armv7'
-device='raspberry_pi2'
+arch=$ARCHITECTURE
+device=$DEVICE
 image=''
 
 export BUILDER_PATH=/var/img-builder
+export RELEASE_DOWNLOAD_URL=http://os.archlinuxarm.org/os/
 
 select_arch() {
     echo ""
@@ -115,14 +116,15 @@ select opt in create emulate quit; do
       select_device
       $BUILDER_PATH/manage_img.sh create ${arch} ${device}
       $BUILDER_PATH/manage_img.sh umount ${arch} ${device} ${image}
-      #break
+      break
       ;;
     emulate)
       select_image
       $BUILDER_PATH/manage_img.sh mount ${arch} ${device} ${image}
-      chroot $BUILDER_PATH/build/opendsp
+      # chroot into image by using qemu-arm-static
+      chroot $BUILDER_PATH/build/opendsp /bin/bash
       $BUILDER_PATH/manage_img.sh umount ${arch} ${device} ${image}
-      #break
+      break
       ;;
     quit)
       break

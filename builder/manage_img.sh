@@ -1,4 +1,13 @@
 #!/bin/bash 
+# host dependencies:
+# on archlinux
+# sudo pacman -S multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static arch-install-scripts
+# most debian based
+# sudo apt-get install multipath-tools parted sshpass zip dosfstools binfmt-support qemu-user-static
+# Register the qemu-arm-static as an ARM interpreter in the kernel (using binfmt_misc kernel module)
+# as root:
+#sudo update-binfmts --enable arm
+#sudo systemctl enable binfmt-support.service # to load on boot up
 
 set -e
 
@@ -9,14 +18,24 @@ image=$4
 
 loop_device=''
 
+# sdcard partition layout
+sector_start=-1
+declare -a partition_type
+declare -a partition_size
+declare -a partition_label
+declare -a partition_mnt
+filesystem_image=''
+
 # throws all output to log file, except those on stdout 7
 # save a copy of current stdout
-exec 7>&1 
-exec > "${BUILDER_PATH}/build/log.txt"
+#exec 7>&1 
+#exec > "${BUILDER_PATH}/build/log.txt"
+#exec  > "${BUILDER_PATH}/build/log.txt" 2>&1 
+#exec &> "${BUILDER_PATH}/build/log.txt"
 
 print() {
 	string=$1	
-	echo "$string" >&7
+	#echo "$string" >&7
 }
 
 #
@@ -308,6 +327,118 @@ EOF
 	chroot opendsp chown -R opendsp:opendsp /home/opendsp/			
 }
 
+install_img() {
+		
+	if [ ! -d "opendsp/lost+found" ]
+	then
+		echo "no lost found"
+	fi
+
+	# download or use it local?
+	if [ ! -f "$filesystem_image" ]
+	then
+		# download it!
+		wget "${RELEASE_DOWNLOAD_URL}/${filesystem_image}"
+	fi
+	# install filesystem_image
+	bsdtar -xvpf $filesystem_image -C opendsp || true
+
+	# any post install action to be done?
+	post_filesystem_install
+
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman-key --init || true
+		retVal=$?    
+	done
+
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman-key --populate archlinuxarm || true
+		retVal=$?  
+	done
+
+	#retVal=-1
+	#while [ $retVal -ne 0 ]; do
+	#	chroot opendsp pacman -Syyu --noconfirm || true
+	#	retVal=$?
+	#done
+
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp ssh-keygen -A || true
+		retVal=$?  
+	done
+
+}	
+
+prepare_img() {
+
+	image_name=$1
+	image_size=0
+
+    for size in ${partition_size[@]}; do
+		image_size=$((image_size+size))
+    done
+	image_size=$((image_size+64))
+	
+	dd if=/dev/zero of=$image_name  bs=1M  count=$image_size
+		
+	# creating partition table
+    for i in ${!partition_type[@]}; do
+        # one by one
+		size=${partition_size[$i]}		
+		fdisk $image_name <<EOF
+n
+
+
+
++$(($size))M
+w
+EOF
+
+		# change type?
+		if [ ${partition_type[$i]} == "fat" ]; then
+			fdisk $image_name <<EOF
+t
+$(($i+1))
+c
+w
+EOF
+		fi
+
+    done
+
+	# move first partition sector to sector_start if it is defined
+	if [ $sector_start -ge 0 ]; then
+		fdisk $image_name <<EOF
+x
+b
+1
+$(($sector_start))
+r
+w
+EOF
+	fi
+
+	# prepare img
+	loop_device="$(losetup --show -f -P "$image_name")"
+
+	# formating partitions
+    for i in ${!partition_type[@]}; do
+		p=$((i+1))
+        # one by one
+		if [ ${partition_type[$i]} == "fat" ]; then
+			mkfs.fat -n ${partition_label[$i]} "${loop_device}p${p}"
+		elif [ ${partition_type[$i]} == "ext4" ]; then
+			mkfs.ext4 -L ${partition_label[$i]} "${loop_device}p${p}"
+		fi
+	done
+
+	# print final partition table for debug
+	fdisk -l $image_name	
+}
+
 mount_img() {
 	
 	image_name=$1
@@ -322,20 +453,34 @@ mount_img() {
 		loop_device="$(losetup --show -f -P "$image_name")"
 	fi
 
-	rootpart="${loop_device}p1"
-	homepart="${loop_device}p2"
+	# mounting first root /
+    for i in ${!partition_mnt[@]}; do
+		if [ ${partition_mnt[$i]} == "/" ]; then
+			p=$((i+1))
+			mkdir -p opendsp/
+			mount -v -t ext4 -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
+		fi
+	done
 
-	# mount root
-	mkdir opendsp
-	mount -v -t ext4 -o sync $rootpart opendsp
-	
-	# mount user land
-	mkdir -p opendsp/home/opendsp/data
-	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
-	
+	# mounting partitions
+    for i in ${!partition_mnt[@]}; do
+		# already mounted above
+		if [ ${partition_mnt[$i]} == "/" ]; then
+			continue
+		fi
+		p=$((i+1))
+        # one by one
+		mkdir -p opendsp${partition_mnt[$i]}
+		if [ ${partition_type[$i]} == "fat" ]; then
+			mount -v -t vfat -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
+		elif [ ${partition_type[$i]} == "ext4" ]; then
+			mount -v -t ext4 -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
+		fi
+	done
+
 	# good idea to have those mounted as we chroot in
-	mkdir opendsp/proc
-	mkdir opendsp/sys
+	mkdir -p opendsp/proc
+	mkdir -p opendsp/sys
 	mkdir -p opendsp/dev/pts
 	mount -t proc /proc opendsp/proc
 	mount -o bind /sys opendsp/sys
@@ -365,7 +510,7 @@ umount_img() {
 	kill -9 `pgrep gpg-agent` || true
 	kill -9 `pgrep pacman` || true
 	 
-	# remove installed packages on /var/cache/pacman/pkg/
+	# remove any installed packages on /var/cache/pacman/pkg/
 	rm opendsp/var/cache/pacman/pkg/* || true
 
 	# remove our systemd resolv.conf
@@ -382,7 +527,7 @@ umount_img() {
 		retVal=$?
 	done
 
-	rm -rf opendsp
+	rm -rf opendsp || true
 
 	# release the image loop device
 	if [ "$loop_device" == "" ]; then
@@ -404,11 +549,11 @@ case $action in
 		mount_img $image
 		print "installing image..."
 		install_img
-		print "tunning image..."
-		tunning_img
-		print "installing opendsp..."
-		install_opendsp
-		print "image ready to go into sdcard!"
+		#print "tunning image..."
+		#tunning_img
+		#print "installing opendsp..."
+		#install_opendsp
+		#print "image ready to go into sdcard!"
 		exit 0 ;;
 	"prepare") 
 		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img

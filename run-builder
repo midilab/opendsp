@@ -27,5 +27,5 @@ if [[ -z $1 && -z $2 ]]; then
     docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build midilab/archlinuxarm-img-builder:latest
 # else automaticly run user parameters choices
 else
-    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build midilab/archlinuxarm-img-builder:latest
+    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build -e ARCHITECTURE=$arch -e DEVICE=$device midilab/archlinuxarm-img-builder:latest
 fi

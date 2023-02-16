@@ -1,83 +1,23 @@
 #!/bin/bash
 
-root_size=8000
-home_size=256
+# the filesystem image to use
+filesystem_image="ArchLinuxARM-odroid-xu3-latest.tar.gz"
 
-prepare_img() {
-
-	image_name=$1
-
-	image_size=$(($root_size+$home_size+64))
-	
-	dd if=/dev/zero of=$image_name  bs=1M  count=$image_size
-		
-	# partitioning
-	fdisk $image_name <<EOF
-o
-n
+# sdcard layout
+sector_start=4096
+partition_type=( "ext4" "ext4" )
+partition_size=( 8000 256 )
+partition_label=( "ROOT" "OPENDSP" )
+partition_mnt=( "/" "/home/opendsp/data" )
 
 
-
-+$(($root_size))M
-n
-
-
-
-+$(($home_size))M
-p
-w
-EOF
-
-	# prepare img
-	loop_device="$(losetup --show -f -P "$image_name")"
-	rootpart="${loop_device}p1"
-	homepart="${loop_device}p2"
-
-	# setup root partition
-	mkfs.ext4 -L ROOT $rootpart
-	# setup user land partition
-	mkfs.ext4 -L OPENDSP $homepart
-
-	fdisk -l $image_name
-}
-
-install_img() {
-
-	# install platform into img
-	wget http://os.archlinuxarm.org/os/ArchLinuxARM-odroid-xu3-latest.tar.gz
-	bsdtar -xvpf ArchLinuxARM-odroid-xu3-latest.tar.gz -C opendsp || true
+post_filesystem_install() {
 
 	# flash bootloader 
 	cd opendsp/boot/
 	sh sd_fusing.sh $loop_device
 	cd ../../
 
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --init || true
-		retVal=$?    
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --populate archlinuxarm || true
-		retVal=$?  
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -Syyu --noconfirm || true
-		retVal=$?
-	done
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp ssh-keygen -A || true
-		retVal=$?  
-	done
-
-	# delete tar install image
-	rm ArchLinuxARM-odroid-xu3-latest.tar.gz
 }
 
 tunning_img() {
