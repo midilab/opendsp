@@ -1,19 +1,28 @@
 #!/bin/bash 
-# dependency: psmisc wget bsdtar 
-# example to manage a OpenDSP image for armv7 version of raspberry pi3/pi2
-# ./manage_img.sh mount platform/armv7/raspberry_pi opendsp-...img
-# ./manage_img.sh umount platform/armv7/raspberry_pi /dev/loop0
-# ./manage_img.sh create platform/armv7/raspberry_pi 
 
 set -e
 
 action=$1
-target=$3
+arch=$2
+device=$3
+image=$4
+
+loop_device=''
+
+# throws all output to log file, except those on stdout 7
+# save a copy of current stdout
+exec 7>&1 
+exec > "${BUILDER_PATH}/build/log.txt"
+
+print() {
+	string=$1	
+	echo "$string" >&7
+}
 
 #
 # Platform create script
 #
-script=${2}
+script="${BUILDER_PATH}/platforms/${arch}/${device}"
 if [ ! -f "$script" ]
 then
 	echo "$0: platform script '${script}' not found."
@@ -22,7 +31,6 @@ fi
 
 # import platform specific create script
 source ${script}
- 
 
 #
 # Opendsp create generic functions
@@ -52,7 +60,7 @@ EOF
 				python-certifi python-packaging python-pillow python-psutil \
 				python-pyparsing python-pyserial python-six python-tornado \
 				python-virtualenv python-jack-client jack xdotool \
-				samba cpupower parted openbox create_ap
+				samba cpupower parted openbox create_ap --noconfirm
 	
 	# add default opendsp user and setup his environment
 	chroot opendsp useradd -m -G audio,video,uucp,lock,tty opendsp
@@ -109,7 +117,8 @@ EOF
 	chroot opendsp ssh-keygen -A
 
 	# setup samba
-	chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
+	#chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
+	chroot opendsp bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp' || true
 
 	cat <<EOF >> opendsp/etc/samba/smb.conf
 [global]
@@ -155,7 +164,8 @@ EOF
 	# add opendsp user
 	chroot opendsp smbpasswd -a opendsp -n
 	# set opendsp default password
-	chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp
+	#chroot opendsp bash -C 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
+	chroot opendsp bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
 
 	# little hack that enable us to start samba on read only file system
 	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
@@ -298,24 +308,115 @@ EOF
 	chroot opendsp chown -R opendsp:opendsp /home/opendsp/			
 }
 
+mount_img() {
+	
+	image_name=$1
+	
+	if [ -d "opendsp/" ]; then
+    	echo "file system mounted"
+		return
+	fi
+
+	if [ "$loop_device" == "" ]; then
+		# mount on loop loop_device
+		loop_device="$(losetup --show -f -P "$image_name")"
+	fi
+
+	rootpart="${loop_device}p1"
+	homepart="${loop_device}p2"
+
+	# mount root
+	mkdir -v opendsp
+	mount -v -t ext4 -o sync $rootpart opendsp
+	
+	# mount user land
+	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
+	
+	# good idea to have those mounted as we chroot in
+	mount -t proc /proc opendsp/proc
+	mount -o bind /sys opendsp/sys
+	mount -o bind /dev opendsp/dev
+	mount -o bind /dev/pts opendsp/dev/pts
+	
+	# prepare for chroot using qemu
+	cp /usr/bin/qemu-arm-static opendsp/usr/bin/	
+	
+	# copy temporarly our resolv.conf to get internet connection
+	mkdir -p opendsp/run/systemd/resolve/
+	cp /etc/resolv.conf opendsp/run/systemd/resolve/
+	
+}
+
+umount_img() {
+
+	image_name=$1	
+	
+	if [ ! -d "opendsp/" ]; then
+    	echo "file system not mounted"
+		return
+	fi
+
+	# just in case, sometimes they can lock /dev/
+	kill -9 `pgrep gpg-agent` || true
+	kill -9 `pgrep pacman` || true
+	 
+	# remove installed packages on /var/cache/pacman/pkg/
+	rm opendsp/var/cache/pacman/pkg/* || true
+
+	# remove our systemd resolv.conf
+	rm -rf opendsp/run/systemd/ || true
+
+	# after all remove qemu
+	rm opendsp/usr/bin/qemu-arm-static || true
+
+	sync
+
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		umount --recursive opendsp/ || true 
+		retVal=$?
+	done
+
+	rm -rf opendsp
+
+	# release the image loop device
+	if [ "$loop_device" == "" ]; then
+		# release all loopdevices
+		losetup -D
+	else
+		losetup -d $loop_device
+	fi
+}
+
+# operates everything from build path
+cd $BUILDER_PATH/build/
+
 case $action in
 	"create") 
-		device=${2##*/}
-		image_name=opendsp_${device}-$(date "+%Y-%m-%d").img
-		prepare_img $image_name
+		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img
+		print "preparing image..."
+		prepare_img $image
+		mount_img $image
+		print "installing image..."
 		install_img
+		print "tunning image..."
 		tunning_img
+		print "installing opendsp..."
 		install_opendsp
-		echo "image ready! please umount it to get it ready to burn..."
+		print "image ready to go into sdcard!"
+		exit 0 ;;
+	"prepare") 
+		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img
+		prepare_img $image
 		exit 0 ;;
 	"install") 
 		install_img
 		exit 0 ;;
-	"install_opendsp") 
-		install_opendsp
-		exit 0 ;;
 	"tune") 
 		tunning_img
+		exit 0 ;;
+	"install_opendsp") 
+		install_opendsp
 		exit 0 ;;
 	"compress") 
 		zip $2.zip $2
@@ -324,11 +425,9 @@ case $action in
 		dd bs=1M if=$2 of=$3 status=progress
 		exit 0 ;;
 	"mount") 
-		mount_img $target
+		mount_img $image
 		exit 0 ;;
 	"umount") 
-		umount_img $target
+		umount_img $image
 		exit 0 ;;
 esac
-
-echo "please chose mount or umount for an action"

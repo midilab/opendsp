@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# ./run-builder build-docker 
+# builds the docker
+if [ "$1" == "build-docker" ]; then
+    if [ ! -d "builder/" ]; then
+        echo "no builder/ path founded. to be able to build the docker image you need to download or clone the opendsp repository."
+        exit -1
+    fi
+    cd builder/
+	docker build -t midilab/archlinuxarm-img-builder . 
+	exit 0
+fi
+
+# ./run-builder 
+# ./run-builder armv7 raspberry_pi2
+arch=$1
+device=$2
+
+# create build/ path if dont exist
+if [ ! -d "build/" ]; then
+    mkdir build/
+fi
+
+# no parameters get user to menu
+if [ -z $1 && -z $2 ]; then
+    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build midilab/archlinuxarm-img-builder:latest
+# else automaticly run user parameters choices
+else
+    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build midilab/archlinuxarm-img-builder:latest
+fi

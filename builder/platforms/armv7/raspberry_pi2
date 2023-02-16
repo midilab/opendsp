@@ -14,7 +14,6 @@
 boot_size=128
 root_size=6000
 data_size=256
-device=""
 
 prepare_img() {
 
@@ -49,10 +48,10 @@ w
 EOF
 
 	# prepare img
-	device="$(losetup --show -f -P "$image_name")"
-	bootpart="${device}p1"
-	rootpart="${device}p2"
-	datapart="${device}p3"
+	loop_device="$(losetup --show -f -P "$image_name")"
+	bootpart="${loop_device}p1"
+	rootpart="${loop_device}p2"
+	datapart="${loop_device}p3"
 
 	# setup boot partition
 	mkfs.fat -n BOOT $bootpart
@@ -61,22 +60,7 @@ EOF
 	# setup user land partition
 	mkfs.ext4 -L OPENDSP $datapart
 
-	fdisk -l $image_name
-
-	# mount root
-	mkdir -v opendsp
-	mount -v -t ext4 -o sync $rootpart opendsp
-	
-	# mount boot
-	mkdir -v opendsp/boot
-	mount -v -t vfat -o sync $bootpart opendsp/boot
-	
-	# mount user land
-	mkdir -v opendsp/home
-	mkdir -v opendsp/home/opendsp
-	mkdir -v opendsp/home/opendsp/data
-	mount -v -t ext4 -o sync $datapart opendsp/home/opendsp/data
-	
+	fdisk -l $image_name	
 }
 
 install_img() {
@@ -87,22 +71,9 @@ install_img() {
 	fi
 
 	# install platform into img
-	wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-2-latest.tar.gz
-	bsdtar -xvpf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp || true
-	#tar -xzvf ArchLinuxARM-rpi-2-latest.tar.gz -C opendsp 
-
-	# prepare for chroot using qemu
-	cp /usr/bin/qemu-arm-static opendsp/usr/bin/
-
-	# good idea to have those mounted as we chroot in
-	mount -t proc /proc opendsp/proc
-	mount -o bind /sys opendsp/sys
-	mount -o bind /dev opendsp/dev
-	mount -o bind /dev/pts opendsp/dev/pts
-	
-	# copy temporarly our resolv.conf to get internet connection
-	mkdir -p opendsp/run/systemd/resolve/
-	cp /etc/resolv.conf opendsp/run/systemd/resolve/
+	wget http://os.archlinuxarm.org/os/ArchLinuxARM-rpi-armv7-latest.tar.gz
+	bsdtar -xvpf ArchLinuxARM-rpi-armv7-latest.tar.gz -C opendsp || true
+	#tar -xzvf ArchLinuxARM-rpi-armv7-latest.tar.gz -C opendsp 
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
@@ -118,7 +89,7 @@ install_img() {
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -Syyu || true
+		chroot opendsp pacman -Syyu --noconfirm || true
 		retVal=$?
 	done
 
@@ -129,74 +100,8 @@ install_img() {
 	done
 
 	# delete tar install image
-	rm ArchLinuxARM-rpi-2-latest.tar.gz
+	rm ArchLinuxARM-rpi-armv7-latest.tar.gz
 }	
-
-mount_img() {
-	
-	image_name=$1
-	
-	# mount on loop device
-	device="$(losetup --show -f -P "$image_name")"
-	bootpart="${device}p1"
-	rootpart="${device}p2"
-	datapart="${device}p3"
-
-	# mount root
-	mkdir -v opendsp
-	mount -v -t ext4 -o sync $rootpart opendsp
-	
-	# mount boot
-	mount -v -t vfat -o sync $bootpart opendsp/boot
-	
-	# mount user land
-	mount -v -t ext4 -o sync $datapart opendsp/home/opendsp/data
-	
-	# good idea to have those mounted as we chroot in
-	mount -t proc /proc opendsp/proc
-	mount -o bind /sys opendsp/sys
-	mount -o bind /dev opendsp/dev
-	mount -o bind /dev/pts opendsp/dev/pts
-	
-	# prepare for chroot using qemu
-	cp /usr/bin/qemu-arm-static opendsp/usr/bin/	
-	
-	# copy temporarly our resolv.conf to get internet connection
-	mkdir -p opendsp/run/systemd/resolve/
-	cp /etc/resolv.conf opendsp/run/systemd/resolve/
-}
-
-umount_img() {
-
-	device_name=$1	
-	
-	# just in case, sometimes they can lock /dev/
-	kill -9 `pgrep gpg-agent` || true
-	kill -9 `pgrep pacman` || true
-	
-	# remove installed packages on /var/cache/pacman/pkg/
-	rm opendsp/var/cache/pacman/pkg/* || true
-
-	# remove our systemd resolv.conf
-	rm -rf opendsp/run/systemd/ || true
-
-	# after all remove qemu
-	rm opendsp/usr/bin/qemu-arm-static || true
-
-	sync
-
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount --recursive opendsp/
-		retVal=$?
-	done
-
-	rm -rf opendsp
-
-	# release the image
-	losetup -d $device_name
-		
-}
 
 tunning_img() {
 
