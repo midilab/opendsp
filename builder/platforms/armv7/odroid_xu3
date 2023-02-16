@@ -10,7 +10,6 @@ partition_size=( 8000 256 )
 partition_label=( "ROOT" "OPENDSP" )
 partition_mnt=( "/" "/home/opendsp/data" )
 
-
 post_filesystem_install() {
 
 	# flash bootloader 

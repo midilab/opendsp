@@ -5,7 +5,8 @@ arch=$ARCHITECTURE
 device=$DEVICE
 image=''
 
-export BUILDER_PATH=/var/img-builder
+#export BUILDER_PATH=/var/img-builder
+export BUILDER_PATH
 export RELEASE_DOWNLOAD_URL=http://os.archlinuxarm.org/os/
 
 select_arch() {

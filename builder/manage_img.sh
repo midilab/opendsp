@@ -358,11 +358,11 @@ install_img() {
 		retVal=$?  
 	done
 
-	#retVal=-1
-	#while [ $retVal -ne 0 ]; do
-	#	chroot opendsp pacman -Syyu --noconfirm || true
-	#	retVal=$?
-	#done
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot opendsp pacman -Syu --noconfirm || true
+		retVal=$?
+	done
 
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
@@ -553,7 +553,7 @@ case $action in
 		#tunning_img
 		#print "installing opendsp..."
 		#install_opendsp
-		#print "image ready to go into sdcard!"
+		print "image ready to go into sdcard!"
 		exit 0 ;;
 	"prepare") 
 		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img

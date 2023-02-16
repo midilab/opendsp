@@ -18,14 +18,22 @@ arch=$1
 device=$2
 
 # create build/ path if dont exist
-if [ ! -d "build/" ]; then
-    mkdir build/
+if [ ! -d "builder/build/" ]; then
+    mkdir builder/build/
 fi
 
-# no parameters get user to menu
-if [[ -z $1 && -z $2 ]]; then
-    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build midilab/archlinuxarm-img-builder:latest
-# else automaticly run user parameters choices
+# docker build
+if [[ -z "${BUILDER_PATH}" ]]; then
+    BUILDER_PATH=/var/img-builder
+    # no parameters get user to menu
+    if [[ -z $1 && -z $2 ]]; then
+        docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/builder/build:/var/img-builder/build -e BUILDER_PATH=$BUILDER_PATH midilab/archlinuxarm-img-builder:latest
+    # else automaticly run user parameters choices
+    else
+        docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/builder/build:/var/img-builder/build -e ARCHITECTURE=$arch -e DEVICE=$device midilab/archlinuxarm-img-builder:latest
+    fi
+# local build
 else
-    docker run -it --rm -v /dev:/dev --privileged -v $(pwd)/build:/var/img-builder/build -e ARCHITECTURE=$arch -e DEVICE=$device midilab/archlinuxarm-img-builder:latest
+    BUILDER_PATH=$(pwd)/builder
+    $BUILDER_PATH/builder-init.sh
 fi
