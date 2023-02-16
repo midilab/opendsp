@@ -326,19 +326,24 @@ mount_img() {
 	homepart="${loop_device}p2"
 
 	# mount root
-	mkdir -v opendsp
+	mkdir opendsp
 	mount -v -t ext4 -o sync $rootpart opendsp
 	
 	# mount user land
+	mkdir -p opendsp/home/opendsp/data
 	mount -v -t ext4 -o sync $homepart opendsp/home/opendsp/data
 	
 	# good idea to have those mounted as we chroot in
+	mkdir opendsp/proc
+	mkdir opendsp/sys
+	mkdir -p opendsp/dev/pts
 	mount -t proc /proc opendsp/proc
 	mount -o bind /sys opendsp/sys
 	mount -o bind /dev opendsp/dev
 	mount -o bind /dev/pts opendsp/dev/pts
 	
 	# prepare for chroot using qemu
+	mkdir -p opendsp/usr/bin
 	cp /usr/bin/qemu-arm-static opendsp/usr/bin/	
 	
 	# copy temporarly our resolv.conf to get internet connection
