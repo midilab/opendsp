@@ -1,20 +1,21 @@
-# Maintainer: Daniel Appelt <daniel.appelt@gmail.com>
-# Contributor : speps <speps at aur dot archlinux dot org>
+# Maintainer: Romulo Silva <contact@midilab.co>
 _pkgbasename=distrho-lv2
 pkgname=${_pkgbasename}-git
 pkgver=r433.1dd1200c
 commit=1dd1200c5b4a34d1b6521d4513e60a34bd8801fa
 pkgrel=1
 pkgdesc="Distrho LV2 Audio Plugins, using the JUCE Toolkit"
-arch=('armv7h' 'i686' 'x86_64')
+arch=('armv7h')
 url="http://distrho.sourceforge.net/"
 license=('GPL' 'GPL3')
-depends=('gcc-libs' 'lv2' 'libxext' 'freetype2' 'alsa-lib')
+depends=('gcc-libs' 'lv2' 'libxext' 'freetype2' 'alsa-lib' 'fftw')
 makedepends=('git' 'premake3' 'libxinerama' 'libxrender' 'libxcursor' 'ladspa')
 provides=("${_pkgbasename}")
 conflicts=("${_pkgbasename}" 'distrho-plugins' 'distrho-plugins-lv2-git')
-source=("${_pkgbasename}::git://github.com/DISTRHO/DISTRHO-Ports.git#commit=${commit}")
-sha256sums=('SKIP')
+source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git"
+        "meson_options.txt")
+#source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git#commit=${commit}")
+sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
   cd "${srcdir}/${_pkgbasename}"
@@ -25,34 +26,17 @@ pkgver() {
 prepare() {
   cd "${srcdir}/${_pkgbasename}"
 
-  # Copy vst sdk
-  cp -Rf ../../vstsdk2.4/* sdks/vstsdk2.4/
-
-  # Compile it for arm without SSE
-  export NOOPTIMIZATIONS=1
-
-  export CFLAGS="$CFLAGS -O3"
-  export CXXFLAGS="$CXXFLAGS -O3"
-
-  # generate build script
-  scripts/premake-update.sh linux
-
-  # Removing SSE dependent from package
-  sed -i '/pitchedDelay/d' ports/Makefile
-  sed -i '/refine/d' ports/Makefile
+  cp ../../meson_options.txt .
 }
 
 build() {
   cd "${srcdir}/${_pkgbasename}"
-
-  make lv2
+  meson build --buildtype release
+  ninja -C build
 }
 
 package() {
   cd "${srcdir}/${_pkgbasename}"
-
-  # lv2 plugins
-  install -d "$pkgdir/usr/lib/lv2"
-  cp -a bin/lv2/*.lv2 "$pkgdir/usr/lib/lv2"
+  DESTDIR="${pkgdir}/" ninja -C build install
 }
 

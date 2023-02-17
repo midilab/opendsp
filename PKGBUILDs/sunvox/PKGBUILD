@@ -3,10 +3,10 @@
 # Contributor: zwergnase <zwergnase@posteo.de>
 
 pkgname=sunvox
-pkgver=1.9.5d
+pkgver=2.1b
 pkgrel=1
 pkgdesc="Small, fast and powerful modular synthesizer with pattern-based sequencer (tracker)."
-arch=('armv6h' 'armv7h' 'armv8h' 'i686' 'x86_64')
+arch=('armv7h' 'armv64' 'i686' 'x86_64')
 url="http://warmplace.ru/soft/sunvox/"
 license=(custom)
 groups=()
@@ -22,15 +22,18 @@ depends=(
 )
 makedepends=('unzip')
 source=(http://warmplace.ru/soft/sunvox/$pkgname-$pkgver.zip)
-md5sums=('8f4a6f1270aea8f86730d130d6db8fbd')
+md5sums=('df9888bb19a6687e528328cc9ace7c9d')
 
 package() {
 	install -dm755 "${pkgdir}/opt/${pkgname}"
 	install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}"
 
 	if [ "$CARCH" = "armv7h" ]; then
-		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm_armhf_raspberry_pi/sunvox" "${pkgdir}/usr/bin/sunvox"
-		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm_armhf_raspberry_pi/sunvox_lofi" "${pkgdir}/usr/bin/sunvox_lofi"
+		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm/sunvox" "${pkgdir}/usr/bin/sunvox"
+		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm/sunvox_lofi" "${pkgdir}/usr/bin/sunvox_lofi"
+	elif [ "$CARCH" = "armv64" ]; then
+		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm64/sunvox" "${pkgdir}/usr/bin/sunvox"
+		install -Dm755 "${srcdir}/sunvox/sunvox/linux_arm64/sunvox_lofi" "${pkgdir}/usr/bin/sunvox_lofi"
 	elif [ "$CARCH" = "x86_64" ]; then
 		install -Dm755 "${srcdir}/sunvox/sunvox/linux_x86_64/sunvox" "${pkgdir}/usr/bin/sunvox"
 	else

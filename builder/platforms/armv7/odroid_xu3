@@ -12,12 +12,10 @@ partition_label=( "ROOT" "OPENDSP" )
 partition_mnt=( "/" "/home/opendsp/data" )
 
 post_filesystem_install() {
-
 	# flash bootloader 
 	cd ${ROOT_MOUNT}/boot/
 	sh sd_fusing.sh $loop_device
 	cd ../../
-
 }
 
 tunning_img() {

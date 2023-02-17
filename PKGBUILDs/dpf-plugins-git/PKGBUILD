@@ -20,29 +20,29 @@ pkgver() {
 }
 
 build() {
-    cd "${pkgname%-*}"
+  cd "${pkgname%-*}"
 
-    #export CFLAGS="$CFLAGS -O3"
-    #export CXXFLAGS="$CXXFLAGS -O3"
-    export CFLAGS="$CFLAGS -Ofast"
-    export CXXFLAGS="$CXXFLAGS -Ofast"
+  #export CFLAGS="$CFLAGS -O3"
+  #export CXXFLAGS="$CXXFLAGS -O3"
+  #export CFLAGS="$CFLAGS -Ofast"
+  #export CXXFLAGS="$CXXFLAGS -Ofast"
 
-    sed -i 's/-msse//' dpf/Makefile.base.mk
-    sed -i 's/-msse2//' dpf/Makefile.base.mk
-    sed -i 's/-mfpmath=sse//' dpf/Makefile.base.mk
-    sed -i 's/-mtune=generic//' dpf/Makefile.base.mk
+  sed -i 's/-msse//' dpf/Makefile.base.mk
+  sed -i 's/-msse2//' dpf/Makefile.base.mk
+  sed -i 's/-mfpmath=sse//' dpf/Makefile.base.mk
+  sed -i 's/-mtune=generic//' dpf/Makefile.base.mk
 
-    sed -i 's/-msse//' dpf/dgl/Makefile
-    sed -i 's/-msse2//' dpf/dgl/Makefile
-    sed -i 's/-mtune=generic//' dpf/dgl/Makefile
+  sed -i 's/-msse//' dpf/dgl/Makefile
+  sed -i 's/-msse2//' dpf/dgl/Makefile
+  sed -i 's/-mtune=generic//' dpf/dgl/Makefile
 
-    make BUILD_DSSI=false BUILD_LV2=true BUILD_VST=false HAVE_PROJM=true BUILD_JACK=true
+  make BUILD_DSSI=false BUILD_LV2=true BUILD_VST=false HAVE_PROJM=true BUILD_JACK=true
 }
 
 package() {
-    cd "${pkgname%-*}"
-    # Install the custom license:
-    install -Dm 644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-    # Install the package files:
-	make DESTDIR="$pkgdir/" PREFIX="/usr" install
+  cd "${pkgname%-*}"
+  # Install the custom license:
+  install -Dm 644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  # Install the package files:
+  make DESTDIR="$pkgdir/" PREFIX="/usr" install
 }

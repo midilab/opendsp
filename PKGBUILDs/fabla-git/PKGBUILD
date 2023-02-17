@@ -1,5 +1,4 @@
-# Maintainer: Christopher Arndt <aur -at- chrisarndt -dot- de>
-# Contributor: speps <speps at aur dot archlinux dot org>
+# Maintainer: Romulo Silva <contact@midilab.co>
 
 pkgname=fabla-git
 _pkgname=fabla
@@ -25,8 +24,6 @@ pkgver() {
 
 build() {
   cd "${srcdir}/${_pkgname}"
-
-  patch CMakeLists.txt < ../../disable_sse.patch
 
   mkdir -p build
   cd build

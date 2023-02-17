@@ -5,10 +5,10 @@ pkgver=0.1
 pkgrel=1
 pkgdesc='OpenDSP Audio Modular meta package'
 arch=(any)
-url='http://midilab.co/opendsp'
+url='https://midilab.co/opendsp'
 license=('GPL')
 depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
-        qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
+        qtractor milkytracker luppp mixxx xwax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
         helm-synth infamousplugins ir.lv2 jalv lilv vlc \
@@ -16,18 +16,22 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
         mephisto.lv2 midi_matrix.lv2 midimsg-lv2 moony.lv2 \
         padthv1 qmidiarp samplv1 setbfree sfizz sratom \
         suil synthv1 vm.lv2 x42-plugins xmonk.lv2 zynaddsubfx \
-        raul ingen distrho-lv2 \
-        non-timeline non-mixer non-session-manager non-sequencer klystrack \
-        dpf-plugins-lv2-git swh-lv2 zamplugins \
-        drmr-falktx-git sooperlooper-lv2-plugin opendsp-mods-factory-audio)
+        mididings python-rtmidi \
+        non-session-manager klystrack-plus)
 
-# processing
-# "/home/opendsp/.processing:/home/opendsp/data/app/processing/"
-# lebiniou 
-# "/home/opendsp/.java:/home/opendsp/data/app/java/"
-# "/home/opendsp/.lebiniou:/home/opendsp/data/app/lebiniou/"
-# projectm
-# "/home/opendsp/.projectM:/home/opendsp/data/app/projectm/"
+#depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
+#        qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
+#        blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
+#        drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
+#        helm-synth infamousplugins ir.lv2 jalv lilv vlc \
+#        liquidsfz lsp-plugins lv2 lv2file lv2lint lvtk mda.lv2\
+#        mephisto.lv2 midi_matrix.lv2 midimsg-lv2 moony.lv2 \
+#        padthv1 qmidiarp samplv1 setbfree sfizz sratom \
+#        suil synthv1 vm.lv2 x42-plugins xmonk.lv2 zynaddsubfx \
+#        raul ingen distrho-lv2 mididings python-rtmidi \
+#        non-timeline non-mixer non-session-manager non-sequencer klystrack-plus \
+#        dpf-plugins-lv2-git swh-lv2 zamplugins \
+#        drmr-falktx-git sooperlooper-lv2-plugin opendsp-mods-factory-audio)
 
 package()
 {

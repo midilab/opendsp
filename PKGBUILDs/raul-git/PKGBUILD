@@ -1,5 +1,4 @@
-# Maintainer:  VirtualTam <virtualtam@flibidi.net>
-# Contributor: Christopher Arndt <aur -at- chrisarndt -dot- de>
+# Maintainer:  Romulo Silva <contact@midilab.co>
 
 _pkgname="raul"
 pkgname="${_pkgname}-git"
@@ -30,11 +29,14 @@ prepare(){
 
 build(){
   cd "${srcdir}/${_pkgname}"
-  python waf configure --prefix="/usr"
-  python waf build ${MAKEFLAGS}
+  meson setup build
+  cd build
+  meson configure -Dcpp_args="-mtune=native -march=native" -Dprefix="/usr"
+  meson compile
 }
 
 package() {
-  cd "${srcdir}/${_pkgname}"
-  python waf install --destdir=${pkgdir}
+  cd "${srcdir}/${_pkgname}/build/"
+  # meson returning error for permition
+  DESTDIR="${pkgdir}/" meson install
 }

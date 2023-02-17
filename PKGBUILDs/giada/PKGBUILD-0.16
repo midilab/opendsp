@@ -1,0 +1,52 @@
+# Maintainer: David Runge <dave@sleepmap.de>
+pkgname=giada
+pkgver=0.16.0
+pkgrel=3
+pkgdesc="A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians"
+arch=('armv7h' 'x86_64')
+url="https://www.giadamusic.com/"
+license=('GPL3')
+groups=('pro-audio')
+depends=('fltk' 'jansson' 'libpulse' 'libxpm' 'rtmidi')
+makedepends=('gendesk' 'imagemagick')
+checkdepends=('catch2' 'xorg-server-xvfb')
+source=("$pkgname-$pkgver.tar.gz::https://github.com/monocasual/${pkgname}/archive/v${pkgver}.tar.gz")
+sha512sums=('3084efb6c3416287b505f816a1397c3aacc232c7eb13c3739d578faa5ea37223501042b89d46885b6629703935de037735bc55eb5f329d6b026c9ec591b73480')
+
+prepare() {
+  cd "$pkgname-$pkgver"
+  autoreconf -vfi
+  # XDG desktop file
+  gendesk -n \
+          --pkgname ${pkgname} \
+          --pkgdesc "${pkgdesc}" \
+          --name Giada \
+          --categories "AudioVideo;Audio;Midi;Sequencer"
+  # fixing catch2 include for system library
+  sed -e 's|catch\.hpp|catch2/catch\.hpp|g' -i tests/*.cpp
+}
+
+build() {
+  cd "$pkgname-$pkgver"
+  ./configure --prefix=/usr \
+              --target=linux \
+              --enable-system-catch
+  make
+}
+
+check(){
+  cd "$pkgname-$pkgver"
+  xvfb-run -a make -k check
+}
+
+package() {
+  cd "$pkgname-$pkgver"
+  make DESTDIR="$pkgdir/" install
+  # XDG integration
+  install -vDm 644 "${pkgname}.desktop" -t "${pkgdir}/usr/share/applications"
+  install -vDm 644 "extras/${pkgname}-logo.png" \
+    "${pkgdir}/usr/share/pixmaps/${pkgname}.png"
+  # docs
+  install -vDm 644 {ChangeLog,README.md} \
+    -t "${pkgdir}/usr/share/doc/${pkgname}"
+}

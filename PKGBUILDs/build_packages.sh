@@ -1,16 +1,19 @@
 #!/bin/bash
-
+# to solve ssl issues for download please:
+# sudo timedatectl set-ntp true 
 set -e
 
 sudo pacman -Syu
 
-sudo pacman -S base-devel cmake git
+sudo pacman -S base-devel cmake git meson 
 
 declare -a rt_kernels=("linux-raspberrypi-rt-opendsp" "linux-odroid-xu3-rt-opendsp")
 
-declare -a opendsp_base=("mididings-git" "mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "python-rtmidi" "opendspd" "opendsp-mods")
+declare -a opendsp_base=("mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "opendspd" "opendsp-mods")
 
-declare -a opendsp_audio=("raul-git" "ingen-git" "distrho-lv2-git" "non-daw-git" "klystrack-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "sunvox" "mod-sooper-looper-lv2" "opendsp-mods-factory-audio" "opendsp-audio-modular")
+# klystrack-plus is on repo now! removed "klystrack-git" 
+# no mma*? mirack?
+declare -a opendsp_audio=("raul-git" "ingen-git" "fabla-git" "distrho-lv2-git" "non-daw-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "sunvox" "mod-sooper-looper-lv2" "opendsp-audio-modular")
 
 declare -a opendsp_video=("mesa-rpi" "mesa-rpi-git" "sdl2-rpi" "lebiniou3" "lebiniou3-data" "processing" "opendsp-mods-factory-video" "opendsp-video-processing")
 
@@ -22,11 +25,18 @@ pack() {
       cd "$i"
       echo "building $i"
       rm -rf src/ pkg/ *.tar.xz
-      makepkg -sci
-      cp *.tar.xz ../../packages/armv7/ 
+      makepkg -sci --noconfirm
+      mv *.tar.xz ../packages/armv7/ 
+      #makepkg --clean --nobuild --nodeps  --noextract
       cd ..
+      rm -rf "$i"/
    done
 }
+
+if [ ! -d "packages" ]
+then
+   mkdir -p packages/armv7
+fi
 
 # lets get some memory space for compile process
 if [ ! -f "/swapfile" ]
@@ -42,6 +52,7 @@ sudo swapon /swapfile || true
 #pack rt_kernels
 #pack opendsp_base
 pack opendsp_audio
+pack opendsp_video
 
 sudo swapoff -a
 sudo rm -f /swapfile
