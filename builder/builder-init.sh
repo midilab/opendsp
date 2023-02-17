@@ -1,19 +1,20 @@
 #!/usr/bin/env bash
 
 # defaults
-arch=$ARCHITECTURE
-device=$DEVICE
+arch="${ARCHITECTURE}"
+device="${DEVICE}"
 image=''
 
-#export BUILDER_PATH=/var/img-builder
+# make sure to setup your BUILDER_PATH enviroment var before run me!
 export BUILDER_PATH
+export ROOT_MOUNT
 export RELEASE_DOWNLOAD_URL=http://os.archlinuxarm.org/os/
 
 select_arch() {
     echo ""
     PS3="Select the arch to use: "
 
-    cd $BUILDER_PATH/platforms/
+    cd ${BUILDER_PATH}/platforms/
     declare -a arrArchs
     for dir in *
     do
@@ -22,12 +23,12 @@ select_arch() {
 
     select target in ${arrArchs[@]} quit;
     do
-        case $target in
+        case ${target} in
             quit)
                 exit 0
                 ;;
             *)
-                arch=$target
+                arch=${target}
                 break
                 ;;
         esac
@@ -47,13 +48,13 @@ select_device() {
 
     select target in ${arrDevices[@]} quit;
     do
-        case $target in
+        case ${target} in
             quit)
                 exit 0
                 break
                 ;;
             *)
-                device=$target
+                device=${target}
                 break
                 ;;
         esac
@@ -64,7 +65,7 @@ select_image() {
     echo ""
     PS3="Select the image to emulate: "
 
-    cd $BUILDER_PATH/build/
+    cd ${BUILDER_PATH}/build/
     declare -a arrImgs
     for file in *.img
     do
@@ -73,13 +74,13 @@ select_image() {
 
     select target in ${arrImgs[@]} quit;
     do
-        case $target in
+        case ${target} in
             quit)
                 exit 0
                 break
                 ;;
             *)
-                image=$target
+                image=${target}
                 break
                 ;;
         esac
@@ -95,7 +96,7 @@ select_image() {
                 device=${DATA[$i]}
             fi
         done
-    done <<< "$image"
+    done <<< "${image}"
 }
 
 echo "
@@ -111,27 +112,26 @@ echo ""
 PS3="What do you want to do?: "
 select opt in create emulate quit; do
 
-  case $opt in
+  case ${opt} in
     create)
       select_arch
       select_device
-      $BUILDER_PATH/manage_img.sh create ${arch} ${device}
-      $BUILDER_PATH/manage_img.sh umount ${arch} ${device} ${image}
+      ROOT_MOUNT=${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+      ${BUILDER_PATH}/manage_img.sh create ${arch} ${device}
+      ${BUILDER_PATH}/manage_img.sh umount ${arch} ${device} ${image}
       break
       ;;
     emulate)
       select_image
-      $BUILDER_PATH/manage_img.sh mount ${arch} ${device} ${image}
-      # chroot into image by using qemu-arm-static
-      chroot $BUILDER_PATH/build/opendsp /bin/bash
-      $BUILDER_PATH/manage_img.sh umount ${arch} ${device} ${image}
+      ROOT_MOUNT=${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+      ${BUILDER_PATH}/manage_img.sh emulate ${arch} ${device} ${image}
       break
       ;;
     quit)
       break
       ;;
     *) 
-      echo "Invalid option $REPLY"
+      echo "Invalid option ${REPLY}"
       ;;
   esac
 done

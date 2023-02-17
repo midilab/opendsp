@@ -11,10 +11,10 @@
 
 set -e
 
-action=$1
-arch=$2
-device=$3
-image=$4
+action="${1}"
+arch="${2}"
+device="${3}"
+image="${4}"
 
 loop_device=''
 
@@ -34,7 +34,7 @@ filesystem_image=''
 #exec &> "${BUILDER_PATH}/build/log.txt"
 
 print() {
-	string=$1	
+	string="${1}"
 	#echo "$string" >&7
 }
 
@@ -44,7 +44,7 @@ print() {
 script="${BUILDER_PATH}/platforms/${arch}/${device}"
 if [ ! -f "$script" ]
 then
-	echo "$0: platform script '${script}' not found."
+	echo "${0}: platform script '${script}' not found."
 	exit -1
 fi
 
@@ -55,11 +55,11 @@ source ${script}
 # Opendsp create generic functions
 install_opendsp() {
 			
-	echo "opendsp" > opendsp/etc/hostname
-	echo "127.0.0.1 opendsp" >> opendsp/etc/hosts
+	echo "opendsp" > ${ROOT_MOUNT}/etc/hostname
+	echo "127.0.0.1 opendsp" >> ${ROOT_MOUNT}/etc/hosts
 	
-	echo "" > opendsp/etc/motd
-	cat <<EOF > opendsp/etc/issue
+	echo "" > ${ROOT_MOUNT}/etc/motd
+	cat <<EOF > ${ROOT_MOUNT}/etc/issue
 
 
  ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
@@ -72,7 +72,7 @@ install_opendsp() {
 EOF
 
 	# base dependencies for opendsp
-	chroot opendsp pacman -S sudo xorg-server xorg-xinit xorg-server-common \
+	chroot ${ROOT_MOUNT} pacman -S sudo xorg-server xorg-xinit xorg-server-common \
 				xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib \
 				alsa-plugins alsa-utils python-setuptools python-pip \
 				liblo python-pyliblo cython python-decorator python-appdirs \
@@ -82,64 +82,64 @@ EOF
 				samba cpupower parted openbox create_ap --noconfirm
 	
 	# add default opendsp user and setup his environment
-	chroot opendsp useradd -m -G audio,video,uucp,lock,tty opendsp
+	chroot ${ROOT_MOUNT} useradd -m -G audio,video,uucp,lock,tty opendsp
 	
 	# change pass
-	chroot opendsp sh -c "echo 'opendsp:opendspd' | chpasswd"
+	chroot ${ROOT_MOUNT} sh -c "echo 'opendsp:opendspd' | chpasswd"
 	
 	# X11 needs config for session control
-	echo "allowed_users = anybody" >> opendsp/etc/X11/Xwrapper.config
-	echo "needs_root_rights = yes" >> opendsp/etc/X11/Xwrapper.config
+	echo "allowed_users = anybody" >> ${ROOT_MOUNT}/etc/X11/Xwrapper.config
+	echo "needs_root_rights = yes" >> ${ROOT_MOUNT}/etc/X11/Xwrapper.config
 
 	# xinitrc
-	echo "[[ -f ~/.Xresources ]] && xrdb ~/.Xresources" > opendsp/home/opendsp/.xinitrc
-	echo "exec openbox-session" >> opendsp/home/opendsp/.xinitrc
+	echo "[[ -f ~/.Xresources ]] && xrdb ~/.Xresources" > ${ROOT_MOUNT}/home/opendsp/.xinitrc
+	echo "exec openbox-session" >> ${ROOT_MOUNT}/home/opendsp/.xinitrc
 
 	# allow x11 forward for plugmod ingen edit modules
-	echo "X11Forwarding yes" >> opendsp/etc/ssh/sshd_config
-	echo "PermitUserEnvironment yes" >> opendsp/etc/ssh/sshd_config
-	mkdir opendsp/home/opendsp/.ssh/
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.ssh/environment
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> opendsp/home/opendsp/.profile
+	echo "X11Forwarding yes" >> ${ROOT_MOUNT}/etc/ssh/sshd_config
+	echo "PermitUserEnvironment yes" >> ${ROOT_MOUNT}/etc/ssh/sshd_config
+	mkdir ${ROOT_MOUNT}/home/opendsp/.ssh/
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.ssh/environment
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.profile
 	
 	# create a place for x11vnc data to live on
-	mkdir -p opendsp/home/opendsp/.vnc/
+	mkdir -p ${ROOT_MOUNT}/home/opendsp/.vnc/
 
 	# allows ddns to find us
-	sed -i 's/#hostname/hostname/' opendsp/etc/dhcpcd.conf
+	sed -i 's/#hostname/hostname/' ${ROOT_MOUNT}/etc/dhcpcd.conf
 
 	# set sudo permition to enable opendspd changes realtime priority of process
-	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> opendsp/etc/sudoers
+	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> ${ROOT_MOUNT}/etc/sudoers
 
 	# set cpu for performance mode
-	sed -i '/governor/d' opendsp/etc/default/cpupower
-	echo "governor='performance'" >> opendsp/etc/default/cpupower
-	chroot opendsp systemctl enable cpupower
+	sed -i '/governor/d' ${ROOT_MOUNT}/etc/default/cpupower
+	echo "governor='performance'" >> ${ROOT_MOUNT}/etc/default/cpupower
+	chroot ${ROOT_MOUNT} systemctl enable cpupower
 	# get a better swappiness for realtime environment
-	echo "vm.swappiness=10" >> opendsp/etc/sysctl.conf
+	echo "vm.swappiness=10" >> ${ROOT_MOUNT}/etc/sysctl.conf
 
 	# set realtime environment for DSPing
-	echo "@audio 	- rtprio 	99" >> opendsp/etc/security/limits.conf
-	echo "@audio 	- memlock 	unlimited" >> opendsp/etc/security/limits.conf
+	echo "@audio 	- rtprio 	99" >> ${ROOT_MOUNT}/etc/security/limits.conf
+	echo "@audio 	- memlock 	unlimited" >> ${ROOT_MOUNT}/etc/security/limits.conf
 	
 	# disable some services
-	#chroot opendsp systemctl disable systemd-random-seed || true
-	#chroot opendsp systemctl enable avahi-daemon
-	#chroot opendsp systemctl disable cron
-	#chroot opendsp systemctl disable rsyslog
-	#chroot opendsp systemctl disable ntp
-	#chroot opendsp systemctl disable triggerhappy
-	#chroot opendsp systemctl disable serial-getty@ttyAMA0.service
-	#chroot opendsp systemctl disable getty@tty1.service
+	#chroot ${ROOT_MOUNT} systemctl disable systemd-random-seed || true
+	#chroot ${ROOT_MOUNT} systemctl enable avahi-daemon
+	#chroot ${ROOT_MOUNT} systemctl disable cron
+	#chroot ${ROOT_MOUNT} systemctl disable rsyslog
+	#chroot ${ROOT_MOUNT} systemctl disable ntp
+	#chroot ${ROOT_MOUNT} systemctl disable triggerhappy
+	#chroot ${ROOT_MOUNT} systemctl disable serial-getty@ttyAMA0.service
+	#chroot ${ROOT_MOUNT} systemctl disable getty@tty1.service
 	
 	# newer archlinux versions need to generate ssh keys by our own
-	chroot opendsp ssh-keygen -A
+	chroot ${ROOT_MOUNT} ssh-keygen -A
 
 	# setup samba
-	#chroot opendsp echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
-	chroot opendsp bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp' || true
+	#chroot ${ROOT_MOUNT} echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp || true
+	chroot ${ROOT_MOUNT} bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp' || true
 
-	cat <<EOF >> opendsp/etc/samba/smb.conf
+	cat <<EOF >> ${ROOT_MOUNT}/etc/samba/smb.conf
 [global]
   workgroup = OpenDSPGroup
   server string = "Opendsp user data"
@@ -163,35 +163,35 @@ EOF
 EOF
 
 	# enable service at boot time
-	chroot opendsp systemctl enable smb
-	chroot opendsp systemctl enable nmb	
+	chroot ${ROOT_MOUNT} systemctl enable smb
+	chroot ${ROOT_MOUNT} systemctl enable nmb	
 
 	# setup samba share for user data over readolny fs
-	cat <<EOF >> opendsp/etc/fstab
+	cat <<EOF >> ${ROOT_MOUNT}/etc/fstab
 # samba fix for read only environment
 tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 	# run for the first time to create dir structure
 	# we need to run it on first boot for later read-only main partition usage of samba
-	#chroot opendsp systemctl start smb
-	chroot opendsp /usr/bin/smbd --foreground --no-process-group &
-	#chroot opendsp systemctl start nmb	
-	chroot opendsp /usr/bin/nmbd --foreground --no-process-group &
+	#chroot ${ROOT_MOUNT} systemctl start smb
+	chroot ${ROOT_MOUNT} /usr/bin/smbd --foreground --no-process-group &
+	#chroot ${ROOT_MOUNT} systemctl start nmb	
+	chroot ${ROOT_MOUNT} /usr/bin/nmbd --foreground --no-process-group &
 	kill -9 `pgrep nmbd` || true
 	kill -9 `pgrep smbd` || true
 	# add opendsp user
-	chroot opendsp smbpasswd -a opendsp -n
+	chroot ${ROOT_MOUNT} smbpasswd -a opendsp -n
 	# set opendsp default password
-	#chroot opendsp bash -C 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
-	chroot opendsp bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
+	#chroot ${ROOT_MOUNT} bash -C 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
+	chroot ${ROOT_MOUNT} bash -c 'echo -ne "opendspd\nopendspd\n" | smbpasswd -a -s opendsp'
 
 	# little hack that enable us to start samba on read only file system
-	mv opendsp/var/cache/samba opendsp/var/cache/samba.cp
-	mkdir -p opendsp/var/cache/samba
-	mv opendsp/var/lib/samba opendsp/var/lib/samba.cp
-	mkdir -p opendsp/var/lib/samba
-	cat <<EOF >> opendsp/etc/systemd/system/sambafix.service
+	mv ${ROOT_MOUNT}/var/cache/samba ${ROOT_MOUNT}/var/cache/samba.cp
+	mkdir -p ${ROOT_MOUNT}/var/cache/samba
+	mv ${ROOT_MOUNT}/var/lib/samba ${ROOT_MOUNT}/var/lib/samba.cp
+	mkdir -p ${ROOT_MOUNT}/var/lib/samba
+	cat <<EOF >> ${ROOT_MOUNT}/etc/systemd/system/sambafix.service
 [Unit]
 Description=Samba Service
 After=remote-fs.service
@@ -206,10 +206,10 @@ ExecStart=/bin/sh -c '/usr/bin/cp -Rf /var/cache/samba.cp/* /var/cache/samba/; /
 [Install]
 WantedBy=multi-user.target
 EOF
-	chroot opendsp systemctl enable sambafix || true
+	chroot ${ROOT_MOUNT} systemctl enable sambafix || true
 
 	# setup create_ap wifi access point
-	cat <<EOF >> opendsp/etc/create_ap.conf
+	cat <<EOF >> ${ROOT_MOUNT}/etc/create_ap.conf
 CHANNEL=default
 GATEWAY=10.0.0.1
 WPA_VERSION=2
@@ -239,10 +239,10 @@ PASSPHRASE=opendspd
 USE_PSK=0
 EOF
 
-	chroot opendsp systemctl enable create_ap
+	chroot ${ROOT_MOUNT} systemctl enable create_ap
 
 	# Xsession setup
-	cat <<EOF >> opendsp/home/opendsp/.Xresources
+	cat <<EOF >> ${ROOT_MOUNT}/home/opendsp/.Xresources
 ! Dracula Xresources palette
 *.foreground: #F8F8F2
 *.background: #282A36
@@ -324,49 +324,49 @@ URxvt.tabbedex.new-button: no
 EOF
 
 	# setup sane permitions
-	chroot opendsp chown -R opendsp:opendsp /home/opendsp/			
+	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/			
 }
 
 install_img() {
 		
-	if [ ! -d "opendsp/lost+found" ]
+	if [ ! -d "${ROOT_MOUNT}/lost+found" ]
 	then
 		echo "no lost found"
 	fi
 
 	# download or use it local?
-	if [ ! -f "$filesystem_image" ]
+	if [ ! -f "${filesystem_image}" ]
 	then
 		# download it!
 		wget "${RELEASE_DOWNLOAD_URL}/${filesystem_image}"
 	fi
 	# install filesystem_image
-	bsdtar -xvpf $filesystem_image -C opendsp || true
+	bsdtar -xvpf ${filesystem_image} -C ${ROOT_MOUNT} || true
 
 	# any post install action to be done?
 	post_filesystem_install
 
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --init || true
+	while [ ${retVal} -ne 0 ]; do
+		chroot ${ROOT_MOUNT} pacman-key --init || true
 		retVal=$?    
 	done
 
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman-key --populate archlinuxarm || true
+	while [ ${retVal} -ne 0 ]; do
+		chroot ${ROOT_MOUNT} pacman-key --populate archlinuxarm || true
 		retVal=$?  
 	done
 
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -Syu --noconfirm || true
+	while [ ${retVal} -ne 0 ]; do
+		chroot ${ROOT_MOUNT} pacman -Syu --noconfirm || true
 		retVal=$?
 	done
 
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot opendsp ssh-keygen -A || true
+	while [ ${retVal} -ne 0 ]; do
+		chroot ${ROOT_MOUNT} ssh-keygen -A || true
 		retVal=$?  
 	done
 
@@ -374,7 +374,7 @@ install_img() {
 
 prepare_img() {
 
-	image_name=$1
+	image_name=${1}
 	image_size=0
 
     for size in ${partition_size[@]}; do
@@ -382,13 +382,19 @@ prepare_img() {
     done
 	image_size=$((image_size+64))
 	
-	dd if=/dev/zero of=$image_name  bs=1M  count=$image_size
+	dd if=/dev/zero of=${image_name}  bs=1M  count=${image_size}
 		
+	# initialize disk
+	fdisk "${image_name}" <<EOF
+o
+w
+EOF
+
 	# creating partition table
     for i in ${!partition_type[@]}; do
         # one by one
 		size=${partition_size[$i]}		
-		fdisk $image_name <<EOF
+		fdisk "${image_name}" <<EOF
 n
 
 
@@ -398,8 +404,8 @@ w
 EOF
 
 		# change type?
-		if [ ${partition_type[$i]} == "fat" ]; then
-			fdisk $image_name <<EOF
+		if [ "${partition_type[$i]}" == "fat" ]; then
+			fdisk "${image_name}" <<EOF
 t
 $(($i+1))
 c
@@ -410,8 +416,8 @@ EOF
     done
 
 	# move first partition sector to sector_start if it is defined
-	if [ $sector_start -ge 0 ]; then
-		fdisk $image_name <<EOF
+	if [ ${sector_start} -ge 0 ]; then
+		fdisk "${image_name}" <<EOF
 x
 b
 1
@@ -422,7 +428,7 @@ EOF
 	fi
 
 	# prepare img
-	loop_device="$(losetup --show -f -P "$image_name")"
+	loop_device="$(losetup --show -f -P "${image_name}")"
 
 	# formating partitions
     for i in ${!partition_type[@]}; do
@@ -436,72 +442,72 @@ EOF
 	done
 
 	# print final partition table for debug
-	fdisk -l $image_name	
+	fdisk -l "${image_name}"
 }
 
 mount_img() {
 	
-	image_name=$1
+	image_name=${1}
 	
-	if [ -d "opendsp/" ]; then
+	if [ -d "${ROOT_MOUNT}/" ]; then
     	echo "file system mounted"
 		return
 	fi
 
-	if [ "$loop_device" == "" ]; then
+	if [ "${loop_device}" == "" ]; then
 		# mount on loop loop_device
-		loop_device="$(losetup --show -f -P "$image_name")"
+		loop_device="$(losetup --show -f -P "${image_name}")"
 	fi
 
 	# mounting first root /
+	mkdir -p ${ROOT_MOUNT}/
     for i in ${!partition_mnt[@]}; do
-		if [ ${partition_mnt[$i]} == "/" ]; then
+		if [ "${partition_mnt[$i]}" == "/" ]; then
 			p=$((i+1))
-			mkdir -p opendsp/
-			mount -v -t ext4 -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
+			mount -v -t ext4 -o sync "${loop_device}p${p}" ${ROOT_MOUNT}${partition_mnt[$i]}
 		fi
 	done
 
 	# mounting partitions
     for i in ${!partition_mnt[@]}; do
 		# already mounted above
-		if [ ${partition_mnt[$i]} == "/" ]; then
+		if [ "${partition_mnt[$i]}" == "/" ]; then
 			continue
 		fi
 		p=$((i+1))
         # one by one
-		mkdir -p opendsp${partition_mnt[$i]}
-		if [ ${partition_type[$i]} == "fat" ]; then
-			mount -v -t vfat -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
-		elif [ ${partition_type[$i]} == "ext4" ]; then
-			mount -v -t ext4 -o sync "${loop_device}p${p}" opendsp${partition_mnt[$i]}
+		mkdir -p ${ROOT_MOUNT}${partition_mnt[$i]}
+		if [ "${partition_type[$i]}" == "fat" ]; then
+			mount -v -t vfat -o sync "${loop_device}p${p}" ${ROOT_MOUNT}${partition_mnt[$i]}
+		elif [ "${partition_type[$i]}" == "ext4" ]; then
+			mount -v -t ext4 -o sync "${loop_device}p${p}" ${ROOT_MOUNT}${partition_mnt[$i]}
 		fi
 	done
 
 	# good idea to have those mounted as we chroot in
-	mkdir -p opendsp/proc
-	mkdir -p opendsp/sys
-	mkdir -p opendsp/dev/pts
-	mount -t proc /proc opendsp/proc
-	mount -o bind /sys opendsp/sys
-	mount -o bind /dev opendsp/dev
-	mount -o bind /dev/pts opendsp/dev/pts
+	mkdir -p ${ROOT_MOUNT}/proc
+	mkdir -p ${ROOT_MOUNT}/sys
+	mkdir -p ${ROOT_MOUNT}/dev/pts
+	mount -t proc /proc ${ROOT_MOUNT}/proc
+	mount -o bind /sys ${ROOT_MOUNT}/sys
+	mount -o bind /dev ${ROOT_MOUNT}/dev
+	mount -o bind /dev/pts ${ROOT_MOUNT}/dev/pts
 	
 	# prepare for chroot using qemu
-	mkdir -p opendsp/usr/bin
-	cp /usr/bin/qemu-arm-static opendsp/usr/bin/	
+	mkdir -p ${ROOT_MOUNT}/usr/bin
+	cp /usr/bin/qemu-arm-static ${ROOT_MOUNT}/usr/bin/	
 	
 	# copy temporarly our resolv.conf to get internet connection
-	mkdir -p opendsp/run/systemd/resolve/
-	cp /etc/resolv.conf opendsp/run/systemd/resolve/
+	mkdir -p ${ROOT_MOUNT}/run/systemd/resolve/
+	cp /etc/resolv.conf ${ROOT_MOUNT}/run/systemd/resolve/
 	
 }
 
 umount_img() {
 
-	image_name=$1	
+	image_name=${1}
 	
-	if [ ! -d "opendsp/" ]; then
+	if [ ! -d "${ROOT_MOUNT}/" ]; then
     	echo "file system not mounted"
 		return
 	fi
@@ -511,49 +517,63 @@ umount_img() {
 	kill -9 `pgrep pacman` || true
 	 
 	# remove any installed packages on /var/cache/pacman/pkg/
-	rm opendsp/var/cache/pacman/pkg/* || true
+	rm ${ROOT_MOUNT}/var/cache/pacman/pkg/* || true
 
 	# remove our systemd resolv.conf
-	rm -rf opendsp/run/systemd/ || true
+	rm -rf ${ROOT_MOUNT}/run/systemd/ || true
 
 	# after all remove qemu
-	rm opendsp/usr/bin/qemu-arm-static || true
+	rm ${ROOT_MOUNT}/usr/bin/qemu-arm-static || true
 
+	# make sure everything is up to date on card before umount it
 	sync
 
 	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		umount --recursive opendsp/ || true 
+	while [ ${retVal} -ne 0 ]; do
+		umount --recursive ${ROOT_MOUNT}/ || true 
 		retVal=$?
 	done
 
-	rm -rf opendsp || true
-
+	rm -rf ${ROOT_MOUNT} || true
+	
 	# release the image loop device
-	if [ "$loop_device" == "" ]; then
+	if [ "${loop_device}" == "" ]; then
 		# release all loopdevices
-		losetup -D
+		#losetup -D
+		echo "please check manually your loop device to delete it: sudo losetup -d /dev/loopX"
 	else
-		losetup -d $loop_device
+		losetup -d "${loop_device}"
 	fi
 }
 
+emulate() {
+	image_name=${1}
+
+	mount_img ${image_name} 
+	# chroot into image by using qemu-arm-static
+	chroot ${BUILDER_PATH}/build/${ROOT_MOUNT} /bin/bash
+	umount_img ${image_name} 
+}
+
 # operates everything from build path
-cd $BUILDER_PATH/build/
+cd ${BUILDER_PATH}/build/
 
 case $action in
 	"create") 
 		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img
 		print "preparing image..."
-		prepare_img $image
+		#prepare_img $image
 		mount_img $image
 		print "installing image..."
-		install_img
-		#print "tunning image..."
+		#install_img
+		print "tunning image..."
 		#tunning_img
-		#print "installing opendsp..."
-		#install_opendsp
+		print "installing opendsp..."
+		install_opendsp
 		print "image ready to go into sdcard!"
+		exit 0 ;;
+	"emulate") 
+		emulate $image
 		exit 0 ;;
 	"prepare") 
 		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img

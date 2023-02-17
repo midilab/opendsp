@@ -4,16 +4,17 @@
 filesystem_image="ArchLinuxARM-odroid-xu3-latest.tar.gz"
 
 # sdcard layout
+disk_label="mmcblk1"
 sector_start=4096
 partition_type=( "ext4" "ext4" )
-partition_size=( 8000 256 )
+partition_size=( 7000 256 )
 partition_label=( "ROOT" "OPENDSP" )
 partition_mnt=( "/" "/home/opendsp/data" )
 
 post_filesystem_install() {
 
 	# flash bootloader 
-	cd opendsp/boot/
+	cd ${ROOT_MOUNT}/boot/
 	sh sd_fusing.sh $loop_device
 	cd ../../
 
@@ -22,53 +23,53 @@ post_filesystem_install() {
 tunning_img() {
 
 	# resize sd user data script
-	echo '#!/bin/bash' > opendsp/usr/bin/resizesd
-	echo 'set -e' >> opendsp/usr/bin/resizesd
-	echo 'read -p "Do you want to resize your data partition? Press enter to continue"' >> opendsp/usr/bin/resizesd
-	echo 'echo "Stoping OpenDSP and services..."' >> opendsp/usr/bin/resizesd
-	echo 'systemctl stop opendsp || true' >> opendsp/usr/bin/resizesd
-	echo 'systemctl stop smb || true' >> opendsp/usr/bin/resizesd
-	echo 'systemctl stop nmb || true' >> opendsp/usr/bin/resizesd
-	echo 'sleep 5' >> opendsp/usr/bin/resizesd
-	echo 'umount -v /home/opendsp/data || true' >> opendsp/usr/bin/resizesd
-	echo 'echo "Resizing..."' >> opendsp/usr/bin/resizesd
-	echo 'parted /dev/mmcblk1 <<EOF' >> opendsp/usr/bin/resizesd
-	echo 'resizepart' >> opendsp/usr/bin/resizesd
-	echo '2' >> opendsp/usr/bin/resizesd
-	echo '-16M' >> opendsp/usr/bin/resizesd
-	echo 'q' >> opendsp/usr/bin/resizesd
-	echo 'EOF' >> opendsp/usr/bin/resizesd
-	echo 'e2fsck -p -f /dev/mmcblk1p2' >> opendsp/usr/bin/resizesd
-	echo 'resize2fs /dev/mmcblk1p2' >> opendsp/usr/bin/resizesd
-	echo 'read -p "Done! Press enter to reboot your machine..."' >> opendsp/usr/bin/resizesd
-	echo 'mount -o remount,rw /' >> opendsp/usr/bin/resizesd
-	echo 'rm /usr/bin/resizesd' >> opendsp/usr/bin/resizesd
-	echo 'rm -r /home/opendsp/data/lost+found || true' >> opendsp/usr/bin/resizesd
-	echo 'shutdown -r now' >> opendsp/usr/bin/resizesd
+	echo '#!/bin/bash' > ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'set -e' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'read -p "Do you want to resize your data partition? Press enter to continue"' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'echo "Stoping OpenDSP and services..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop opendsp || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop smb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop nmb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'sleep 5' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'umount -v /home/opendsp/data || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'echo "Resizing..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'parted /dev/mmcblk1 <<EOF' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'resizepart' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo '2' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo '-16M' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'q' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'EOF' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'e2fsck -p -f /dev/mmcblk1p2' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'resize2fs /dev/mmcblk1p2' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'read -p "Done! Press enter to reboot your machine..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'mount -o remount,rw /' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'rm /usr/bin/resizesd' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'rm -r /home/opendsp/data/lost+found || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'shutdown -r now' >> ${ROOT_MOUNT}/usr/bin/resizesd
 
-	chmod 755 opendsp/usr/bin/resizesd
+	chmod 755 ${ROOT_MOUNT}/usr/bin/resizesd
 
 	# take uart usage off for console, we need it for MIDI uart
-	sed -i 's/ console=ttySAC2,115200n8//' opendsp/boot/boot.txt
+	sed -i 's/ console=ttySAC2,115200n8//' ${ROOT_MOUNT}/boot/boot.txt
 	# take off all visual noise at boot stage, set boot process to output only a blank screen
 	# isolate cpus(run before install rt to make easy later setup)
 	# CPUs 0-3 represent the A7 chip, CPUs 4-7 represent the A15 chip.
-	sed -i 's/console=tty1/console=null fsck.repair=yes quiet logo.nologo consoleblank=0/' opendsp/boot/boot.txt
+	sed -i 's/console=tty1/console=null fsck.repair=yes quiet logo.nologo consoleblank=0/' ${ROOT_MOUNT}/boot/boot.txt
 	# threadirqs isolcpus=2,3,4,5,6,7 nohz_full=2,3,4,5,6,7 rcu_nocbs=2,3,4,5,6,7 
 	# enabling threadirqs and boot read only file system and other system options
-	sed -i 's/ rw/ ro/' opendsp/boot/boot.txt
+	sed -i 's/ rw/ ro/' ${ROOT_MOUNT}/boot/boot.txt
 
 	# needs to install mkimage
 	retVal=-1
 	while [ $retVal -ne 0 ]; do
-		chroot opendsp pacman -S uboot-tools --noconfirm || true
+		chroot ${ROOT_MOUNT} pacman -S uboot-tools --noconfirm || true
 		retVal=$?  
 	done
 
-	chroot opendsp mkimage -A arm -C none -T script -n 'Boot script for OpenDSP on ODROID-XU3' -d /boot/boot.txt /boot/boot.scr
+	chroot ${ROOT_MOUNT} mkimage -A arm -C none -T script -n 'Boot script for OpenDSP on ODROID-XU3' -d /boot/boot.txt /boot/boot.scr
 
 	# set read only file systems
-	cat <<EOF > opendsp/etc/fstab
+	cat <<EOF > ${ROOT_MOUNT}/etc/fstab
 # Static information about the filesystems.
 # See fstab(5) for details.
 
@@ -87,9 +88,9 @@ EOF
 		#odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
 		#odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
 		#odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
-		#chroot opendsp pacman -S odroid-xu3-libgl-x11 odroid-xu3-libgl-headers || true
+		#chroot ${ROOT_MOUNT} pacman -S odroid-xu3-libgl-x11 odroid-xu3-libgl-headers || true
 		# this needs special kernel parameter
-		chroot opendsp pacman -S xf86-video-fbdev odroid-xu3-libgl-fb --noconfirm || true
+		chroot ${ROOT_MOUNT} pacman -S xf86-video-fbdev odroid-xu3-libgl-fb --noconfirm || true
 		# or xf86-video-armsoc-odroid
 		#Section "Device"
 		#   Identifier "Mali-Fbdev"
