@@ -78,7 +78,7 @@ EOF
 				liblo python-pyliblo cython python-decorator python-appdirs \
 				python-certifi python-packaging python-pillow python-psutil \
 				python-pyparsing python-pyserial python-six python-tornado \
-				python-virtualenv python-jack-client jack xdotool \
+				python-virtualenv python-jack-client jack xdotool python-pyxdg \
 				samba cpupower parted openbox create_ap --noconfirm
 	
 	# add default opendsp user and setup his environment
