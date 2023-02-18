@@ -7,7 +7,7 @@ filesystem_image="ArchLinuxARM-odroid-xu3-latest.tar.gz"
 disk_label="mmcblk1"
 sector_start=4096
 partition_type=( "ext4" "ext4" )
-partition_size=( 7000 256 )
+partition_size=( 8000 256 )
 partition_label=( "ROOT" "OPENDSP" )
 partition_mnt=( "/" "/home/opendsp/data" )
 

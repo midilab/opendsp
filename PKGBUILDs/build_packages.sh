@@ -22,14 +22,18 @@ pack() {
    echo "BUILDING PACKS..."
    for i in "${packs[@]}"
    do
-      cd "$i"
-      echo "building $i"
+      if [ ! -d "${i}" ]
+      then
+         continue
+      fi
+      cd "${i}"
+      echo "building ${i}"
       rm -rf src/ pkg/ *.tar.xz
       makepkg -sci --noconfirm
       mv *.tar.xz ../packages/armv7/ 
       #makepkg --clean --nobuild --nodeps  --noextract
       cd ..
-      rm -rf "$i"/
+      rm -rf "${i}"/
    done
 }
 

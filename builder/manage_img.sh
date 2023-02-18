@@ -71,16 +71,20 @@ install_opendsp() {
 
 EOF
 
-	# base dependencies for opendsp
-	chroot ${ROOT_MOUNT} pacman -S sudo xorg-server xorg-xinit xorg-server-common \
-				xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib \
-				alsa-plugins alsa-utils python-setuptools python-pip \
-				liblo python-pyliblo cython python-decorator python-appdirs \
-				python-certifi python-packaging python-pillow python-psutil \
-				python-pyparsing python-pyserial python-six python-tornado \
-				python-virtualenv python-jack-client jack xdotool python-pyxdg \
-				samba cpupower parted openbox create_ap --noconfirm
-	
+	# base dependencies for opendsp	
+	retVal=-1
+	while [ $retVal -ne 0 ]; do
+		chroot ${ROOT_MOUNT} pacman -S sudo xorg-server xorg-xinit xorg-server-common \
+					xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib \
+					alsa-plugins alsa-utils python-setuptools python-pip \
+					liblo python-pyliblo cython python-decorator python-appdirs \
+					python-certifi python-packaging python-pillow python-psutil \
+					python-pyparsing python-pyserial python-six python-tornado \
+					python-virtualenv python-jack-client jack xdotool python-pyxdg \
+					samba cpupower parted openbox create_ap --noconfirm || true
+		retVal=$?
+	done
+
 	# add default opendsp user and setup his environment
 	chroot ${ROOT_MOUNT} useradd -m -G audio,video,uucp,lock,tty opendsp
 	
