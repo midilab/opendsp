@@ -1,6 +1,6 @@
 # Maintainer: Radek Podgorny <radek@podgorny.cz>
 pkgname=novnc
-pkgver=1.0.0
+pkgver=1.4.0
 pkgrel=1
 pkgdesc="javascript vnc client"
 arch=(any)
@@ -8,11 +8,11 @@ url="https://github.com/kanaka/noVNC"
 license=('GPL')
 depends=('bash' 'python' 'net-tools')
 source=("https://github.com/kanaka/noVNC/archive/v${pkgver}.tar.gz")
-md5sums=('d63c2944abd12fecec6ec504e82f27c8')
+md5sums=('7a81bbc7a33f4378b0a9bb1b89954b49')
 
 prepare() {
   cd $srcdir/noVNC-${pkgver}
-  rm -f utils/*.o
+  #rm -f utils/*.o
   rm -rf .git
 }
 
@@ -23,6 +23,8 @@ build() {
 package() {
   cd $srcdir/noVNC-${pkgver}
   cp -Rf ../../websockify/ utils/
+  chmod 774 utils/websockify/run
+  chmod 774 utils/websockify/rebind 
   mkdir -p $pkgdir/usr/share/novnc $pkgdir/usr/share/doc/novnc $pkgdir/usr/bin
   mv vnc_lite.html index.html
   cp -a app core vendor utils vnc.html index.html $pkgdir/usr/share/novnc/
@@ -30,7 +32,8 @@ package() {
   cat >$pkgdir/usr/bin/novnc <<EOF
 
 cd /usr/share/novnc || exit 1
-exec ./utils/launch.sh --listen 80 \$*
+exec ./utils/novnc_proxy --vnc localhost:5900 --listen 80 \$*
 EOF
   chmod 0755 $pkgdir/usr/bin/novnc
 }
+
