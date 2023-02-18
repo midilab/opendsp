@@ -562,12 +562,12 @@ case $action in
 	"create") 
 		image=opendsp-${arch}-${device}-$(date "+%Y-%m-%d").img
 		print "preparing image..."
-		#prepare_img $image
+		prepare_img $image
 		mount_img $image
 		print "installing image..."
-		#install_img
+		install_img
 		print "tunning image..."
-		#tunning_img
+		tunning_img
 		print "installing opendsp..."
 		install_opendsp
 		print "image ready to go into sdcard!"
