@@ -8,7 +8,7 @@ arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
 depends=(sudo xorg-server xorg-xinit xorg-server-common noto-fonts \
-         xorg-server-xvfb tint2 openbox rxvt-unicode x11vnc \
+         xorg-server-xvfb tint2 openbox rxvt-unicode x11vnc mixxx \
          alsa-firmware alsa-lib alsa-plugins alsa-utils patchage qjackctl \
          python-setuptools python-pip liblo python-pyliblo cython \
          python-decorator python-appdirs python-certifi python-packaging \

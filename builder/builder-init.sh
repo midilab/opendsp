@@ -3,6 +3,7 @@
 # defaults
 arch="${ARCHITECTURE}"
 device="${DEVICE}"
+customization=''
 image=''
 
 # make sure to setup your BUILDER_PATH enviroment var before run me!
@@ -14,7 +15,7 @@ select_arch() {
     echo ""
     PS3="Select the arch to use: "
 
-    cd ${BUILDER_PATH}/platforms/
+    cd "${BUILDER_PATH}/platforms/"
     declare -a arrArchs
     for dir in *
     do
@@ -39,11 +40,11 @@ select_device() {
     echo ""
     PS3="Select the device to use: "
 
-    cd "${BUILDER_PATH}/platforms/${arch}"
+    cd "${BUILDER_PATH}/platforms/${arch}/"
     declare -a arrDevices
     for file in *
     do
-        arrDevices+=($file)
+        arrDevices+=(${file%.*})
     done
 
     select target in ${arrDevices[@]} quit;
@@ -55,6 +56,32 @@ select_device() {
                 ;;
             *)
                 device=${target}
+                break
+                ;;
+        esac
+    done
+}
+
+select_customization() {
+    echo ""
+    PS3="Any customization to apply?: "
+
+    cd "${BUILDER_PATH}/customizations/"
+    declare -a arrCustom
+    for dir in *
+    do
+        arrCustom+=($dir)
+    done
+
+    select target in ${arrCustom[@]} quit;
+    do
+        case ${target} in
+            quit)
+                exit 0
+                break
+                ;;
+            *)
+                customization=${target}
                 break
                 ;;
         esac
@@ -87,10 +114,12 @@ select_image() {
     done
 
     # get arch and device based on image name
-    # layout: opendsp-ARCH-DEVICE-date.img
+    # layout: CUSTOMIZATION-ARCH-DEVICE-date.img
     while IFS='-' read -ra DATA; do
         for i in "${!DATA[@]}"; do
-            if [ $i -eq 1 ]; then
+            if [ $i -eq 0 ]; then
+                customization=${DATA[$i]}
+            elif [ $i -eq 1 ]; then
                 arch=${DATA[$i]}
             elif [ $i -eq 2 ]; then
                 device=${DATA[$i]}
@@ -106,7 +135,7 @@ echo "
 ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
 ╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     "
-echo "Archlinux ARM sdcard image buidler"
+echo "Archlinux ARM sdcard image builder"
 echo ""
 
 PS3="What do you want to do?: "
@@ -116,14 +145,15 @@ select opt in create emulate quit; do
     create)
       select_arch
       select_device
-      ROOT_MOUNT=${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
-      ${BUILDER_PATH}/manage_img.sh create ${arch} ${device}
+      select_customization
+      ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+      ${BUILDER_PATH}/manage_img.sh create ${arch} ${device} ${customization}
       ${BUILDER_PATH}/manage_img.sh umount ${arch} ${device} ${image}
       break
       ;;
     emulate)
       select_image
-      ROOT_MOUNT=${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+      ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
       ${BUILDER_PATH}/manage_img.sh emulate ${arch} ${device} ${image}
       break
       ;;

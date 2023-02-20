@@ -1,0 +1,4 @@
+>>>>append
+# samba fix for read only environment
+tmpfs           /var/cache/samba tmpfs   defaults,noatime,mode=0755      0       0
+tmpfs           /var/lib/samba   tmpfs   defaults,noatime,mode=0755      0       0

@@ -1,4 +1,4 @@
-# Maintainer: Romulo Silva <contact@midilab.co>
+# Maintainer: midilab <contact at midilab dot co>
 _pkgbasename=distrho-lv2
 pkgname=${_pkgbasename}-git
 pkgver=r433.1dd1200c
@@ -14,18 +14,17 @@ provides=("${_pkgbasename}")
 conflicts=("${_pkgbasename}" 'distrho-plugins' 'distrho-plugins-lv2-git')
 source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git"
         "meson_options.txt")
-#source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git#commit=${commit}")
-sha256sums=('SKIP' 'SKIP')
+#source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git#commit=${commit}"
+#        "meson_options.txt")
+md5sums=('SKIP' '4384fab5fde6c28a08aca97b9980dd68')
 
 pkgver() {
   cd "${srcdir}/${_pkgbasename}"
-
   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {
   cd "${srcdir}/${_pkgbasename}"
-
   cp ../../meson_options.txt .
 }
 

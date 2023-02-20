@@ -3,9 +3,9 @@
 # sudo timedatectl set-ntp true 
 set -e
 
-sudo pacman -Syu
+sudo pacman -Syu --noconfirm
 
-sudo pacman -S base-devel cmake git meson 
+sudo pacman -S base-devel cmake git meson --noconfirm
 
 declare -a rt_kernels=("linux-raspberrypi-rt-opendsp" "linux-odroid-xu3-rt-opendsp")
 
@@ -54,9 +54,9 @@ sudo swapon /swapfile || true
 
 # start pack
 #pack rt_kernels
-#pack opendsp_base
+pack opendsp_base
 pack opendsp_audio
-pack opendsp_video
+#pack opendsp_video
 
 sudo swapoff -a
 sudo rm -f /swapfile

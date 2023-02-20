@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # the filesystem image to use
 filesystem_image="ArchLinuxARM-odroid-xu3-latest.tar.gz"
 
@@ -10,6 +8,26 @@ partition_type=( "ext4" "ext4" )
 partition_size=( 8000 256 )
 partition_label=( "ROOT" "OPENDSP" )
 partition_mnt=( "/" "/home/opendsp/data" )
+
+# adittional packages to install
+packages=(uboot-tools xf86-video-fbdev odroid-xu3-libgl-fb)
+#Section "Device"
+#   Identifier "Mali-Fbdev"
+#   Driver   "armsoc"
+#   Option   "fbdev"           "/dev/fb0"
+#   Option  "DriverName"      "exynos"
+#   Option  "Debug" "false"
+#EndSection
+#
+#Section "Screen"
+#   Identifier   "Mali-Screen"
+#   Device       "Mali-Fbdev"
+#   DefaultDepth 24 
+#EndSection
+#
+#Section "DRI"
+#   Mode 0666
+#EndSection
 
 post_filesystem_install() {
 	# flash bootloader 
@@ -29,7 +47,7 @@ tunning_img() {
 	echo 'systemctl stop smb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'systemctl stop nmb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'sleep 5' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'umount -v /home/opendsp/data || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'umount -v /home/opendsp/data' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'echo "Resizing..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'parted /dev/mmcblk1 <<EOF' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'resizepart' >> ${ROOT_MOUNT}/usr/bin/resizesd
@@ -58,11 +76,11 @@ tunning_img() {
 	sed -i 's/ rw/ ro/' ${ROOT_MOUNT}/boot/boot.txt
 
 	# needs to install mkimage
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot ${ROOT_MOUNT} pacman -S uboot-tools --noconfirm || true
-		retVal=$?  
-	done
+	#retVal=-1
+	#while [ $retVal -ne 0 ]; do
+	#	chroot ${ROOT_MOUNT} pacman -S uboot-tools --noconfirm || true
+	#	retVal=$?  
+	#done
 
 	chroot ${ROOT_MOUNT} mkimage -A arm -C none -T script -n 'Boot script for OpenDSP on ODROID-XU3' -d /boot/boot.txt /boot/boot.scr
 
@@ -78,36 +96,5 @@ tunning_img() {
 tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       0
 tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
-
-	# install xf86 drivers for vc4 broadcom GPU
-	retVal=-1
-	while [ $retVal -ne 0 ]; do	
-		#odroid-libgl				ODROID-X/X2/U2/U3 Mali GL Driver
-		#odroid-xu3-libgl-fb		ODROID-XU3/XU4 Mali driver (framebuffer)
-		#odroid-xu3-libgl-headers	ODROID-XU3/XU4 Mali driver headers
-		#odroid-xu3-libgl-x11	 	ODROID-XU3/XU4 Mali driver (X11)
-		#chroot ${ROOT_MOUNT} pacman -S odroid-xu3-libgl-x11 odroid-xu3-libgl-headers || true
-		# this needs special kernel parameter
-		chroot ${ROOT_MOUNT} pacman -S xf86-video-fbdev odroid-xu3-libgl-fb --noconfirm || true
-		# or xf86-video-armsoc-odroid
-		#Section "Device"
-		#   Identifier "Mali-Fbdev"
-		#   Driver   "armsoc"
-		#   Option   "fbdev"           "/dev/fb0"
-		#   Option  "DriverName"      "exynos"
-		#   Option  "Debug" "false"
-		#EndSection
-		#
-		#Section "Screen"
-		#   Identifier   "Mali-Screen"
-		#   Device       "Mali-Fbdev"
-		#   DefaultDepth 24 
-		#EndSection
-		#
-		#Section "DRI"
-		#   Mode 0666
-		#EndSection
-		retVal=$?
-	done
 
 }	

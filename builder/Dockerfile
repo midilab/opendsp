@@ -12,5 +12,6 @@ RUN pacman -Syu --noconfirm && pacman -S unzip multipath-tools parted sshpass zi
 RUN ["/usr/bin/mkdir", "/var/img-builder"]
 ADD ["manage_img.sh", "/var/img-builder/"]
 ADD ["platforms/", "/var/img-builder/platforms/"]
+ADD ["customizations/", "/var/img-builder/customizations/"]
 ADD ["builder-init.sh", "/var/img-builder"]
 ENTRYPOINT ["/var/img-builder/builder-init.sh"]

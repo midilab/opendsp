@@ -1,17 +1,15 @@
-# Maintainer: Romulo Silva <contact@midilab.co>
+# Maintainer: midilab <contact at midilab dot co>
 _pkgname=ingen
 pkgname="${_pkgname}-git"
 pkgver=0.5.1.r2843.e2d69c69
 pkgrel=1
 pkgdesc="A modular plugin host for JACK and LV2."
-arch=('arm' 'armv6h' 'armv7h' 'aarch64')
+arch=('armv7h')
 url="http://drobilla.net/software/${_pkgname}/"
 license=('GPL')
-depends=('alsa-lib' 'ganv' 'jack' 'lilv' 'portaudio' 'suil' 'serd' 'sord' 'raul' 'lv2')
+depends=('boost' 'alsa-lib' 'ganv' 'jack' 'lilv' 'portaudio' 'suil' 'serd' 'sord' 'raul' 'lv2')
 makedepends=('python' 'python-markdown' 'python-pygments' 'python-rdflib')
-optdepends=(
-    'lv2-plugins: various useful LV2 plug-in packages'
-)
+optdepends=('lv2-plugins: various useful LV2 plug-in packages')
 provides=("${_pkgname}")
 conflicts=("${_pkgname}")
 source=("${_pkgname}::git+https://github.com/drobilla/ingen.git/")
@@ -30,14 +28,12 @@ build() {
   cd "${srcdir}/${_pkgname}"
   meson setup build
   cd build
-  meson configure -Dcpp_args="-mtune=native -march=native" -Dprefix="/usr"
+  #meson configure -Dcpp_args="-mtune=native -march=native" -Dprefix="/usr"
+  meson configure -Dprefix="/usr"
   meson compile
 }
 
 package() {
   cd "${srcdir}/${_pkgname}/build/"
-  # meson returning error for permition
   DESTDIR="${pkgdir}/" meson install
 }
-
-# vim:set ts=2 sw=2 et:

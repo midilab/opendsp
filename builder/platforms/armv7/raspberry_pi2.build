@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # the filesystem image to use
 filesystem_image="ArchLinuxARM-rpi-armv7-latest.tar.gz"
 
@@ -9,11 +7,12 @@ partition_type=( "fat" "ext4" "ext4" )
 partition_size=( 200 6000 256 )
 partition_label=( "BOOT" "ROOT" "OPENDSP" )
 partition_mnt=( "/boot" "/" "/home/opendsp/data" )
+	
+# install xf86 drivers for vc4 broadcom GPU
+packages=(xf86-video-fbdev)
 
 post_filesystem_install() {
-
 	echo "post filesystem install"
-
 }
 
 tunning_img() {
@@ -23,11 +22,11 @@ tunning_img() {
 	echo 'set -e' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'read -p "Do you want to resize your data partition? Press enter to continue"' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'echo "Stoping OpenDSP and services..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'systemctl stop opendsp || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'systemctl stop smb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'systemctl stop nmb || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop opendsp' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop smb' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'systemctl stop nmb' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'sleep 5' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'umount -v /home/opendsp/data || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'umount -v /home/opendsp/data' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'echo "Resizing..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'parted /dev/mmcblk0 <<EOF' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'resizepart' >> ${ROOT_MOUNT}/usr/bin/resizesd
@@ -40,7 +39,7 @@ tunning_img() {
 	echo 'read -p "Done! Press enter to reboot your machine..."' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'mount -o remount,rw /' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'rm /usr/bin/resizesd' >> ${ROOT_MOUNT}/usr/bin/resizesd
-	echo 'rm -r /home/opendsp/data/lost+found || true' >> ${ROOT_MOUNT}/usr/bin/resizesd
+	echo 'rm -r /home/opendsp/data/lost+found' >> ${ROOT_MOUNT}/usr/bin/resizesd
 	echo 'shutdown -r now' >> ${ROOT_MOUNT}/usr/bin/resizesd
 
 	chmod 755 ${ROOT_MOUNT}/usr/bin/resizesd
@@ -137,11 +136,5 @@ tmpfs           /var/tmp        tmpfs   defaults,noatime,mode=0755      0       
 tmpfs           /var/log        tmpfs   defaults,noatime,mode=0755      0       0
 EOF
 
-	# install xf86 drivers for vc4 broadcom GPU
-	retVal=-1
-	while [ $retVal -ne 0 ]; do
-		chroot ${ROOT_MOUNT} pacman -S xf86-video-fbdev || true
-		retVal=$?
-	done	
 }	
 
