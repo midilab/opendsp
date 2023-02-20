@@ -8,14 +8,26 @@ Licensed under LGPL version 3 (see docs/LICENSE.LGPL-3)
 '''
 
 import sys
-
-# python 3.0 differences
-try:
-    from http.server import BaseHTTPRequestHandler, HTTPServer
-except ImportError:
-    from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+from http.server import BaseHTTPRequestHandler, HTTPServer
 
 from websockify.websocket import WebSocket, WebSocketWantReadError, WebSocketWantWriteError
+
+class HttpWebSocket(WebSocket):
+    """Class to glue websocket and http request functionality together"""
+    def __init__(self, request_handler):
+        super().__init__()
+
+        self.request_handler = request_handler
+
+    def send_response(self, code, message=None):
+        self.request_handler.send_response(code, message)
+
+    def send_header(self, keyword, value):
+        self.request_handler.send_header(keyword, value)
+
+    def end_headers(self):
+        self.request_handler.end_headers()
+
 
 class WebSocketRequestHandlerMixIn:
     """WebSocket request handler mix-in class
@@ -30,7 +42,7 @@ class WebSocketRequestHandlerMixIn:
     use for the WebSocket connection.
     """
 
-    SocketClass = WebSocket
+    SocketClass = HttpWebSocket
 
     def handle_one_request(self):
         """Extended request handler
@@ -42,12 +54,7 @@ class WebSocketRequestHandlerMixIn:
         self._real_do_GET = self.do_GET
         self.do_GET = self._websocket_do_GET
         try:
-            # super() only works for new style classes
-            if issubclass(WebSocketRequestHandlerMixIn, object):
-                super(WebSocketRequestHandlerMixIn, self).handle_one_request()
-            else:
-                # Assume handle_one_request() hasn't been overriden
-                BaseHTTPRequestHandler.handle_one_request(self)
+            super().handle_one_request()
         finally:
             self.do_GET = self._real_do_GET
 
@@ -69,15 +76,13 @@ class WebSocketRequestHandlerMixIn:
         The WebSocket object will then replace the request object and
         handle_websocket() will be called.
         """
-        websocket = self.SocketClass()
+        websocket = self.SocketClass(self)
         try:
             websocket.accept(self.request, self.headers)
         except Exception:
             exc = sys.exc_info()[1]
             self.send_error(400, str(exc))
             return
-
-        self.log_request(101)
 
         self.request = websocket
 

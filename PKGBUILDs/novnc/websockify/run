@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-
-import websockify
-
-websockify.websocketproxy.websockify_init()
+#!/usr/bin/env sh
+set -e
+cd "$(dirname "$0")"
+exec python3 -m websockify "$@"

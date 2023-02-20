@@ -12,24 +12,13 @@ as taken from http://docs.python.org/dev/library/ssl.html#certificates
 '''
 
 import signal, socket, optparse, time, os, sys, subprocess, logging, errno, ssl
-try:
-    from socketserver import ForkingMixIn
-except ImportError:
-    from SocketServer import ForkingMixIn
-
-try:
-    from http.server import HTTPServer
-except ImportError:
-    from BaseHTTPServer import HTTPServer
+from socketserver import ThreadingMixIn
+from http.server import HTTPServer
 
 import select
 from websockify import websockifyserver
 from websockify import auth_plugins as auth
-try:
-    from urllib.parse import parse_qs, urlparse
-except ImportError:
-    from cgi import parse_qs
-    from urlparse import urlparse
+from urllib.parse import parse_qs, urlparse
 
 class ProxyRequestHandler(websockifyserver.WebSockifyRequestHandler):
 
@@ -46,15 +35,15 @@ Traffic Legend:
     <  - Client send
     <. - Client send partial
 """
-    
+
     def send_auth_error(self, ex):
         self.send_response(ex.code, ex.msg)
         self.send_header('Content-Type', 'text/html')
         for name, val in ex.headers.items():
             self.send_header(name, val)
-        
+
         self.end_headers()
-    
+
     def validate_connection(self):
         if not self.server.token_plugin:
             return
@@ -83,7 +72,7 @@ Traffic Legend:
         except (TypeError, AttributeError, KeyError):
             # not a SSL connection or client presented no certificate with valid data
             pass
-            
+
         try:
             self.server.auth_plugin.authenticate(
                 headers=self.headers, target_host=self.server.target_host,
@@ -118,9 +107,9 @@ Traffic Legend:
                                                            connect=True,
                                                            use_ssl=self.server.ssl_target,
                                                            unix_socket=self.server.unix_target)
-        except Exception:
-            self.log_message("Failed to connect to %s:%s",
-                             self.server.target_host, self.server.target_port)
+        except Exception as e:
+            self.log_message("Failed to connect to %s:%s: %s",
+                             self.server.target_host, self.server.target_port, e)
             raise self.CClose(1011, "Failed to connect to downstream server")
 
         self.request.setsockopt(socket.SOL_TCP, socket.TCP_NODELAY, 1)
@@ -233,6 +222,18 @@ Traffic Legend:
                 tqueue.extend(bufs)
 
                 if closed:
+
+                    while (len(tqueue) != 0):
+                        # Send queued client data to the target
+                        dat = tqueue.pop(0)
+                        sent = target.send(dat)
+                        if sent == len(dat):
+                            self.print_traffic(">")
+                        else:
+                            # requeue the remaining data
+                            tqueue.insert(0, dat[sent:])
+                            self.print_traffic(".>")
+
                     # TODO: What about blocking on client socket?
                     if self.verbose:
                         self.log_message("%s:%s: Client closed connection",
@@ -256,6 +257,16 @@ Traffic Legend:
                 # Receive target data, encode it and queue for client
                 buf = target.recv(self.buffer_size)
                 if len(buf) == 0:
+
+                    # Target socket closed, flushing queues and closing client-side websocket
+                    # Send queued target data to the client
+                    if len(cqueue) != 0:
+                        c_pend = True
+                        while(c_pend):
+                            c_pend = self.send_frames(cqueue)
+
+                        cqueue = []
+
                     if self.verbose:
                         self.log_message("%s:%s: Target closed connection",
                                 self.server.target_host, self.server.target_port)
@@ -293,6 +304,7 @@ class WebSocketProxy(websockifyserver.WebSockifyServer):
             wsdir = os.path.dirname(sys.argv[0])
             rebinder_path = [os.path.join(wsdir, "..", "lib"),
                              os.path.join(wsdir, "..", "lib", "websockify"),
+                             os.path.join(wsdir, ".."),
                              wsdir]
             self.rebinder = None
 
@@ -313,12 +325,15 @@ class WebSocketProxy(websockifyserver.WebSockifyServer):
             self.target_port = sock.getsockname()[1]
             sock.close()
 
+            # Insert rebinder at the head of the (possibly empty) LD_PRELOAD pathlist
+            ld_preloads = filter(None, [ self.rebinder, os.environ.get("LD_PRELOAD", None) ])
+
             os.environ.update({
-                "LD_PRELOAD": self.rebinder,
+                "LD_PRELOAD": os.pathsep.join(ld_preloads),
                 "REBIND_OLD_PORT": str(kwargs['listen_port']),
                 "REBIND_NEW_PORT": str(self.target_port)})
 
-        websockifyserver.WebSockifyServer.__init__(self, RequestHandlerClass, *args, **kwargs)
+        super().__init__(RequestHandlerClass, *args, **kwargs)
 
     def run_wrap_cmd(self):
         self.msg("Starting '%s'", " ".join(self.wrap_cmd))
@@ -394,35 +409,15 @@ def _subprocess_setup():
     signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 
-try :
-    # First try SSL options for Python 3.4 and above
-    SSL_OPTIONS = {
-        'default': ssl.OP_ALL,
-        'tlsv1_1': ssl.PROTOCOL_TLS | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
-        ssl.OP_NO_TLSv1,
-        'tlsv1_2': ssl.PROTOCOL_TLS | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
-        ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1,
-        'tlsv1_3': ssl.PROTOCOL_TLS | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
-        ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2,
-    }
-except AttributeError:
-    try:
-        # Python 3.3 uses a different scheme for SSL options
-        # tlsv1_3 is not supported on older Python versions
-        SSL_OPTIONS = {
-            'default': ssl.OP_ALL,
-            'tlsv1_1': ssl.PROTOCOL_TLSv1 | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
-            ssl.OP_NO_TLSv1,
-            'tlsv1_2': ssl.PROTOCOL_TLSv1 | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
-            ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1,
-        }
-    except AttributeError:
-        # Python 2.6 does not support TLS v1.2, and uses a different scheme
-        # for SSL options
-        SSL_OPTIONS = {
-            'default': ssl.PROTOCOL_SSLv23,
-            'tlsv1_1': ssl.PROTOCOL_TLSv1,
-        }
+SSL_OPTIONS = {
+    'default': ssl.OP_ALL,
+    'tlsv1_1': ssl.PROTOCOL_SSLv23 | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
+    ssl.OP_NO_TLSv1,
+    'tlsv1_2': ssl.PROTOCOL_SSLv23 | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
+    ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1,
+    'tlsv1_3': ssl.PROTOCOL_SSLv23 | ssl.OP_NO_SSLv2 | ssl.OP_NO_SSLv3 |
+    ssl.OP_NO_TLSv1 | ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2,
+}
 
 def select_ssl_version(version):
     """Returns SSL options for the most secure TSL version available on this
@@ -433,7 +428,7 @@ def select_ssl_version(version):
         # It so happens that version names sorted lexicographically form a list
         # from the least to the most secure
         keys = list(SSL_OPTIONS.keys())
-        keys.sort() 
+        keys.sort()
         fallback = keys[-1]
         logger = logging.getLogger(WebSocketProxy.log_prefix)
         logger.warn("TLS version %s unsupported. Falling back to %s",
@@ -443,18 +438,21 @@ def select_ssl_version(version):
 
 def websockify_init():
     # Setup basic logging to stderr.
-    logger = logging.getLogger(WebSocketProxy.log_prefix)
-    logger.propagate = False
-    logger.setLevel(logging.INFO)
     stderr_handler = logging.StreamHandler()
     stderr_handler.setLevel(logging.DEBUG)
     log_formatter = logging.Formatter("%(message)s")
     stderr_handler.setFormatter(log_formatter)
-    logger.addHandler(stderr_handler)
+    root = logging.getLogger()
+    root.addHandler(stderr_handler)
+    root.setLevel(logging.INFO)
 
     # Setup optparse.
     usage = "\n    %prog [options]"
     usage += " [source_addr:]source_port [target_addr:target_port]"
+    usage += "\n    %prog [options]"
+    usage += " --token-plugin=CLASS [source_addr:]source_port"
+    usage += "\n    %prog [options]"
+    usage += " --unix-target=FILE [source_addr:]source_port"
     usage += "\n    %prog [options]"
     usage += " [source_addr:]source_port -- WRAP_COMMAND_LINE"
     parser = optparse.OptionParser(usage=usage)
@@ -478,6 +476,8 @@ def websockify_init():
             help="SSL certificate file")
     parser.add_option("--key", default=None,
             help="SSL key file (if separate from cert)")
+    parser.add_option("--key-password", default=None,
+            help="SSL key password")
     parser.add_option("--ssl-only", action="store_true",
             help="disallow non-encrypted client connections")
     parser.add_option("--ssl-target", action="store_true",
@@ -545,6 +545,8 @@ def websockify_init():
     parser.add_option("--legacy-syslog", action="store_true",
                       help="Use the old syslog protocol instead of RFC 5424. "
                            "Use this if the messages produced by websockify seem abnormal.")
+    parser.add_option("--file-only", action="store_true",
+                      help="use this to disable directory listings in web server.")
 
     (opts, args) = parser.parse_args()
 
@@ -580,7 +582,8 @@ def websockify_init():
         log_file_handler = logging.FileHandler(opts.log_file)
         log_file_handler.setLevel(logging.DEBUG)
         log_file_handler.setFormatter(log_formatter)
-        logger.addHandler(log_file_handler)
+        root = logging.getLogger()
+        root.addHandler(log_file_handler)
 
     del opts.log_file
 
@@ -613,13 +616,15 @@ def websockify_init():
                                                  legacy=opts.legacy_syslog)
         syslog_handler.setLevel(logging.DEBUG)
         syslog_handler.setFormatter(log_formatter)
-        logger.addHandler(syslog_handler)
+        root = logging.getLogger()
+        root.addHandler(syslog_handler)
 
     del opts.syslog
     del opts.legacy_syslog
 
     if opts.verbose:
-        logger.setLevel(logging.DEBUG)
+        root = logging.getLogger()
+        root.setLevel(logging.DEBUG)
 
 
     # Transform to absolute path as daemon may chdir
@@ -724,7 +729,7 @@ def websockify_init():
         server.start_server()
 
 
-class LibProxyServer(ForkingMixIn, HTTPServer):
+class LibProxyServer(ThreadingMixIn, HTTPServer):
     """
     Just like WebSocketProxy, but uses standard Python SocketServer
     framework.
@@ -766,14 +771,13 @@ class LibProxyServer(ForkingMixIn, HTTPServer):
         if web:
             os.chdir(web)
 
-        HTTPServer.__init__(self, (listen_host, listen_port),
-                            RequestHandlerClass)
+        super().__init__((listen_host, listen_port), RequestHandlerClass)
 
 
     def process_request(self, request, client_address):
         """Override process_request to implement a counter"""
         self.handler_id += 1
-        ForkingMixIn.process_request(self, request, client_address)
+        super().process_request(request, client_address)
 
 
 if __name__ == '__main__':

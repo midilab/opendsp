@@ -14,19 +14,7 @@ as taken from http://docs.python.org/dev/library/ssl.html#certificates
 
 import os, sys, time, errno, signal, socket, select, logging
 import multiprocessing
-
-# Imports that vary by python version
-
-# python 3.0 differences
-if sys.hexversion > 0x3000000:
-    s2b = lambda s: s.encode('latin_1')
-else:
-    s2b = lambda s: s      # No-op
-
-try:
-    from http.server import SimpleHTTPRequestHandler
-except ImportError:
-    from SimpleHTTPServer import SimpleHTTPRequestHandler
+from http.server import SimpleHTTPRequestHandler
 
 # Degraded functionality if these imports are missing
 for mod, msg in [('ssl', 'TLS/SSL/wss is disabled'),
@@ -40,16 +28,13 @@ for mod, msg in [('ssl', 'TLS/SSL/wss is disabled'),
 if sys.platform == 'win32':
     # make sockets pickle-able/inheritable
     import multiprocessing.reduction
-    # the multiprocesssing module behaves much differently on Windows,
-    # and we have yet to fix all the bugs
-    sys.exit("Windows is not supported at this time")
 
-from websockify.websocket import WebSocket, WebSocketWantReadError, WebSocketWantWriteError
+from websockify.websocket import WebSocketWantReadError, WebSocketWantWriteError
 from websockify.websocketserver import WebSocketRequestHandlerMixIn
 
-class CompatibleWebSocket(WebSocket):
+class CompatibleWebSocket(WebSocketRequestHandlerMixIn.SocketClass):
     def select_subprotocol(self, protocols):
-        # Handle old websockify clients that still specifiy a sub-protocol
+        # Handle old websockify clients that still specify a sub-protocol
         if 'binary' in protocols:
             return 'binary'
         else:
@@ -99,10 +84,10 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
         if self.logger is None:
             self.logger = WebSockifyServer.get_logger()
 
-        SimpleHTTPRequestHandler.__init__(self, req, addr, server)
+        super().__init__(req, addr, server)
 
     def log_message(self, format, *args):
-        self.logger.info("%s - - [%s] %s" % (self.address_string(), self.log_date_time_string(), format % args))
+        self.logger.info("%s - - [%s] %s" % (self.client_address[0], self.log_date_time_string(), format % args))
 
     #
     # WebSocketRequestHandler logging/output functions
@@ -149,20 +134,14 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
                     self.rec.write("'{{{0}{{{1}',\n".format(tdelta, bufstr))
                 self.send_parts.append(buf)
 
-        # Flush any previously queued data
-        try:
-            self.request.sendmsg('')
-        except WebSocketWantWriteError:
-            return True
-
         while self.send_parts:
             # Send pending frames
-            buf = self.send_parts.pop(0)
             try:
-                self.request.sendmsg(buf)
+                self.request.sendmsg(self.send_parts[0])
             except WebSocketWantWriteError:
                 self.print_traffic("<.")
                 return True
+            self.send_parts.pop(0)
             self.print_traffic("<")
 
         return False
@@ -221,7 +200,7 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
         self.validate_connection()
         self.auth_connection()
 
-        WebSocketRequestHandlerMixIn.handle_upgrade(self)
+        super().handle_upgrade()
 
     def handle_websocket(self):
         # Indicate to server that a Websocket upgrade was done
@@ -271,15 +250,15 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
             self.auth_connection()
 
         if self.only_upgrade:
-            self.send_error(405, "Method Not Allowed")
+            self.send_error(405)
         else:
-            SimpleHTTPRequestHandler.do_GET(self)
+            super().do_GET()
 
     def list_directory(self, path):
         if self.file_only:
-            self.send_error(404, "No such file")
+            self.send_error(404)
         else:
-            return SimpleHTTPRequestHandler.list_directory(self, path)
+            return super().list_directory(path)
 
     def new_websocket_client(self):
         """ Do something with a WebSockets client connection. """
@@ -298,15 +277,15 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
             self.auth_connection()
 
         if self.only_upgrade:
-            self.send_error(405, "Method Not Allowed")
+            self.send_error(405)
         else:
-            SimpleHTTPRequestHandler.do_HEAD(self)
+            super().do_HEAD()
 
     def finish(self):
         if self.rec:
             self.rec.write("'EOF'];\n")
             self.rec.close()
-        SimpleHTTPRequestHandler.finish(self)
+        super().finish()
 
     def handle(self):
         # When using run_once, we have a single process, so
@@ -315,14 +294,14 @@ class WebSockifyRequestHandler(WebSocketRequestHandlerMixIn, SimpleHTTPRequestHa
         if self.run_once:
             self.handle_one_request()
         else:
-            SimpleHTTPRequestHandler.handle(self)
+            super().handle()
 
     def log_request(self, code='-', size='-'):
         if self.verbose:
-            SimpleHTTPRequestHandler.log_request(self, code, size)
+            super().log_request(code, size)
 
 
-class WebSockifyServer(object):
+class WebSockifyServer():
     """
     WebSockets server class.
     As an alternative, the standard library SocketServer can be used
@@ -340,7 +319,7 @@ class WebSockifyServer(object):
 
     def __init__(self, RequestHandlerClass, listen_fd=None,
             listen_host='', listen_port=None, source_is_ipv6=False,
-            verbose=False, cert='', key='', ssl_only=None,
+            verbose=False, cert='', key='', key_password=None, ssl_only=None,
             verify_client=False, cafile=None,
             daemon=False, record='', web='', web_auth=False,
             file_only=False,
@@ -380,6 +359,7 @@ class WebSockifyServer(object):
 
         # keyfile path must be None if not specified
         self.key = None
+        self.key_password = key_password
 
         # Make paths settings absolute
         self.cert = os.path.abspath(cert)
@@ -561,7 +541,7 @@ class WebSockifyServer(object):
         if not handshake:
             raise self.EClose("")
 
-        elif handshake[0] in ("\x16", "\x80", 22, 128):
+        elif handshake[0] in (22, 128):
             # SSL wrap the connection
             if not ssl:
                 raise self.EClose("SSL connection but no 'ssl' module")
@@ -570,32 +550,21 @@ class WebSockifyServer(object):
                                   % self.cert)
             retsock = None
             try:
-                if (hasattr(ssl, 'create_default_context') 
-                    and callable(ssl.create_default_context)):
-                    # create new-style SSL wrapping for extended features
-                    context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
-                    if self.ssl_ciphers is not None:
-                        context.set_ciphers(self.ssl_ciphers)
-                    context.options = self.ssl_options
-                    context.load_cert_chain(certfile=self.cert, keyfile=self.key)
-                    if self.verify_client:
-                        context.verify_mode = ssl.CERT_REQUIRED
-                        if self.cafile:
-                            context.load_verify_locations(cafile=self.cafile)
-                        else:
-                            context.set_default_verify_paths()
-                    retsock = context.wrap_socket(
-                            sock,
-                            server_side=True)
-                else:
-                    if self.verify_client:
-                        raise self.EClose("Client certificate verification requested, but this Python is too old.")
-                    # new-style SSL wrapping is not needed, using to old style
-                    retsock = ssl.wrap_socket(
-                            sock,
-                            server_side=True,
-                            certfile=self.cert,
-                            keyfile=self.key)
+                # create new-style SSL wrapping for extended features
+                context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
+                if self.ssl_ciphers is not None:
+                    context.set_ciphers(self.ssl_ciphers)
+                context.options = self.ssl_options
+                context.load_cert_chain(certfile=self.cert, keyfile=self.key, password=self.key_password)
+                if self.verify_client:
+                    context.verify_mode = ssl.CERT_REQUIRED
+                    if self.cafile:
+                        context.load_verify_locations(cafile=self.cafile)
+                    else:
+                        context.set_default_verify_paths()
+                retsock = context.wrap_socket(
+                        sock,
+                        server_side=True)
             except ssl.SSLError:
                 _, x, _ = sys.exc_info()
                 if x.args[0] == ssl.SSL_ERROR_EOF:
@@ -731,10 +700,6 @@ class WebSockifyServer(object):
 
         if self.listen_fd != None:
             lsock = socket.fromfd(self.listen_fd, socket.AF_INET, socket.SOCK_STREAM)
-            if sys.hexversion < 0x3000000:
-                # For python 2 we have to wrap the "raw" socket into a socket object,
-                # otherwise ssl wrap_socket doesn't work.
-                lsock = socket.socket(_sock=lsock)
         else:
             lsock = self.socket(self.listen_host, self.listen_port, False,
                                 self.prefer_ipv6,
