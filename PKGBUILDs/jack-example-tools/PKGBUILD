@@ -1,0 +1,51 @@
+# Maintainer: David Runge <dvzrv@archlinux.org>
+
+pkgname=jack-example-tools
+pkgver=4
+_commit=142fca8930191eedaca96ea874171df008372148  # refgs/tags/4
+pkgrel=1
+pkgdesc="Official JACK example clients and tools"
+arch=('armv7h')
+url="https://github.com/jackaudio/jack-example-tools"
+license=(GPL2 GPL3)
+groups=(pro-audio)
+depends=(glibc)
+makedepends=(
+  alsa-lib
+  git
+  jack
+  libsamplerate
+  libsndfile
+  meson
+  opus
+  readline
+  zita-alsa-pcmi
+  zita-resampler
+)
+source=("git+$url#tag=$_commit?signed")
+sha256sums=('SKIP')
+validpgpkeys=('62B11043D2F6EB6672D93103CDBAA37ABC74FBA0') # falkTX <falktx@falktx.com>
+
+prepare() {
+  cd "${srcdir}/${pkgname}"
+  cp ../../meson_options.txt .
+}
+
+build() {
+  arch-meson build $pkgname "${_meson_args[@]}"
+  ninja -vC build
+}
+
+package() {
+  depends+=(
+    alsa-lib libasound.so
+    jack libjack.so
+    libsamplerate libsamplerate.so
+    libsndfile libsndfile.so
+    readline libreadline.so
+    zita-alsa-pcmi libzita-alsa-pcmi.so
+    zita-resampler libzita-resampler.so
+  )
+
+  DESTDIR="$pkgdir" meson install -C build
+}
