@@ -104,9 +104,6 @@ EOF
 	# add default opendsp user and setup his environment
 	chroot ${ROOT_MOUNT} useradd -m -G audio,video,uucp,lock,tty opendsp
 	
-	# change pass
-	chroot ${ROOT_MOUNT} sh -c "echo 'opendsp:opendspd' | chpasswd"
-	
 	# X11 needs config for session control
 	echo "allowed_users = anybody" >> ${ROOT_MOUNT}/etc/X11/Xwrapper.config
 	echo "needs_root_rights = yes" >> ${ROOT_MOUNT}/etc/X11/Xwrapper.config
@@ -119,8 +116,8 @@ EOF
 	echo "X11Forwarding yes" >> ${ROOT_MOUNT}/etc/ssh/sshd_config
 	echo "PermitUserEnvironment yes" >> ${ROOT_MOUNT}/etc/ssh/sshd_config
 	mkdir ${ROOT_MOUNT}/home/opendsp/.ssh/
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.ssh/environment
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.profile
+	#echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.ssh/environment
+	#echo "export XAUTHORITY=/tmp/.Xauthority" >> ${ROOT_MOUNT}/home/opendsp/.profile
 	
 	# create a place for x11vnc data to live on
 	mkdir -p ${ROOT_MOUNT}/home/opendsp/.vnc/
@@ -342,6 +339,19 @@ URxvt.tabbedex.tab-bg: 0
 URxvt.tabbedex.title: yes
 URxvt.tabbedex.new-button: no
 EOF
+
+	# set default password for all services
+	# changing system password
+	chroot ${ROOT_MOUNT} sh -c "echo 'opendsp:opendspd' | chpasswd"
+	# changing samba file share service password
+	chroot ${ROOT_MOUNT} sh -c "echo -ne 'opendspd\nopendspd\n' | sudo smbpasswd -a -s opendsp"
+	# persist the password on our RO init copy of samba(check sambafix.sevice)
+	chroot ${ROOT_MOUNT} cp -r /var/lib/samba/* /var/lib/samba.cp/
+	chroot ${ROOT_MOUNT} cp -r /var/cache/samba/* /var/cache/samba.cp/
+	# chaging vnc virtual desktop service password
+	chroot ${ROOT_MOUNT} x11vnc -storepasswd opendspd /home/opendsp/.vnc/passwd
+	# chaging wifi access point service connection password
+	chroot ${ROOT_MOUNT} sed -i "/PASSPHRASE/c\PASSPHRASE=opendspd" /etc/create_ap.conf
 
 	# setup sane permitions
 	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/			
