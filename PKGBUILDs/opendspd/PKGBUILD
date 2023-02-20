@@ -8,7 +8,7 @@ arch=(any)
 url='http://midilab.co/opendspd'
 license=('GPL')
 depends=(sudo xorg-server xorg-xinit xorg-server-common noto-fonts \
-         xorg-server-xvfb tint2 openbox rxvt-unicode x11vnc mixxx \
+         xorg-server-xvfb tint2 openbox rxvt-unicode x11vnc \
          alsa-firmware alsa-lib alsa-plugins alsa-utils patchage qjackctl \
          python-setuptools python-pip liblo python-pyliblo cython \
          python-decorator python-appdirs python-certifi python-packaging \
@@ -17,7 +17,7 @@ depends=(sudo xorg-server xorg-xinit xorg-server-common noto-fonts \
          jack mididings xdotool a2jmidid rtmidi samba cpupower parted create_ap)
 source=("git+https://github.com/midilab/opendspd.git")
 md5sums=('SKIP')
-
+# mixxx is broke! remove him
 pkgver()
 {
   cd "$pkgname"

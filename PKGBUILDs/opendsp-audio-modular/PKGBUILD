@@ -8,7 +8,7 @@ arch=(any)
 url='https://midilab.co/opendsp'
 license=('GPL')
 depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
-        qtractor milkytracker luppp mixxx xwax lmms hydrogen \
+        qtractor milkytracker luppp xwax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
         helm-synth infamousplugins ir.lv2 jalv lilv vlc \
@@ -18,7 +18,7 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
         suil synthv1 vm.lv2 x42-plugins xmonk.lv2 zynaddsubfx \
         mididings python-rtmidi \
         non-session-manager klystrack-plus)
-
+# removed mixxx because of depencies problem: compile it appart
 #depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
 #        qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
 #        blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \

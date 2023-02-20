@@ -15,11 +15,11 @@ sha256sums=('6947efddb4abb2ea5fd3eb2610955bbd4aafaf7a9bb6ce95ac8012af7e524e0a')
 
 build() {
 	cd "$pkgname-version-$pkgver"
-  export CFLAGS="${CFLAGS} -I/usr/include/GraphicsMagick"
+  	export CFLAGS="${CFLAGS} -I/usr/include/GraphicsMagick"
 	./bootstrap
 	export PKG_CONFIG_PATH="$PKG_CONFIG_PATH:/usr/lib/pkgconfig"
-	./configure --prefix=/usr
-  sed -i 's/-lMagickWand-7.Q16HDRI -lMagickCore-7.Q16HDRI/-lImageMagick-7.1.0.Q16HDRI -lGraphicsMagick-1.3.40.Q16HDRI/g' Makefile
+	./configure --prefix=/usr --disable-oscaudio --disable-sndio --disable-pulseaudio --disable-twip --enable-opengl
+  	sed -i 's/-lMagickWand-7.Q16HDRI -lMagickCore-7.Q16HDRI/-lImageMagick-7.1.0.Q16HDRI -lGraphicsMagick-1.3.40.Q16HDRI/g' Makefile
 	make
 }
 
