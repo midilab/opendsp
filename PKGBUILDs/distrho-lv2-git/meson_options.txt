@@ -98,7 +98,7 @@ option('plugins',
         'tal-reverb-2',
         'tal-reverb-3',
         'tal-vocoder-2',
-        'temper',
+        #'temper',
         'vex',
         'wolpertinger',
         # juce6

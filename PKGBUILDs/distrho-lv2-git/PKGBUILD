@@ -1,7 +1,7 @@
 # Maintainer: midilab <contact at midilab dot co>
 _pkgbasename=distrho-lv2
 pkgname=${_pkgbasename}-git
-pkgver=r433.1dd1200c
+pkgver=r623.f2dbaded
 commit=1dd1200c5b4a34d1b6521d4513e60a34bd8801fa
 pkgrel=1
 pkgdesc="Distrho LV2 Audio Plugins, using the JUCE Toolkit"
@@ -16,7 +16,7 @@ source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git"
         "meson_options.txt")
 #source=("${_pkgbasename}::git+https://github.com/DISTRHO/DISTRHO-Ports.git#commit=${commit}"
 #        "meson_options.txt")
-md5sums=('SKIP' '4384fab5fde6c28a08aca97b9980dd68')
+md5sums=('SKIP' 'a6a06964ff891dd577f4ec0c01d3cdce')
 
 pkgver() {
   cd "${srcdir}/${_pkgbasename}"
