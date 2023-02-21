@@ -9,7 +9,7 @@ sudo pacman -S base-devel cmake git meson --noconfirm
 
 declare -a rt_kernels=("linux-raspberrypi-rt-opendsp" "linux-odroid-xu3-rt-opendsp")
 
-declare -a opendsp_base=("mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "opendspd" "opendsp-mods")
+declare -a opendsp_base=("jack" "jack-example-tools" "mod-ttymidi" "jamrouter-git" "python-wiringpi-git" "input2midi" "novnc" "opendspd" "opendsp-mods")
 
 # klystrack-plus is on repo now! removed "klystrack-git" 
 # no mma*? mirack?

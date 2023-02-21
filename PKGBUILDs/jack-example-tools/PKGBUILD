@@ -22,9 +22,8 @@ makedepends=(
   zita-alsa-pcmi
   zita-resampler
 )
-source=("git+$url#tag=$_commit?signed")
+source=("git+$url#tag=$_commit")
 sha256sums=('SKIP')
-validpgpkeys=('62B11043D2F6EB6672D93103CDBAA37ABC74FBA0') # falkTX <falktx@falktx.com>
 
 prepare() {
   cd "${srcdir}/${pkgname}"
