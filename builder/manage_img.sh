@@ -11,21 +11,21 @@
 
 #set -e
 
-action="${1}"
-arch="${2}"
-device="${3}"
-image="${4}"
-customization="${4}"
+declare action="${1}"
+declare arch="${2}"
+declare device="${3}"
+declare image="${4}"
+declare customization="${4}"
 
-loop_device=''
+declare loop_device=''
 
 # sdcard partition layout
-sector_start=-1
+declare sector_start=-1
 declare -a partition_type
 declare -a partition_size
 declare -a partition_label
 declare -a partition_mnt
-filesystem_image=''
+declare filesystem_image=''
 
 # for additional packaging install
 declare -a packages
@@ -229,11 +229,24 @@ mount_img() {
 	mkdir -p ${ROOT_MOUNT}/proc
 	mkdir -p ${ROOT_MOUNT}/sys
 	mkdir -p ${ROOT_MOUNT}/dev/pts
-	mount -t proc /proc ${ROOT_MOUNT}/proc
+	mkdir -p ${ROOT_MOUNT}/tmp
+	mkdir -p ${ROOT_MOUNT}/run
+	mkdir -p ${ROOT_MOUNT}/dev/shm
+	mkdir -p ${ROOT_MOUNT}/sys/fs/bpf 
+	mkdir -p ${ROOT_MOUNT}/dev/mqueue
+	mkdir -p ${ROOT_MOUNT}/var/tmp
+	# bind then
+	mount -o bind /proc ${ROOT_MOUNT}/proc
 	mount -o bind /sys ${ROOT_MOUNT}/sys
 	mount -o bind /dev ${ROOT_MOUNT}/dev
 	mount -o bind /dev/pts ${ROOT_MOUNT}/dev/pts
-	
+	mount -o bind /tmp ${ROOT_MOUNT}/tmp
+	mount -o bind /run ${ROOT_MOUNT}/run
+	mount -o bind /dev/shm ${ROOT_MOUNT}/dev/shm
+	mount -o bind /sys/fs/bpf ${ROOT_MOUNT}/sys/fs/bpf 
+	mount -o bind /dev/mqueue ${ROOT_MOUNT}/dev/mqueue
+	mount -o bind /var/tmp ${ROOT_MOUNT}/var/tmp
+
 	# prepare for chroot using qemu
 	mkdir -p ${ROOT_MOUNT}/usr/bin
 	cp /usr/bin/qemu-arm-static ${ROOT_MOUNT}/usr/bin/	

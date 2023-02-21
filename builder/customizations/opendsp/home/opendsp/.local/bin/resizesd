@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+
+disk='mmcblk1'
+partition='mmcblk1p2'
+partition_num='2'
+
+read -p "Do you want to resize your data partition? Press enter to continue"
+echo "Stoping OpenDSP and services..."
+systemctl stop opendsp || true
+systemctl stop smb || true
+systemctl stop nmb || true
+sleep 5
+umount -v /home/opendsp/data || true
+echo "Resizing..."
+parted /dev/${disk} <<EOF
+resizepart
+$(($partition_num))
+-16M
+q
+EOF
+e2fsck -p -f /dev/${partition}
+resize2fs /dev/${partition}
+read -p "Done! Press enter to reboot your machine..."
+mount -o remount,rw /
+#rm /usr/bin/resizesd
+rm -r /home/opendsp/data/lost+found || true
+shutdown -r now

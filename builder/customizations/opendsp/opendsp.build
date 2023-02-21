@@ -1,10 +1,15 @@
+#!/bin/bash
+
 # adittional packages to install
-packages+=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv python-jack-client jack xdotool python-pyxdg samba cpupower parted openbox create_ap)
+packages+=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv xdotool python-pyxdg samba cpupower parted openbox create_ap)
 
 #
 # Opendsp create generic functions
 customize_new() {
 			
+	# we can get script values, parse then and put then back to theyr place so no copy
+	#
+
 	# add default opendsp user and setup his environment
 	run useradd -m -G audio,video,uucp,lock,tty opendsp
 	#chroot ${ROOT_MOUNT} useradd -m -G audio,video,uucp,lock,tty opendsp
@@ -353,6 +358,14 @@ EOF
 	# chaging wifi access point service connection password
 	chroot ${ROOT_MOUNT} sed -i "/PASSPHRASE/c\PASSPHRASE=opendspd" /etc/create_ap.conf
 
+	# download OpenDSP PKGBUILDs for build
+	wget https://github.com/midilab/opendsp/archive/refs/heads/master.zip
+	# unpack it and cleaning
+	unzip master.zip
+	mv opendsp-master/PKGBUILDs ${ROOT_MOUNT}${BUILDER_PATH}/build/
+	rm -rf opendsp-master/ master.zip
 	# setup sane permitions
-	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/			
+	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/
+	# become opendsp user for makepkg usage and call build script
+	chroot ${ROOT_MOUNT} sh -c "su opendsp; ${BUILDER_PATH}/build/PKGBUILDs/build_packages.sh"
 }
