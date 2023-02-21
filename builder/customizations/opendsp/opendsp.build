@@ -3,6 +3,9 @@
 # adittional packages to install
 packages+=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv xdotool python-pyxdg samba cpupower parted openbox create_ap)
 
+# PKGBUILD num cores
+cores="10"
+
 #
 # Opendsp create generic functions
 customize_new() {
@@ -366,6 +369,10 @@ EOF
 	rm -rf opendsp-master/ master.zip
 	# setup sane permitions
 	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/
+	# enable multi core build
+	chroot ${ROOT_MOUNT} sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j${cores}\"/" /etc/makepkg.conf
 	# become opendsp user for makepkg usage and call build script
-	chroot ${ROOT_MOUNT} sh -c "su opendsp; ${BUILDER_PATH}/build/PKGBUILDs/build_packages.sh"
+	chroot ${ROOT_MOUNT} sh -c "su opendsp; cd ${BUILDER_PATH}/build/PKGBUILDs; ./build_packages.sh"
+	# disable multi core build
+	chroot ${ROOT_MOUNT} sed -i "s/MAKEFLAGS=\"-j${cores}\"/#MAKEFLAGS=\"-j2\"/" /etc/makepkg.conf
 }
