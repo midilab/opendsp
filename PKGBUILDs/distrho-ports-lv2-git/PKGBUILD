@@ -15,7 +15,7 @@ conflicts=("${_pkgbasename}" 'distrho-git')
 source=("${_pkgbasename}::git://github.com/DISTRHO/DISTRHO-Ports.git")
 sha256sums=('SKIP')
 
-# ALARM: midilab instruments <contact@midilab.co>
+# ALARM: midilab instruments <contact at midilab dot co>
 #  - disable SSE optimizations
 #  - enable juce5 only plugins
 

@@ -13,7 +13,7 @@ declare -a opendsp_base=("jack" "jack-example-tools" "mod-ttymidi" "jamrouter-gi
 
 # klystrack-plus is on repo now! removed "klystrack-git" 
 # no mma*? mirack?
-declare -a opendsp_audio=("raul-git" "ingen-git" "fabla-git" "distrho-lv2-git" "non-daw-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "mixxx" "sunvox" "mod-sooper-looper-lv2" "opendsp-audio-modular")
+declare -a opendsp_audio=("raul-git" "ingen-git" "fabla-git" "distrho-ports-lv2-git" "non-daw-git" "dpf-plugins-git" "swh-lv2-git" "zam-plugins-git" "drmr-falktx-git" "mixxx" "sunvox" "mod-sooper-looper-lv2" "opendsp-audio-modular")
 
 declare -a opendsp_video=("mesa-rpi" "mesa-rpi-git" "sdl2-rpi" "lebiniou3" "lebiniou3-data" "processing" "opendsp-mods-factory-video" "opendsp-video-processing")
 
