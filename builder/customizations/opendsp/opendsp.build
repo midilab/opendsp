@@ -365,14 +365,17 @@ EOF
 	wget https://github.com/midilab/opendsp/archive/refs/heads/master.zip
 	# unpack it and cleaning
 	unzip master.zip
-	mv opendsp-master/PKGBUILDs ${ROOT_MOUNT}${BUILDER_PATH}/build/
-	rm -rf opendsp-master/ master.zip
-	# setup sane permitions
+	cp -Rf opendsp-master/PKGBUILDs ${ROOT_MOUNT}/home/opendsp/
+	# set permition to work on PKGBUILD
 	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/
 	# enable multi core build
 	chroot ${ROOT_MOUNT} sed -i "s/#MAKEFLAGS=\"-j2\"/MAKEFLAGS=\"-j${cores}\"/" /etc/makepkg.conf
 	# become opendsp user for makepkg usage and call build script
+	#chroot ${ROOT_MOUNT} /bin/su opendsp -l -c "/home/opendsp/PKGBUILDs/build_packages.sh"
 	chroot ${ROOT_MOUNT} sh -c "su opendsp; cd ${BUILDER_PATH}/build/PKGBUILDs; ./build_packages.sh"
 	# disable multi core build
 	chroot ${ROOT_MOUNT} sed -i "s/MAKEFLAGS=\"-j${cores}\"/#MAKEFLAGS=\"-j2\"/" /etc/makepkg.conf
+	# remove build files
+	chroot ${ROOT_MOUNT} rm -rf /home/opendsp/PKGBUILDs
+
 }

@@ -8,6 +8,7 @@
 # as root:
 #sudo update-binfmts --enable arm
 #sudo systemctl enable binfmt-support.service # to load on boot up
+# using only docker still needs qemu-user-static-binfmt on host
 
 #set -e
 
@@ -305,7 +306,7 @@ emulate() {
 
 	mount_img ${image_name} 
 	# chroot into image by using qemu-arm-static
-	chroot ${BUILDER_PATH}/build/${ROOT_MOUNT} /bin/bash
+	chroot ${ROOT_MOUNT} /bin/bash
 	umount_img ${image_name} 
 }
 
