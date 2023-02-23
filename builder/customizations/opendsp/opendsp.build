@@ -3,11 +3,18 @@
 # adittional packages to install
 packages+=(sudo xorg-server xorg-xinit xorg-server-common xorg-server-xvfb rxvt-unicode x11vnc alsa-firmware alsa-lib alsa-plugins alsa-utils python-setuptools python-pip liblo python-pyliblo cython python-decorator python-appdirs python-certifi python-packaging python-pillow python-psutil python-pyparsing python-pyserial python-six python-tornado python-virtualenv xdotool python-pyxdg samba cpupower parted openbox create_ap)
 
-# PKGBUILD num cores
+# PKGBUILD num cores for build opendsp PKBBUILDs
 cores="10"
+# Pacman parallel downloads(faster image build time for pacman updates)
+parallel_downloads="5"
 
 #
 # Opendsp create generic functions
+post_filesystem_install_general() {
+	# enable pacman parallel downloads
+	chroot ${ROOT_MOUNT} sed -i "s/#ParallelDownloads = 5/ParallelDownloads = ${parallel_downloads}/" /etc/pacman.conf
+}
+
 customize_new() {
 			
 	# we can get script values, parse then and put then back to theyr place so no copy
@@ -377,5 +384,7 @@ EOF
 	chroot ${ROOT_MOUNT} sed -i "s/MAKEFLAGS=\"-j${cores}\"/#MAKEFLAGS=\"-j2\"/" /etc/makepkg.conf
 	# remove build files
 	chroot ${ROOT_MOUNT} rm -rf /home/opendsp/PKGBUILDs
+	# enable opendspd service
+	chroot ${ROOT_MOUNT} systemctl enable opendsp
 
 }

@@ -78,7 +78,10 @@ bootstrap_img() {
 	bsdtar -xvpf ${filesystem_image} -C ${ROOT_MOUNT}
 
 	# any post install action to be done?
+	# for arch builder
 	post_filesystem_install
+	# for customization builder
+	post_filesystem_install_general
 
 	retVal=-1
 	while [ ${retVal} -ne 0 ]; do

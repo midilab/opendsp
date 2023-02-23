@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
 # defaults
-arch="${ARCHITECTURE}"
-device="${DEVICE}"
-customization=''
-image=''
+declare arch="${ARCHITECTURE}"
+declare device="${DEVICE}"
+declare customization=''
+declare image=''
 
 # make sure to setup your BUILDER_PATH enviroment var before run me!
 export BUILDER_PATH
@@ -128,40 +128,44 @@ select_image() {
     done <<< "${image}"
 }
 
-echo "
+main () {
+    echo "
  ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
 ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
 ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
 ██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
 ╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
  ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     "
-echo "Archlinux ARM sdcard image builder"
-echo ""
+    echo "Archlinux ARM sdcard image builder"
+    echo ""
 
-PS3="What do you want to do?: "
-select opt in create emulate quit; do
+    PS3="What do you want to do?: "
+    select opt in create emulate quit; do
+        case ${opt} in
+            create)
+                select_arch
+                select_device
+                select_customization
+                ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+                ${BUILDER_PATH}/manage_img.sh create ${arch} ${device} ${customization}
+                ${BUILDER_PATH}/manage_img.sh umount ${arch} ${device} ${image}
+                break
+                ;;
+            emulate)
+                select_image
+                ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
+                ${BUILDER_PATH}/manage_img.sh emulate ${arch} ${device} ${image}
+                break
+                ;;
+            quit)
+                break
+                ;;
+            *) 
+                echo "Invalid option ${REPLY}"
+                ;;
+        esac
+    done
+}
 
-  case ${opt} in
-    create)
-      select_arch
-      select_device
-      select_customization
-      ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
-      ${BUILDER_PATH}/manage_img.sh create ${arch} ${device} ${customization}
-      ${BUILDER_PATH}/manage_img.sh umount ${arch} ${device} ${image}
-      break
-      ;;
-    emulate)
-      select_image
-      ROOT_MOUNT=${customization}-${arch}-${device}-$(date "+%Y-%m-%d-%H_%M")
-      ${BUILDER_PATH}/manage_img.sh emulate ${arch} ${device} ${image}
-      break
-      ;;
-    quit)
-      break
-      ;;
-    *) 
-      echo "Invalid option ${REPLY}"
-      ;;
-  esac
-done
+# call main() entrypoint
+main
