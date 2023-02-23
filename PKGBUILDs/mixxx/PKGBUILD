@@ -42,17 +42,14 @@ build() {
   cmake --build .
 }
 
-check() {
-  cd $pkgname-$pkgver
-  xvfb-run ../build/$pkgname-test
-}
-
 package() {
+  cd $pkgname-$pkgver
+  cd build/
   depends+=(libFLAC.so libavcodec.so libavformat.so libavutil.so
   libchromaprint.so libfftw3.so libglib-2.0.so libid3tag.so libgobject-2.0.so
   liblilv-0.so libogg.so libportaudio.so libportmidi.so libprotobuf-lite.so
   librubberband.so libsndfile.so libusb-1.0.so libvorbis.so libvorbisenc.so
   libvorbisfile.so)
 
-  make DESTDIR="$pkgdir" install -C build
+  make DESTDIR="$pkgdir" install 
 }

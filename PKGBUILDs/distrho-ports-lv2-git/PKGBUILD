@@ -1,0 +1,45 @@
+# Maintainer: Daniel Appelt <daniel.appelt@gmail.com>
+# Contributor : speps <speps at aur dot archlinux dot org>
+_pkgbasename=distrho-ports
+pkgname=${_pkgbasename}-lv2-git
+pkgver=r492.062a0f61
+pkgrel=1
+pkgdesc="Distrho LV2 Audio Plugins, using the JUCE Toolkit"
+arch=('armv7h' 'i686' 'x86_64')
+url="http://distrho.sourceforge.net/"
+license=('GPL' 'GPL3')
+depends=('lv2' 'libglvnd' 'libxext' 'freetype2' 'alsa-lib')
+makedepends=('git' 'meson' 'libxinerama' 'libxrender' 'libxcursor' 'ladspa')
+provides=("${_pkgbasename}-lv2")
+conflicts=("${_pkgbasename}" 'distrho-git')
+source=("${_pkgbasename}::git://github.com/DISTRHO/DISTRHO-Ports.git")
+sha256sums=('SKIP')
+
+# ALARM: midilab instruments <contact@midilab.co>
+#  - disable SSE optimizations
+#  - enable juce5 only plugins
+
+pkgver() {
+  cd "${srcdir}/${_pkgbasename}"
+
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+build() {
+  cd "${srcdir}/${_pkgbasename}"
+
+  # ALARM: Specify build flags for arm compiling
+  # sse-optimizations=false
+  # build-juce5-only=true
+  [[ $CARCH == "armv7h" ]] && ARM_CONFIGFLAG="-Dsse-optimizations=false -Dbuild-juce5-only=true"
+
+  meson build --buildtype release
+  meson configure build -Dprefix="${pkgdir}/usr" -Dbuild-vst2=false -Dbuild-vst3=false ${ARM_CONFIGFLAG}
+  ninja -C build
+}
+
+package() {
+  cd "${srcdir}/${_pkgbasename}"
+
+  ninja -C build install
+}

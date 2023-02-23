@@ -43,14 +43,14 @@ then
 fi
 
 # lets get some memory space for compile process
-if [ ! -f "/swapfile" ]
-then
-	sudo fallocate -l 512M /swapfile
-	sudo chmod 600 /swapfile
-	sudo mkswap /swapfile
-fi
+#if [ ! -f "/swapfile" ]
+#then
+#	sudo fallocate -l 512M /swapfile
+#	sudo chmod 600 /swapfile
+#	sudo mkswap /swapfile
+#fi
 
-sudo swapon /swapfile || true
+#sudo swapon /swapfile || true
 
 # start pack
 #pack rt_kernels
@@ -58,5 +58,5 @@ pack opendsp_base
 pack opendsp_audio
 #pack opendsp_video
 
-sudo swapoff -a
-sudo rm -f /swapfile
+#sudo swapoff -a
+#sudo rm -f /swapfile
