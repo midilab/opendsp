@@ -1,6 +1,3 @@
-# The is automatic generated Code by "makePipRecipes.py"
-# (build by Robin Sebastian (https://github.com/robseb) (git@robseb.de) Vers.: 1.2) 
-
 SUMMARY = "Recipe to embedded the Python PiP Package pyliblo"
 HOMEPAGE ="https://pypi.org/project/pyliblo"
 LICENSE = "LGPL"
