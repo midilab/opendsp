@@ -1,0 +1,29 @@
+From de77cd7bbae066d3a51fa513dae24e89494bfcb7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Fri, 2 Sep 2022 01:44:47 +0200
+Subject: [PATCH] Avoid links to build tmp path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a5fb541..9a023db 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -118,7 +118,7 @@ if(RTMIDI_API_ALSA)
+     message(FATAL_ERROR "ALSA API requested but no ALSA dev libraries found")
+   endif()
+   list(APPEND INCDIRS ${ALSA_INCLUDE_DIR})
+-  list(APPEND LINKLIBS ${ALSA_LIBRARY})
++  list(APPEND LINKLIBS asound)
+   list(APPEND PKGCONFIG_REQUIRES "alsa")
+   list(APPEND API_DEFS "-D__LINUX_ALSA__")
+   list(APPEND API_LIST "alsa")
+-- 
+2.35.3
+

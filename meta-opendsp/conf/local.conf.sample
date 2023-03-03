@@ -1,0 +1,6 @@
+MACHINE = "raspberrypi3"
+
+DISTRO = "opendsp"
+
+PACKAGE_CLASSES ?= "package_ipk"
+
