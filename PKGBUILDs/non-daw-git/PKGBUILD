@@ -1,18 +1,27 @@
-# Maintainer: Midilab <contact@midilab.co>
+# Maintainer: Lieven Moors <lievenmoors@gmail.com>
+# Contributor: Jonathan E. Brickman <jeb@ponderworthy.com>
+# Contributor: Corey Mwamba <contact.me@coreymwamba.co.uk>
+# Contributor: Anshul Sirur <vixus0@gmail.com>
+
+# ALARM: midilab <contact at midilab dot co>
+#  - changed ntk-git dependency for ntk
+#  - added missing dependency ladspa
+#  - disable sse optmizations
+
 pkgname=non-daw-git
 _gitname=non
-pkgver=0.r1845.c15bfa8
+pkgver=0.r1937.cdad262
 pkgrel=1
 pkgdesc="A modular Digital Audio Workstation system - Git version."
-arch=('armv7h')
+arch=('armv7h' 'aarch64' 'i686' 'x86_64')
 url="http://non.tuxfamily.org"
 license=('GPL')
 groups=('multimedia')
-depends=('jack' 'liblo' 'libsigc++' 'liblrdf' 'hicolor-icon-theme' 'ntk')
+depends=('jack' 'liblo' 'libsigc++' 'liblrdf' 'hicolor-icon-theme' 'ntk' 'ladspa')
 makedepends=('git' 'python' 'libxpm')
 provides=('non-timeline' 'non-mixer' 'non-session-manager' 'non-sequencer')
 conflicts=('non-daw' 'non-timeline' 'non-mixer' 'non-session-manager' 'non-sequencer')
-source=('git+https://github.com/linuxaudio/non.git')
+source=('git://github.com/linuxaudio/non.git')
 md5sums=('SKIP')
 install=non.install
 
@@ -25,7 +34,11 @@ pkgver() {
 
 build() {
   cd "${srcdir}/${_gitname}"
-  ./waf configure --prefix="/usr"
+
+  # ALARM: Disable sse optmizations
+  [[ $CARCH == "armv7h" || $CARCH == "aarch64" ]] && ARM_CONFIG="--disable-sse"
+
+  ./waf configure --prefix="/usr" ${ARM_CONFIG}
   ./waf
 }
 

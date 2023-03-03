@@ -7,7 +7,7 @@ pkgdesc='OpenDSP Audio Modular meta package'
 arch=(any)
 url='https://midilab.co/opendsp'
 license=('GPL')
-depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
+depends=(carla bchoppr beatslash-lv2 ecasound pd pd-lua \
         qtractor milkytracker luppp xwax lmms hydrogen \
         blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \
         drumkv1 element eteroj.lv2 fomp.lv2 guitarix gxplugins.lv2 \
@@ -16,9 +16,9 @@ depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
         mephisto.lv2 midi_matrix.lv2 midimsg-lv2 moony.lv2 \
         padthv1 qmidiarp samplv1 setbfree sfizz sratom \
         suil synthv1 vm.lv2 x42-plugins xmonk.lv2 zynaddsubfx \
-        mididings python-rtmidi \
-        non-session-manager klystrack-plus)
+        klystrack-plus)
 # removed mixxx because of depencies problem: compile it appart
+# removed cadence because of jack2 dependency
 #depends=(carla cadence bchoppr beatslash-lv2 ecasound pd pd-lua \
 #        qtractor milkytracker giada luppp mixxx xwax lmms hydrogen \
 #        blop.lv2 bsequencer bshapr bslizr calf deteriorate-lv2 drumgizmo \

@@ -1,13 +1,16 @@
 # Maintainer: CrocoDuck <crocoduck dot oducks at gmail dot com>
 
-pkgname=dpf-plugins-lv2-git
-pkgver=r95.3adff28
-pkgrel=1
-pkgdesc="Collection of DPF-based plugins by DISTRHO. LV2"
+# ALARM: midilab <contact at midilab dot co>
+#  - disable sse optmizations
+
+pkgname=dpf-plugins-git
+pkgver=r113.86084a9
+pkgrel=2
+pkgdesc="Collection of DPF-based plugins by DISTRHO. LV2, LADSPA, dssi and VST."
 arch=('armv7h' 'i686' 'x86_64')
 url="http://distrho.sourceforge.net/"
 license=('custom')
-depends=('liblo' 'projectm')
+depends=('jack' 'liblo' 'projectm')
 makedepends=('git' 'wget')
 provides=("${pkgname%-*}")
 conflicts=("${pkgname%-*}")
@@ -20,29 +23,28 @@ pkgver() {
 }
 
 build() {
-  cd "${pkgname%-*}"
+    cd "${pkgname%-*}"
 
-  #export CFLAGS="$CFLAGS -O3"
-  #export CXXFLAGS="$CXXFLAGS -O3"
-  #export CFLAGS="$CFLAGS -Ofast"
-  #export CXXFLAGS="$CXXFLAGS -Ofast"
+    # ALARM: Disable sse optmizations
+    if [[ $CARCH == "armv7h" || $CARCH == "aarch64" ]]
+    then
+      sed -i 's/-msse//' dpf/Makefile.base.mk
+      sed -i 's/-msse2//' dpf/Makefile.base.mk
+      sed -i 's/-mfpmath=sse//' dpf/Makefile.base.mk
+      sed -i 's/-mtune=generic//' dpf/Makefile.base.mk
 
-  sed -i 's/-msse//' dpf/Makefile.base.mk
-  sed -i 's/-msse2//' dpf/Makefile.base.mk
-  sed -i 's/-mfpmath=sse//' dpf/Makefile.base.mk
-  sed -i 's/-mtune=generic//' dpf/Makefile.base.mk
+      sed -i 's/-msse//' dpf/dgl/Makefile
+      sed -i 's/-msse2//' dpf/dgl/Makefile
+      sed -i 's/-mtune=generic//' dpf/dgl/Makefile
+    fi
 
-  sed -i 's/-msse//' dpf/dgl/Makefile
-  sed -i 's/-msse2//' dpf/dgl/Makefile
-  sed -i 's/-mtune=generic//' dpf/dgl/Makefile
-
-  make BUILD_DSSI=false BUILD_LV2=true BUILD_VST=false HAVE_PROJM=true BUILD_JACK=true
+    make all && make all -C plugins/ProM
 }
 
 package() {
-  cd "${pkgname%-*}"
-  # Install the custom license:
-  install -Dm 644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  # Install the package files:
-  make DESTDIR="$pkgdir/" PREFIX="/usr" install
+    cd "${pkgname%-*}"
+    # Install the custom license:
+    install -Dm 644 "LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+    # Install the package files:
+	make DESTDIR="$pkgdir/" PREFIX="/usr" install
 }
