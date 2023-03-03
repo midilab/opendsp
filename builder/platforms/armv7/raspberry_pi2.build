@@ -4,7 +4,7 @@ filesystem_image="ArchLinuxARM-rpi-armv7-latest.tar.gz"
 # sdcard layout
 disk_label="mmcblk0"
 partition_type=( "fat" "ext4" "ext4" )
-partition_size=( 200 6000 256 )
+partition_size=( 200 8000 256 )
 partition_label=( "BOOT" "ROOT" "OPENDSP" )
 partition_mnt=( "/boot" "/" "/home/opendsp/data" )
 	

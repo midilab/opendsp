@@ -373,6 +373,7 @@ EOF
 	# unpack it and cleaning
 	unzip master.zip
 	cp -Rf opendsp-master/PKGBUILDs ${ROOT_MOUNT}/home/opendsp/
+	rm -r opendsp-master/ master.zip
 	# set permition to work on PKGBUILD
 	chroot ${ROOT_MOUNT} chown -R opendsp:opendsp /home/opendsp/
 	# enable multi core build
@@ -386,5 +387,4 @@ EOF
 	chroot ${ROOT_MOUNT} rm -rf /home/opendsp/PKGBUILDs
 	# enable opendspd service
 	chroot ${ROOT_MOUNT} systemctl enable opendsp
-
 }
