@@ -6,3 +6,6 @@ part /boot --source bootimg-partition --ondisk mmcblk0 --fstype=vfat --label boo
 part / --source rootfs --ondisk mmcblk0 --fstype=ext4 --label root --align 4096
 # added by opendsp
 part /home/opendsp/data --source rootfs --rootfs-dir=${IMAGE_ROOTFS}/home/opendsp/data --ondisk mmcblk0 --fstype=ext4 --label data --align 4096 --size 256M
+
+# console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0
+bootloader --append="fsck.repair=yes dwc_otg.speed=1"
