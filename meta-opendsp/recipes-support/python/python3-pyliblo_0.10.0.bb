@@ -1,6 +1,6 @@
 SUMMARY = "Recipe to embedded the Python PiP Package pyliblo"
 HOMEPAGE ="https://pypi.org/project/pyliblo"
-LICENSE = "LGPL"
+LICENSE = "LGPLv3+"
 LIC_FILES_CHKSUM = "file://NEWS;md5=5cf82a2087a190ad35d15ff72cb071bd"
 
 PYPI_PACKAGE = "pyliblo"

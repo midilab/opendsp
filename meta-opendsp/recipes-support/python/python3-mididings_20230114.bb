@@ -1,6 +1,6 @@
 SUMMARY = "Recipe to embedded the Python PiP Package mididings"
 HOMEPAGE ="https://pypi.org/project/mididings"
-LICENSE = "GNU-2.0"
+LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://README.md;md5=f0f58f50d57bd7496dab1a157dd50174"
 
 PYPI_PACKAGE = "mididings"
