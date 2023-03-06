@@ -12,7 +12,7 @@ SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1"
 # version
 PV = "v0.10.3"
 # commit
-SRCREV = "e4120356ebbcf46b178a8d17ca394c0242d5c045"
+SRCREV = "bddf42d4947aeacd9c87e1a980c7bf35059fd2eb"
 
 S = "${WORKDIR}/git/src"
 
@@ -60,12 +60,9 @@ do_install:append() {
     cp -rf --no-preserve=ownership ../data/* ${D}${OPENDSP_HOME_DIR}/data/
 }
 
-# Set sane permissions
-set_sane_permissions () {
-    chown -R opendsp ${IMAGE_ROOTFS}${OPENDSP_HOME_DIR}
-    chgrp -R opendsp ${IMAGE_ROOTFS}${OPENDSP_HOME_DIR}
-}
+inherit systemd
 
-ROOTFS_POSTPROCESS_COMMAND += "set_sane_permissions; "
+SYSTEMD_SERVICE:${PN} += "opendsp.service"
+SYSTEMD_AUTO_ENABLE = "enable"
 
 inherit setuptools3
