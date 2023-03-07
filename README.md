@@ -9,6 +9,8 @@ fully interface with any MIDI or OSC compilant device. The source code are in py
 
 The OpenDSP OS and Service together gives you the power to emulate a lot of different expensive proprietary DSP machines or to create your self a new one for your needs.
 
+![Image of OpenDSP Plugmod and DX7  view](https://raw.githubusercontent.com/midilab/opendsp/master/doc/plugmod-opendsp.jpg)
+
 Achieve professional realtime low-latency audio and video processing on low budget computers!
 
 OpenDSP is Good for:
@@ -105,3 +107,25 @@ You can create Mods ussing the following opensource applications ecosystem:
 – processing
 + audio plugins  
 410 audio plugins, from effects to classic synthesizer emulations  
+
+# Initing dependency repositories
+
+git submodule update --init --recursive
+
+# Build
+
+The best way to build opendsp is using docker and official supported yocto image for dev crops
+
+docker run --rm -it -v /path_to_/opendsp:/workdir crops/poky --workdir=/workdir
+
+TEMPLATECONF=/workdir/meta-opendsp/conf source poky/oe-init-build-env
+bitbake opendsp-base-image
+
+# Depends
+
+openembedded-core
+meta-openembedded:
+  + meta-oe
+  + meta-python
+  + meta-multimedia
+  + meta-networking

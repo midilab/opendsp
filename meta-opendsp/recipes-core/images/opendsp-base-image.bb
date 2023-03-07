@@ -19,8 +19,7 @@ IMAGE_INSTALL += "xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth 
 # networking
 IMAGE_INSTALL += "samba"
 
-# missing: create_ap, novnc
-# missing opendsp: ecasound, tint2, patchage, qjackctl
+# missing: create_ap, novnc jamrouter mod-ttymidi tint2
 
 IMAGE_LINGUAS = "en-us"
 
@@ -55,7 +54,7 @@ EXTRA_USERS_PARAMS = " \
 inherit systemd
 
 # create_ap.service
-SYSTEMD_SERVICE:${PN} += "opendsp.service smb.service nmb.service"
+SYSTEMD_SERVICE:${PN} += "opendsp.service"
 SYSTEMD_AUTO_ENABLE = "enable"
 
 #
@@ -90,9 +89,6 @@ EOF
 	
 	# create a place for x11vnc data to live on
 	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.vnc/
-
-	# allows ddns to find us
-	#sed -i 's/#hostname/hostname/' ${IMAGE_ROOTFS}/etc/dhcpcd.conf
 
 	# set sudo permition to enable opendspd changes realtime priority of process
 	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> ${IMAGE_ROOTFS}/etc/sudoers
@@ -161,6 +157,13 @@ SSID=OpenDSP
 PASSPHRASE=opendspd
 USE_PSK=0
 EOF
+
+	# changing samba file share service password
+	#echo -ne "$PASSWORD\n$PASSWORD\n" | smbpasswd -a -s opendsp
+	# chaging vnc virtual desktop service password
+	#x11vnc -storepasswd $PASSWORD ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
+	# chaging wifi access point service connection password
+	#sed -i "/PASSPHRASE/c\PASSPHRASE=$PASSWORD" ${IMAGE_ROOTFS}/etc/create_ap.conf
 
 	# rm lost+found on data user partition
 	#rm -r ${IMAGE_ROOTFS}/home/opendsp/data/lost+found
