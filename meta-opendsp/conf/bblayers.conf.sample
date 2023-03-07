@@ -7,12 +7,12 @@ BBLAYERS ?= " \
     ##OEROOT##/meta \
     ##OEROOT##/meta-poky \
     ##OEROOT##/meta-yocto-bsp \
-    ##OEROOT##/meta-openembedded/meta-oe \
-    ##OEROOT##/meta-openembedded/meta-python \
-    ##OEROOT##/meta-openembedded/meta-networking \
-    ##OEROOT##/meta-openembedded/meta-multimedia \
-    ##OEROOT##/meta-raspberrypi \
-    ##OEROOT##/meta-opendsp \
+    /workdir/meta-openembedded/meta-oe \
+    /workdir/meta-openembedded/meta-python \
+    /workdir/meta-openembedded/meta-networking \
+    /workdir/meta-openembedded/meta-multimedia \
+    /workdir/meta-raspberrypi \
+    /workdir/meta-opendsp \
 "
 
-# BBLAYERS += "##OEROOT##/meta-qt5 "
+# BBLAYERS += "/workdir/meta-qt5 "
