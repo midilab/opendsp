@@ -23,10 +23,14 @@ FILES:${PN} += "${OPENDSP_HOME_DIR}/.*"
 FILES:${PN} += "${OPENDSP_HOME_DIR}/*"
 
 RDEPENDS:${PN} = " \
+    alsa-utils \
+    jack-server \
+    a2jmidid \
 	python3-pyliblo \
     python3-rtmidi \
     python3-jack-client \
     python3-mididings \
+    sudo \
     bash \
 "
 
@@ -58,6 +62,10 @@ do_install:append() {
     # opendsp user data
     install -d ${D}${OPENDSP_HOME_DIR}/data/ 
     cp -rf --no-preserve=ownership ../data/* ${D}${OPENDSP_HOME_DIR}/data/
+
+    # apps and tools symbolic linkage for read-only fs support
+    install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
+    install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 }
 
 inherit setuptools3
