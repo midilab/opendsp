@@ -2,5 +2,8 @@ MACHINE = "raspberrypi3"
 
 DISTRO = "opendsp"
 
+# pam is needed for samba
+DISTRO_FEATURES += "pam"
+
 PACKAGE_CLASSES ?= "package_ipk"
 

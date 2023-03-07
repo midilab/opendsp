@@ -10,9 +10,9 @@ OPENDSP_HOME_DIR = "/home/opendsp"
 SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1"
 
 # version
-PV = "v0.10.3"
+PV = "v0.10.4"
 # commit
-SRCREV = "bddf42d4947aeacd9c87e1a980c7bf35059fd2eb"
+SRCREV = "df6cf1d8f8d3084c00a658d64e4d762c1654afe8"
 
 S = "${WORKDIR}/git/src"
 
@@ -59,10 +59,5 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/data/ 
     cp -rf --no-preserve=ownership ../data/* ${D}${OPENDSP_HOME_DIR}/data/
 }
-
-inherit systemd
-
-SYSTEMD_SERVICE:${PN} += "opendsp.service"
-SYSTEMD_AUTO_ENABLE = "enable"
 
 inherit setuptools3
