@@ -6,7 +6,7 @@ LICENSE = "MIT"
 #
 inherit core-image
 
-IMAGE_FEATURES:remove = "splash"
+IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
@@ -33,8 +33,8 @@ IMAGE_FEATURES += "read-only-rootfs"
 #
 # board setup
 #
-# specific board setup. use machine var for dinamyc require
-require raspberrypi.inc
+# specific board setup. uses machine var for dinamyc require
+require ${MACHINE}.inc
 
 #
 # user setup
@@ -45,14 +45,13 @@ inherit extrausers
 DEFAULT_PASSWD = '\$1\$dEZC2DzA\$VHF1NAp2zij2ercxuiiOy0'
 EXTRA_USERS_PARAMS = " \
 	usermod -p '${DEFAULT_PASSWD}' root; \
-    useradd -m -G audio,video,uucp,tty -p '${DEFAULT_PASSWD}' opendsp; \
+    useradd -m -G audio,video,uucp,tty,dialout -p '${DEFAULT_PASSWD}' opendsp; \
 "
 
 #
 # services
 #
 inherit systemd
-
 # create_ap.service
 SYSTEMD_SERVICE:${PN} += "opendsp.service"
 SYSTEMD_AUTO_ENABLE = "enable"
@@ -87,6 +86,11 @@ EOF
 	echo "X11Forwarding yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
 	echo "PermitUserEnvironment yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
 	
+	# allow usage of x display from terminal and via x11 forward
+	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.ssh/
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/home/opendsp/.ssh/environment
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/home/opendsp/.profile
+
 	# create a place for x11vnc data to live on
 	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.vnc/
 
@@ -106,7 +110,7 @@ EOF
 	# samba
 	cat <<EOF > ${IMAGE_ROOTFS}/etc/samba/smb.conf
 [global]
-  workgroup = OpenDSPGroup
+  workgroup = WORKGROUP
   server string = "Opendsp user data"
   passdb backend = tdbsam
   load printers = no
@@ -169,11 +173,13 @@ EOF
 	#rm -r ${IMAGE_ROOTFS}/home/opendsp/data/lost+found
 }
 
-do_opendsp_image_post () {
+do_opendsp_image_pre () {
 	# set sane permitions
     chown -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
     chgrp -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
-IMAGE_POSTPROCESS_COMMAND += "do_opendsp_image_post; "
+#IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
+
+addtask do_opendsp_image_pre after do_rootfs

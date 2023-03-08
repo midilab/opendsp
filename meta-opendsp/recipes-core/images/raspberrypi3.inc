@@ -1,5 +1,8 @@
 MACHINE_FEATURES:remove = "bluetooth"
-MACHINE_FEATURES += "vc4graphics "
+MACHINE_FEATURES += "vc4graphics"
+
+# install xf86 drivers for vc4 broadcom GPU
+IMAGE_INSTALL += "xf86-video-fbdev"
 
 WKS_FILE = "raspberrypi.wks"
 
