@@ -10,9 +10,9 @@ OPENDSP_HOME_DIR = "/home/opendsp"
 SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1"
 
 # version
-PV = "v0.12.0"
+PV = "v0.12.1"
 # commit
-SRCREV = "7eead629ef58d131dd227936c9be936f45d711bc"
+SRCREV = "73de45dfbb008fbc01396c1a9482c2aa2f0c15e2"
 
 S = "${WORKDIR}/git/src"
 
