@@ -1,8 +1,0 @@
-# adittional packages to install
-packages+=()
-
-#
-# Opendsp create generic functions
-customize() {
-	echo ""		
-}

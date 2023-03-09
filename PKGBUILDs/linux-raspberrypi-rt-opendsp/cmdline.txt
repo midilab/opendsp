@@ -1,1 +1,0 @@
-root=/dev/mmcblk0p2 ro threadirqs isolcpus=1,2,3 nohz_full=1,2,3 rcu_nocbs=1,2,3 rootwait console=null fsck.repair=yes dwc_otg.speed=1 quiet logo.nologo consoleblank=0 selinux=0 plymouth.enable=0 smsc95xx.turbo_mode=N dwc_otg.lpm_enable=0 elevator=noop

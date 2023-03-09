@@ -1,7 +1,0 @@
-option('alsa_in_out', type: 'feature', value: 'auto', description: 'Build the alsa_in and alsa_out executables (default: auto)')
-option('jack_net', type: 'feature', value: 'disabled', description: 'Build the jack_net_master and jack_net_slave executables (default: auto)')
-option('jack_netsource', type: 'feature', value: 'disabled', description: 'Build the jack_netsource executable (default: auto)')
-option('jack_rec', type: 'feature', value: 'auto', description: 'Build the jack_rec executable (default: auto)')
-option('opus_support', type: 'feature', value: 'disabled', description: 'Build the jack_netsource executable with opus support (default: auto)')
-option('readline_support', type: 'feature', value: 'auto', description: 'Build the jack_transport executable with readline support (default: auto)')
-option('zalsa', type: 'feature', value: 'auto', description: 'Build the ZALSA internal client (default: auto)')

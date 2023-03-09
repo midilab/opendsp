@@ -1,0 +1,29 @@
+From 2298f90cd077301bc52ff10926f09d0e30d783a8 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Fri, 2 Sep 2022 00:03:30 +0200
+Subject: [PATCH] Fix cmake file installation path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 28ee1f8..a5fb541 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -237,7 +237,7 @@ install(TARGETS ${LIB_TARGETS}
+ export(PACKAGE RtMidi)
+ 
+ # Set installation path for CMake files.
+-set(RTMIDI_CMAKE_DESTINATION share/rtmidi)
++set(RTMIDI_CMAKE_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/rtmidi)
+ 
+ # Create CMake configuration export file.
+ if(NEED_PTHREAD)
+-- 
+2.35.3
+

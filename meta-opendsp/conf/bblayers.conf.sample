@@ -1,0 +1,18 @@
+POKY_BBLAYERS_CONF_VERSION = "2"
+
+BBPATH = "${TOPDIR}"
+BBFILES ?= ""
+
+BBLAYERS ?= " \
+    ##OEROOT##/meta \
+    ##OEROOT##/meta-poky \
+    ##OEROOT##/meta-yocto-bsp \
+    /workdir/meta-openembedded/meta-oe \
+    /workdir/meta-openembedded/meta-python \
+    /workdir/meta-openembedded/meta-networking \
+    /workdir/meta-openembedded/meta-multimedia \
+    /workdir/meta-raspberrypi \
+    /workdir/meta-opendsp \
+"
+
+# BBLAYERS += "/workdir/meta-qt5 "
