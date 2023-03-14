@@ -10,7 +10,7 @@ IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
-IMAGE_INSTALL += "opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget"
+IMAGE_INSTALL += "opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget hostapd"
 
 # x env
 IMAGE_INSTALL += "xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth x11vnc rxvt-unicode xdotool openbox obconf"
@@ -49,14 +49,6 @@ EXTRA_USERS_PARAMS = " \
 "
 
 #
-# services
-#
-inherit systemd
-# create_ap.service
-SYSTEMD_SERVICE:${PN} += "opendsp.service"
-SYSTEMD_AUTO_ENABLE = "enable"
-
-#
 # post tunning
 #
 do_opendsp_rootfs_post () {
@@ -93,6 +85,7 @@ EOF
 
 	# create a place for x11vnc data to live on
 	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.vnc/
+	echo "" > ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
 
 	# set sudo permition to enable opendspd changes realtime priority of process
 	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> ${IMAGE_ROOTFS}/etc/sudoers
@@ -106,30 +99,6 @@ EOF
 	# set realtime environment for DSP
 	#echo "@audio 	- rtprio 	99" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
 	#echo "@audio 	- memlock 	unlimited" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
-
-	# samba
-	cat <<EOF > ${IMAGE_ROOTFS}/etc/samba/smb.conf
-[global]
-  workgroup = WORKGROUP
-  server string = "Opendsp user data"
-  passdb backend = tdbsam
-  load printers = no
-  printing = bsd
-  printcap name = /dev/null
-  disable spoolss = yes
-  show add printer wizard = no
-  security = user
-
-[data]
-  comment = OpenDSP user data
-  valid users = opendsp
-  path = /home/opendsp/data
-  writable = yes
-  printable = no
-  public = no
-  create mask = 0644
-  directory mask = 0755
-EOF
 
 	# setup create_ap wifi access point
 	cat <<EOF >> ${IMAGE_ROOTFS}/etc/create_ap.conf
@@ -163,23 +132,21 @@ USE_PSK=0
 EOF
 
 	# changing samba file share service password
-	#echo -ne "$PASSWORD\n$PASSWORD\n" | smbpasswd -a -s opendsp
+	#echo -ne "${PASSWORD}\n${PASSWORD}\n" | smbpasswd -a -s opendsp
 	# chaging vnc virtual desktop service password
-	#x11vnc -storepasswd $PASSWORD ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
-	# chaging wifi access point service connection password
-	#sed -i "/PASSPHRASE/c\PASSPHRASE=$PASSWORD" ${IMAGE_ROOTFS}/etc/create_ap.conf
+	#x11vnc -storepasswd ${PASSWORD} ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
 
 	# rm lost+found on data user partition
 	#rm -r ${IMAGE_ROOTFS}/home/opendsp/data/lost+found
+
+	# set sane permitions
+    chown -R 1000 ${IMAGE_ROOTFS}/home/opendsp/
+    chgrp -R 1000 ${IMAGE_ROOTFS}/home/opendsp/
 }
 
 do_opendsp_image_pre () {
-	# set sane permitions
-    chown -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
-    chgrp -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
 #IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
-
-addtask do_opendsp_image_pre after do_rootfs
+#addtask do_opendsp_image_pre after do_rootfs

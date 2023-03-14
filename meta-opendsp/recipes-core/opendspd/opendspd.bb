@@ -10,9 +10,9 @@ OPENDSP_HOME_DIR = "/home/opendsp"
 SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1"
 
 # version
-PV = "v0.12.1"
+PV = "v0.12.2"
 # commit
-SRCREV = "73de45dfbb008fbc01396c1a9482c2aa2f0c15e2"
+SRCREV = "533536a2c173130f9bff453947d4b86417a665a8"
 
 S = "${WORKDIR}/git/src"
 
@@ -67,5 +67,13 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 }
+
+#
+# services
+#
+inherit systemd
+# create_ap.service
+SYSTEMD_SERVICE:${PN} += "opendsp.service"
+SYSTEMD_AUTO_ENABLE = "enable"
 
 inherit setuptools3
