@@ -10,16 +10,18 @@ IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
-IMAGE_INSTALL += "opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget hostapd"
+IMAGE_INSTALL += "opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget"
 
 # x env
 IMAGE_INSTALL += "xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth x11vnc rxvt-unicode xdotool openbox obconf"
 #IMAGE_INSTALL += "packagegroup-core-x11"
 
 # networking
-IMAGE_INSTALL += "samba"
+IMAGE_INSTALL += "samba hostapd"
 
-# missing: create_ap, novnc jamrouter mod-ttymidi tint2
+# setup opendsp ecosystem
+IMAGE_INSTALL += "udev-rules-tty"
+# missing: create_ap(use linux-router instead or only hostapd), novnc jamrouter mod-ttymidi tint2
 
 IMAGE_LINGUAS = "en-us"
 
@@ -150,3 +152,6 @@ do_opendsp_image_pre () {
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
 #IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
 #addtask do_opendsp_image_pre after do_rootfs
+
+# for user name resolution at chown and chmod?
+#DEPENDS += "shadow-native"

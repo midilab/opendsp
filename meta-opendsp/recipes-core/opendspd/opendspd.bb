@@ -34,6 +34,16 @@ RDEPENDS:${PN} = " \
     bash \
 "
 
+#
+# service
+#
+inherit systemd
+# create_ap.service
+NATIVE_SYSTEMD_SUPPORT = "1"
+SYSTEMD_PACKAGES += "${PN}"
+SYSTEMD_SERVICE:${PN} += "opendsp.service"
+SYSTEMD_AUTO_ENABLE = "enable"
+
 do_install:append() {
     # opendsp entrypoint
     install -D opendsp-daemon -m 0755 ${D}${bindir}/opendspd
@@ -67,13 +77,5 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 }
-
-#
-# services
-#
-inherit systemd
-# create_ap.service
-SYSTEMD_SERVICE:${PN} += "opendsp.service"
-SYSTEMD_AUTO_ENABLE = "enable"
 
 inherit setuptools3

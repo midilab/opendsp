@@ -1,1 +1,0 @@
-SUBSYSTEM=="tty", GROUP="tty", MODE="0660"

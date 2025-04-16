@@ -1,1 +1,4 @@
 build/
+opendsp-base-image/
+.zed/
+.vscode/

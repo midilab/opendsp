@@ -1,3 +1,4 @@
+#MACHINE = "intel-corei7-64"
 MACHINE = "raspberrypi3"
 
 DISTRO = "opendsp"
@@ -138,7 +139,7 @@ BB_DISKMON_DIRS ??= "\
 # By default native qemu will build with a builtin VNC server where graphical output can be
 # seen. The line below enables the SDL UI frontend too.
 PACKAGECONFIG:append:pn-qemu-system-native = " sdl"
-# By default libsdl2-native will be built, if you want to use your host's libSDL instead of 
+# By default libsdl2-native will be built, if you want to use your host's libSDL instead of
 # the minimal libsdl built by libsdl2-native then uncomment the ASSUME_PROVIDED line below.
 #ASSUME_PROVIDED += "libsdl2-native"
 
