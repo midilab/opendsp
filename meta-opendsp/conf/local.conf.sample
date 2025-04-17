@@ -1,5 +1,10 @@
-#MACHINE = "intel-corei7-64"
-MACHINE = "raspberrypi3"
+# 32 bit Intel Core 2 CPU (and later) with MMX, SSE, SSE2, SSE3, and SSSE3 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
+#MACHINE = "intel-core2-32"
+# 64 bit Intel Core i7 CPU (and later) with MMX, SSE, SSE2, SSE3, and SSSE3 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
+MACHINE = "intel-corei7-64"
+# 64 bit Intel Skylake CPU (and later) with MMX, SSE, SSE2, SSE3, SSE4.1, SSE4.2, AVX, and AVX2 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
+#MACHINE = "intel-skylake-64"
+#MACHINE = "raspberrypi3"
 
 DISTRO = "opendsp"
 

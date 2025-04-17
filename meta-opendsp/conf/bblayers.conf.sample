@@ -11,6 +11,7 @@ BBLAYERS ?= " \
     /workdir/meta-openembedded/meta-python \
     /workdir/meta-openembedded/meta-networking \
     /workdir/meta-openembedded/meta-multimedia \
+    /workdir/meta-intel \
     /workdir/meta-raspberrypi \
     /workdir/meta-opendsp \
 "
