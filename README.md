@@ -6,8 +6,8 @@ OpenDSP is a headless-first Realtime Operational System designed for audio and v
 [OpenDSP Daemon Service](https://github.com/midilab/opendspd) serves as a comprehensive framework for creating DSP devices that can seamlessly interface with any MIDI or OSC compliant device.
 
 By combining the OpenDSP **OS** and **Service**, you gain the capability to emulate numerous expensive proprietary DSP machines or even develop your own customized DSP solution to cater to your specific requirements.
-  
-[Download Raspberry Pi2/3 Image!](https://github.com/midilab/opendsp/releases/download/v0.11.0/opendsp_0.11.0-raspberry_pi2_3.zip)    
+
+[Download Raspberry Pi2/3 Image!](https://github.com/midilab/opendsp/releases/download/v0.11.0/opendsp_0.11.0-raspberry_pi2_3.zip)
 
 Please check our [wiki](https://github.com/midilab/opendsp/wiki) for the latest documentation and tutorials.
 
@@ -54,19 +54,19 @@ Creating your own Mod requires only a few lines of configuration. You can find h
 System Applications
 -------------------
 
-You can create Mods using the following open-source apps:  
-**loopers:** giada, luppp  
-**djing:** mixxx, wxax  
-**daw/sequencer:** lmms, hydrogen, qtractor, non-daw, non-mixer, non-sequencer  
-**trackers:** sunvox, milkytrack, klystrac  
-**modular synthesis:** carla, carla-rack, ingen  
-**video:** lebiniou, omxplayer, vlc  
-**DSP programming:** puredata, processing  
+You can create Mods using the following open-source apps:
+**loopers:** giada, luppp
+**djing:** mixxx, wxax
+**daw/sequencer:** lmms, hydrogen, qtractor, non-daw, non-mixer, non-sequencer
+**trackers:** sunvox, milkytrack, klystrac
+**modular synthesis:** carla, carla-rack, ingen
+**video:** lebiniou, omxplayer, vlc
+**DSP programming:** puredata, processing
 **plugins:** 410+ audio plugins, from effects to classic synthesizer emulations
 
-By utilizing Mod configuration files, you have the flexibility to define your own setups with just a few lines of configuration.  
-  
-In the example you mentioned, you can configure a standalone tracker that visually responds to audio on your screen. Additionally, you can set up a keyboard as a MIDI controller to play SunVox synthesizers.   
+By utilizing Mod configuration files, you have the flexibility to define your own setups with just a few lines of configuration.
+
+In the example you mentioned, you can configure a standalone tracker that visually responds to audio on your screen. Additionally, you can set up a keyboard as a MIDI controller to play SunVox synthesizers.
 
 ```ini
 [app1]
@@ -94,7 +94,7 @@ midi_output: "opendsp:1"
 User manual
 -----------
 
-You can get the latest documentation on our [wiki](https://github.com/midilab/opendsp/wiki)  
+You can get the latest documentation on our [wiki](https://github.com/midilab/opendsp/wiki)
 
 # Initing dependency repositories
 
@@ -104,7 +104,7 @@ git submodule update --init --recursive
 
 The best way to build opendsp is using docker and official supported yocto image for dev crops
 
-docker run --rm -it -v /path_to_/opendsp:/workdir crops/poky --workdir=/workdir
+docker run --rm -it -v ./:/workdir crops/poky --workdir=/workdir
 
 TEMPLATECONF=/workdir/meta-opendsp/conf source poky/oe-init-build-env
 bitbake opendsp-base-image

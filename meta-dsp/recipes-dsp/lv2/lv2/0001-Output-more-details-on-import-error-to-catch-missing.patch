@@ -1,0 +1,56 @@
+From bc96caf97d32168abefde038e9353685a14fa64d Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Mon, 21 Jan 2019 22:38:05 +0100
+Subject: [PATCH] Output more details on import error to catch missing
+ dependencies
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Updream-Status: Pending
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ lv2specgen/lv2docgen.py  | 3 ++-
+ lv2specgen/lv2specgen.py | 6 ++++--
+ 2 files changed, 6 insertions(+), 3 deletions(-)
+
+diff --git a/lv2specgen/lv2docgen.py b/lv2specgen/lv2docgen.py
+index 23a239d..685f32e 100755
+--- a/lv2specgen/lv2docgen.py
++++ b/lv2specgen/lv2docgen.py
+@@ -28,7 +28,8 @@ __contact__ = 'devel@lists.lv2plug.in'
+ 
+ try:
+     import rdflib
+-except ImportError:
++except ImportError as imperror:
++    print(imperror)
+     sys.exit('Error importing rdflib')
+ 
+ doap = rdflib.Namespace('http://usefulinc.com/ns/doap#')
+diff --git a/lv2specgen/lv2specgen.py b/lv2specgen/lv2specgen.py
+index 8cfa1c7..028e731 100755
+--- a/lv2specgen/lv2specgen.py
++++ b/lv2specgen/lv2specgen.py
+@@ -66,13 +66,15 @@ try:
+     import pygments.formatters
+ 
+     have_pygments = True
+-except ImportError:
++except ImportError as imperror:
++    print(imperror)
+     print("Error importing pygments, syntax highlighting disabled")
+     have_pygments = False
+ 
+ try:
+     import rdflib
+-except ImportError:
++except ImportError as imperror:
++    print(imperror)
+     sys.exit("Error importing rdflib")
+ 
+ # Global Variables
+-- 
+2.20.1
+
