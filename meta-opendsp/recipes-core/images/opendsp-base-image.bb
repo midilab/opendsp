@@ -10,27 +10,36 @@ IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
-IMAGE_INSTALL += "opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget"
+IMAGE_INSTALL += " opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src fltk fltk-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils a2jmidid mpg123 parted cpupower wget"
+
+# Development environment?
+IMAGE_INSTALL += " gcc make cmake pkgconfig"
+
+# Tools
+IMAGE_INSTALL += " e2fsprogs-resize2fs"
 
 # x env
-IMAGE_INSTALL += "xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth x11vnc rxvt-unicode xdotool openbox obconf"
-#IMAGE_INSTALL += "packagegroup-core-x11"
+IMAGE_INSTALL += " xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth x11vnc rxvt-unicode xdotool openbox obconf"
+#IMAGE_INSTALL += " packagegroup-core-x11"
 
 # networking
-IMAGE_INSTALL += "samba hostapd"
+IMAGE_INSTALL += " samba hostapd"
 
 # setup opendsp ecosystem
-IMAGE_INSTALL += "udev-rules-tty"
+IMAGE_INSTALL += " udev-rules-tty"
 # missing: create_ap(use linux-router instead or only hostapd), novnc jamrouter mod-ttymidi tint2
+
+# meta-dsp
+# gearmulator gearmulator-lv2
+IMAGE_INSTALL += " lv2 ganv ingen ingen-standalone lilv jalv mda-lv2 patchage raul serd sord sratom suil"
 
 IMAGE_LINGUAS = "en-us"
 
 SDIMG_ROOTFS_TYPE = "ext4"
 IMAGE_FSTYPES = "wic"
-#IMAGE_FSTYPES = "wic ext4.gz"
 
 # To make the image read only, uncomment the following line
-IMAGE_FEATURES += "read-only-rootfs"
+IMAGE_FEATURES += " read-only-rootfs"
 
 #
 # board setup
@@ -59,12 +68,12 @@ do_opendsp_rootfs_post () {
 	cat <<EOF > ${IMAGE_ROOTFS}/etc/issue
 
 
- ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗ 
+ ██████╗ ██████╗ ███████╗███╗   ██╗██████╗ ███████╗██████╗
 ██╔═══██╗██╔══██╗██╔════╝████╗  ██║██╔══██╗██╔════╝██╔══██╗
 ██║   ██║██████╔╝█████╗  ██╔██╗ ██║██║  ██║███████╗██████╔╝
-██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝ 
-╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║     
- ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝     
+██║   ██║██╔═══╝ ██╔══╝  ██║╚██╗██║██║  ██║╚════██║██╔═══╝
+╚██████╔╝██║     ███████╗██║ ╚████║██████╔╝███████║██║
+ ╚═════╝ ╚═╝     ╚══════╝╚═╝  ╚═══╝╚═════╝ ╚══════╝╚═╝
 
 EOF
 
@@ -79,7 +88,7 @@ EOF
 	# allow x11 forward for plugmod ingen edit modules
 	echo "X11Forwarding yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
 	echo "PermitUserEnvironment yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
-	
+
 	# allow usage of x display from terminal and via x11 forward
 	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.ssh/
 	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/home/opendsp/.ssh/environment

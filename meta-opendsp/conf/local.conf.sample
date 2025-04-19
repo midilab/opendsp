@@ -9,7 +9,7 @@ MACHINE = "intel-corei7-64"
 DISTRO = "opendsp"
 
 # pam is needed for samba
-DISTRO_FEATURES += "pam"
+DISTRO_FEATURES:append = " pam x11 systemd"
 
 PACKAGE_CLASSES ?= "package_ipk"
 

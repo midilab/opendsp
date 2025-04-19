@@ -7,7 +7,9 @@ LIC_FILES_CHKSUM = "file://../LICENSE;md5=d32239bcb673463ab874e80d47fae504"
 # default user to run opendspd is opendsp
 OPENDSP_HOME_DIR = "/home/opendsp"
 
-SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1"
+SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1 \
+           file://userdata_resize \
+"
 
 # version
 PV = "v0.12.2"
@@ -70,12 +72,15 @@ do_install:append() {
     install -D ../tools/bin/vlc-youtube-update -m 0755 ${D}${bindir}/vlc-youtube-update
 
     # opendsp user data
-    install -d ${D}${OPENDSP_HOME_DIR}/data/ 
+    install -d ${D}${OPENDSP_HOME_DIR}/data/
     cp -rf --no-preserve=ownership ../data/* ${D}${OPENDSP_HOME_DIR}/data/
 
     # apps and tools symbolic linkage for read-only fs support
     install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
+
+    # Install userdata_resize script
+    install -D ${WORKDIR}/userdata_resize -m 0777 ${D}${bindir}/userdata_resize
 }
 
 inherit setuptools3
