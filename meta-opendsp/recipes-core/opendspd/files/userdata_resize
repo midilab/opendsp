@@ -22,7 +22,7 @@ sleep 5
 
 # Unmount data directory
 echo "Unmounting data directory..."
-umount -v ${USER_DATA_DEVICE_PARTITION}
+umount -v /home/opendsp/data/
 
 # Resize partition
 echo "Resizing partition..."
