@@ -32,5 +32,14 @@ EXTRA_OECMAKE = " \
     -DJUCE_BUILD_CONFIGURATION=RELEASE \
     -DCMAKE_BUILD_TYPE=Release \
 "
-
 BUILD_TYPE = "Release"
+
+do_install:append() {
+    target_dir="${D}${STAGING_DIR_NATIVE}${bindir_native}"
+    if [ -f ${target_dir}/juceaide ]; then
+        ln -sf juceaide ${target_dir}/juce\:\:juceaide
+    else
+        bberror "Failed to find ${target_dir}/juceaide to Symlink it to juce::juceaide"
+        exit 1
+    fi
+}
