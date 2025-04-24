@@ -46,14 +46,9 @@ EXTRA_OECMAKE = " \
     -Dgearmulator_BUILD_JUCEPLUGIN_VST3=OFF \
     -Dgearmulator_BUILD_JUCEPLUGIN_AU=OFF \
 "
-
 BUILD_TYPE = "Release"
 
 do_compile:prepend() {
-    # linking juceaide native tools for crosscompile
-    # The build system seems to look for juce::juceaide specifically.
-    ln -sf ${STAGING_DIR_NATIVE}/${bindir_native}/juceaide ${STAGING_DIR_NATIVE}/${bindir_native}/juce\:\:juceaide
-
     # Operate in the native sysroot directory
     BIN_DIR=${STAGING_DIR_NATIVE}/${bindir_native}
 

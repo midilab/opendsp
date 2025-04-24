@@ -53,12 +53,6 @@ do_configure:prepend() {
     export GIT_SSL_NO_VERIFY=true
 }
 
-do_compile:prepend() {
-    # linking juceaide native tools for crosscompile
-    # The build system seems to look for juce::juceaide specifically.
-    ln -sf ${STAGING_DIR_NATIVE}/${bindir_native}/juceaide ${STAGING_DIR_NATIVE}/${bindir_native}/juce\:\:juceaide
-}
-
 # Install the built plugins
 do_install () {
     # Define the source directory where CMake/JUCE placed the build artefacts
