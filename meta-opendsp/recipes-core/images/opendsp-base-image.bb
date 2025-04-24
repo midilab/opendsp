@@ -31,7 +31,7 @@ IMAGE_INSTALL += " udev-rules-tty"
 
 # meta-dsp
 # gearmulator gearmulator-lv2
-IMAGE_INSTALL += " lv2 ganv ingen ingen-standalone lilv jalv mda-lv2 patchage raul serd sord sratom suil"
+IMAGE_INSTALL += " lv2 ganv ingen ingen-standalone lilv jalv mda-lv2 patchage raul serd sord sratom suil gearmulator-lv2"
 
 IMAGE_LINGUAS = "en-us"
 
