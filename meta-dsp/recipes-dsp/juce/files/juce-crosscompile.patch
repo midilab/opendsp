@@ -1,0 +1,44 @@
+--- a/CMakeLists.txt	2025-04-23 07:55:43.782560472 -0300
++++ b/CMakeLists.txt	2025-04-23 08:04:10.517317905 -0300
+@@ -123,10 +123,10 @@
+     COMPATIBILITY ExactVersion
+     ${extra_version_arg})
+ 
+-set(JUCE_INSTALL_DESTINATION "lib/cmake/JUCE-${JUCE_VERSION}" CACHE STRING
++set(JUCE_INSTALL_DESTINATION "lib/cmake" CACHE STRING
+     "The location, relative to the install prefix, where the JUCE config file will be installed")
+ 
+-set(JUCE_MODULE_PATH "include/JUCE-${JUCE_VERSION}/modules")
++set(JUCE_MODULE_PATH "include/modules")
+ set(UTILS_INSTALL_DIR "${JUCE_INSTALL_DESTINATION}")
+ set(JUCEAIDE_PATH "${JUCE_TOOL_INSTALL_DIR}/${JUCE_JUCEAIDE_NAME}")
+ configure_package_config_file("${JUCE_CMAKE_UTILS_DIR}/JUCEConfig.cmake.in"
+@@ -167,14 +169,14 @@
+     _juce_add_lv2_manifest_helper_target()
+ 
+     if(TARGET juce_lv2_helper)
+-        install(TARGETS juce_lv2_helper EXPORT LV2_HELPER DESTINATION "bin/JUCE-${JUCE_VERSION}")
++        install(TARGETS juce_lv2_helper EXPORT LV2_HELPER DESTINATION "bin")
+         install(EXPORT LV2_HELPER NAMESPACE juce:: DESTINATION "${JUCE_INSTALL_DESTINATION}")
+     endif()
+ 
+     _juce_add_vst3_manifest_helper_target()
+ 
+     if(TARGET juce_vst3_helper)
+-        install(TARGETS juce_vst3_helper EXPORT VST3_HELPER DESTINATION "bin/JUCE-${JUCE_VERSION}")
++        install(TARGETS juce_vst3_helper EXPORT VST3_HELPER DESTINATION "bin")
+         install(EXPORT VST3_HELPER NAMESPACE juce:: DESTINATION "${JUCE_INSTALL_DESTINATION}")
+     endif()
+ endif()
+ 
+ --- a/extras/Build/juceaide/CMakeLists.txt	2025-04-23 08:06:42.222834723 -0300
+ +++ b/extras/Build/juceaide/CMakeLists.txt	2025-04-23 08:12:47.493368765 -0300
+ @@ -145,7 +145,7 @@
+  
+      add_executable(juce::juceaide ALIAS juceaide)
+  
+ -    set(JUCE_TOOL_INSTALL_DIR "bin/JUCE-${JUCE_VERSION}" CACHE STRING
+ +    set(JUCE_TOOL_INSTALL_DIR "bin" CACHE STRING
+          "The location, relative to the install prefix, where juceaide will be installed")
+  
+      install(PROGRAMS "${imported_location}" DESTINATION "${JUCE_TOOL_INSTALL_DIR}")
