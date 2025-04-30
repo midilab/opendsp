@@ -30,8 +30,7 @@ IMAGE_INSTALL += " udev-rules-tty"
 # missing: create_ap(use linux-router instead or only hostapd), novnc jamrouter mod-ttymidi tint2
 
 # meta-dsp
-# gearmulator gearmulator-lv2
-IMAGE_INSTALL += " lv2 ganv ingen ingen-standalone lilv jalv mda-lv2 patchage raul serd sord sratom suil gearmulator-lv2"
+IMAGE_INSTALL += " lv2 ganv ingen ingen-standalone lilv jalv mda-lv2 patchage raul serd sord sratom suil jc303-lv2 gearmulator-lv2"
 
 IMAGE_LINGUAS = "en-us"
 

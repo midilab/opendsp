@@ -9,8 +9,16 @@ WKS_FILE = "intel-corei7-64.wks"
 
 DEPENDS += " virtual/kernel grub-efi-native"
 
+# for live os and self-install
 EFI_PROVIDER = "grub-efi"
 GRUB_TARGET = "x86_64-efi"
+GRUB_TIMEOUT = "0"
+IMAGE_FSTYPES:append = " ext4"
+IMAGE_TYPEDEP_wic = "ext4"
+INITRD_IMAGE_LIVE="core-image-minimal-initramfs"
+do_image_wic[depends] += "${INITRD_IMAGE_LIVE}:do_image_complete"
+do_image_wic[depends] += "${IMAGE_BASENAME}:do_image_ext4"
+do_rootfs[depends] += "virtual/kernel:do_deploy"
 
 #do_opendsp_config() {
 #    # Configuration specific to Intel Core i7-64

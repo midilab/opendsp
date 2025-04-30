@@ -25,6 +25,8 @@ echo "Unmounting data directory..."
 umount -v /home/opendsp/data/
 
 # Resize partition
+# maybe run e2fsck before just to make sure everything is ok?
+e2fsck -p -f /dev/${USER_DATA_DEVICE_PARTITION}
 echo "Resizing partition..."
 parted /dev/${USER_DATA_DEVICE} <<EOF
 resizepart
