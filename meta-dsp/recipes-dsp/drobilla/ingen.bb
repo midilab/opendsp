@@ -3,7 +3,8 @@ HOMEPAGE = "http://drobilla.net/software/ingen"
 LICENSE = "AGPL-3.0-only"
 LIC_FILES_CHKSUM = "file://COPYING;md5=73f1eb20517c55bf9493b7dd6e480788"
 
-inherit waf pkgconfig gtk-icon-cache pack_audio_plugins python3native
+# Use meson instead of waf
+inherit meson pkgconfig gtk-icon-cache pack_audio_plugins python3native
 
 DEPENDS += " \
     boost \
@@ -15,11 +16,14 @@ DEPENDS += " \
     portaudio-v19 \
 "
 
+# Runtime dependency for python tools (add more if needed, e.g., python3-rdflib)
+# RDEPENDS:${PN}-python += "python3 python3-rdflib"
+
 SRC_URI = " \
     gitsm://gitlab.com/drobilla/ingen.git;protocol=https;branch=main \
-    file://0001-Fix-build-for-python3-only-environments.patch \
 "
-SRCREV = "36949a845cf79e105445b9bc8656f2560469dc4d"
+SRCREV = "6e02a3e2e60ffdcebdb2a244dd11e500e108c6bb"
+
 S = "${WORKDIR}/git"
 PV = "0.5.1+git${SRCPV}"
 
@@ -33,15 +37,28 @@ DOCDEPENDS = " \
     python-isodate-native \
     python-six-native \
 "
-PACKAGECONFIG[doc] = "--docs,,${DOCDEPENDS}"
+# Use meson feature option for docs
+PACKAGECONFIG[doc] = "-Ddocs=enabled,-Ddocs=disabled,${DOCDEPENDS}"
 
 PACKAGES =+ "${PN}-standalone ${PN}-python"
 
-FILES_SOLIBSDEV = "${libdir}/libingen-*${SOLIBSDEV}"
+# Adjust library name if Meson installs it differently (e.g., libingen-0.so)
+# Check the actual library name in ${D}${libdir} after compilation.
+FILES_SOLIBSDEV = "${libdir}/libingen${SOLIBSDEV}"
 
+# Main package: runtime library. LV2 plugins handled by pack_audio_plugins class.
+# Ensure the library pattern matches the actual installed library.
 FILES:${PN} += " \
-    ${libdir}/libingen_*.so \
+    ${libdir}/libingen-0.so.* \
+    ${libdir}/libingen_jack.so \
+    ${libdir}/libingen_server.so \
+    ${libdir}/libingen_client.so \
+    ${libdir}/libingen_gui.so \
+    ${libdir}/libingen_portaudio.so \
 "
+# Note: Removed explicit ${libdir}/lv2 - let pack_audio_plugins handle it.
+
+FILES:${PN}-dev += "${libdir}/libingen-0.so"
 
 FILES:${PN}-standalone = " \
     ${datadir}/applications \
@@ -49,7 +66,8 @@ FILES:${PN}-standalone = " \
     ${bindir}/ingen \
 "
 
-# pyton tools are not expected to work: we do not have rdflib yet
+# Python tools and any installed modules
+# Note: The comment about rdflib still applies; functionality might depend on runtime deps.
 FILES:${PN}-python = " \
     ${bindir}/ingenams \
     ${bindir}/ingenish \

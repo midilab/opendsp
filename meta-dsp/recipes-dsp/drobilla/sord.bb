@@ -1,15 +1,14 @@
 SUMMARY = "C library for storing RDF data in memory"
 HOMEPAGE = "http://drobilla.net/software/sord"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://COPYING;md5=b698a6a2120a83eecb34a9c6f1b93989"
+LIC_FILES_CHKSUM = "file://COPYING;md5=7e70199cf220ed471b0bf4ccdd02261e"
 
-inherit waf pkgconfig
+inherit meson pkgconfig
 
-DEPENDS += "libpcre serd"
+DEPENDS += "libpcre serd zix"
 
-PV = "0.16.10"
+PV = "0.16.18"
 SRC_URI = " \
-    http://download.drobilla.net/${BPN}-${PV}.tar.bz2 \
-    file://0001-Fix-build-for-python3-only-environments.patch \
+    http://download.drobilla.net/${BPN}-${PV}.tar.xz \
 "
-SRC_URI[sha256sum] = "9c70b3fbbb0c5c7bf761ef66c3d5b939ab45ad063e055990f17f40f1f6f96572"
+SRC_URI[sha256sum] = "4f398b635894491a4774b1498959805a08e11734c324f13d572dea695b13d3b3"
