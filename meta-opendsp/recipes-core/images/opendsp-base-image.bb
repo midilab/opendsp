@@ -102,13 +102,14 @@ EOF
 
 	# set cpu for performance mode
 	#sed -i '/governor/d' ${IMAGE_ROOTFS}/etc/default/cpupower
-	#echo "governor='performance'" >> ${IMAGE_ROOTFS}/etc/default/cpupower
+	mkdir -p ${IMAGE_ROOTFS}/etc/default/
+	echo "governor='performance'" >> ${IMAGE_ROOTFS}/etc/default/cpupower
 	# get a better swappiness for realtime environment
 	echo "vm.swappiness=10" >> ${IMAGE_ROOTFS}/etc/sysctl.conf
 
 	# set realtime environment for DSP
-	#echo "@audio 	- rtprio 	99" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
-	#echo "@audio 	- memlock 	unlimited" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+	echo "@audio 	- rtprio 	99" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+	echo "@audio 	- memlock 	unlimited" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
 
 	# setup create_ap wifi access point
 	cat <<EOF >> ${IMAGE_ROOTFS}/etc/create_ap.conf
@@ -159,7 +160,6 @@ do_opendsp_image_pre () {
 
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
 #IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
-#addtask do_opendsp_image_pre after do_rootfs
 
 # for user name resolution at chown and chmod?
 #DEPENDS += "shadow-native"
