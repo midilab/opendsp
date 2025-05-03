@@ -81,7 +81,15 @@ do_install:append() {
     rm -rf ${D}/usr/mqPerformanceTest
     rm -rf ${D}/usr/virusTestConsole
     rm -rf ${D}/usr/plugins
+
+    # Create skel directory structure and symbolic link for runtime user data
+    install -d ${D}${sysconfdir}/skel/data/app/dsp56300
+    install -d ${D}${sysconfdir}/skel/.local/share
+    ln -sf ../../data/app/dsp56300 "${D}${sysconfdir}/skel/.local/share/The Usual Suspects"
 }
 
 # Specify the files to include in the package
-FILES:${PN} += "${libdir}/lv2"
+FILES:${PN} += " \
+    ${libdir}/lv2 \
+    ${sysconfdir}/skel \
+"

@@ -136,10 +136,16 @@ do_install () {
     else
         bbnote "No CLAP source directory found to remove at ${src_clap_dir}"
     fi
+
+    # Create skel directory structure and symbolic link for runtime user data
+    install -d ${D}${sysconfdir}/skel/data/app/midilab/jc303
+    install -d ${D}${sysconfdir}/skel/Documents/midilab
+    ln -sf ../../data/app/midilab/jc303 ${D}${sysconfdir}/skel/Documents/midilab/JC303
 }
 
 FILES_${PN} += " \
     ${libdir}/lv2 \
     ${libdir}/vst \
     ${libdir}/vst3 \
+    ${sysconfdir}/skel \
 "
