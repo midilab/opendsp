@@ -8,7 +8,7 @@ LIC_FILES_CHKSUM = "file://../LICENSE;md5=d32239bcb673463ab874e80d47fae504"
 OPENDSP_HOME_DIR = "/home/opendsp"
 
 SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1 \
-           file://userdata_resize \
+           file://resize_userdata \
 "
 
 # version
@@ -79,8 +79,8 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 
-    # Install userdata_resize script
-    install -D ${WORKDIR}/userdata_resize -m 0777 ${D}${bindir}/userdata_resize
+    # Install resize_userdata script
+    install -D ${WORKDIR}/resize_userdata -m 0777 ${D}${bindir}/resize_userdata
 }
 
 inherit setuptools3

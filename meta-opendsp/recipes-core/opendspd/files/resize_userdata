@@ -1,0 +1,198 @@
+#!/bin/bash
+
+# Ensure the script is run as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root"
+   exit 1
+fi
+
+# Add /usr/sbin to the PATH for this script's execution
+export PATH="/usr/sbin:/sbin:$PATH"
+
+# --- Configuration ---
+DATA_LABEL="data"
+DATA_MOUNT_POINT="/home/opendsp/data/" # Define the expected mount point
+
+echo "Attempting to automatically detect the partition labeled '${DATA_LABEL}'..."
+
+# Define the path to the label symlink
+LABEL_SYMLINK="/dev/disk/by-label/${DATA_LABEL}"
+
+# Check if the label symlink exists
+if [ ! -L "${LABEL_SYMLINK}" ]; then
+    echo "Error: Could not find a partition label symlink at '${LABEL_SYMLINK}'."
+    echo "Please ensure the target partition exists and is labeled '${DATA_LABEL}'."
+    echo "You can label an ext2/3/4 filesystem using 'e2label /dev/your_partition ${DATA_LABEL}'"
+    echo "or 'tune2fs -L ${DATA_LABEL} /dev/your_partition'."
+    exit 1
+fi
+
+# Resolve the symlink to the actual device partition path (e.g., /dev/sda3, /dev/mmcblk0p1)
+# readlink -f resolves the link recursively and provides the canonical path
+USER_DATA_DEVICE_PARTITION=$(readlink -f "${LABEL_SYMLINK}")
+
+# Check if readlink succeeded and returned a non-empty path
+if [ $? -ne 0 ] || [ -z "${USER_DATA_DEVICE_PARTITION}" ]; then
+    echo "Error: Failed to resolve the symlink '${LABEL_SYMLINK}' to a device path."
+    exit 1
+fi
+
+# Verify it's actually a block device
+if [ ! -b "${USER_DATA_DEVICE_PARTITION}" ]; then
+    echo "Error: Found label '${DATA_LABEL}' but the resolved path '${USER_DATA_DEVICE_PARTITION}' is not a valid block device."
+    exit 1
+fi
+
+echo "Found partition path via label: ${USER_DATA_DEVICE_PARTITION}"
+
+# --- Determine Partition Number (without lsblk) ---
+# Use parameter expansion to remove the longest prefix ending in a non-digit.
+# Handles /dev/sda3 -> 3, /dev/mmcblk0p1 -> 1, /dev/nvme0n1p2 -> 2
+USER_DATA_PARTITION_NUMBER="${USER_DATA_DEVICE_PARTITION##*[!0-9]}"
+if [ -z "${USER_DATA_PARTITION_NUMBER}" ]; then
+    echo "Error: Could not determine partition number from '${USER_DATA_DEVICE_PARTITION}'."
+    exit 1
+fi
+echo "Determined partition number: ${USER_DATA_PARTITION_NUMBER}"
+
+# --- Determine Base Device Path (without lsblk) ---
+# Use sed to remove the partition part from the device path.
+# Handles common cases like sdXN, hdXN, vdXN, mmcblkXpN, nvmeXnYpZ
+# Case 1: MMC/NVMe style (ends in 'p' + number) e.g., /dev/mmcblk0p1 -> /dev/mmcblk0, /dev/nvme0n1p2 -> /dev/nvme0n1
+if [[ "${USER_DATA_DEVICE_PARTITION}" =~ p[0-9]+$ ]]; then
+    FULL_USER_DATA_DEVICE=$(echo "${USER_DATA_DEVICE_PARTITION}" | sed -E 's/p[0-9]+$//')
+# Case 2: Standard style (ends in number) e.g., /dev/sda3 -> /dev/sda
+elif [[ "${USER_DATA_DEVICE_PARTITION}" =~ [0-9]+$ ]]; then
+    FULL_USER_DATA_DEVICE=$(echo "${USER_DATA_DEVICE_PARTITION}" | sed -E 's/[0-9]+$//')
+else
+    echo "Error: Cannot determine base device path from partition path '${USER_DATA_DEVICE_PARTITION}'."
+    echo "Device name does not follow expected pattern (e.g., /dev/sda3, /dev/mmcblk0p1)."
+    exit 1
+fi
+
+# Check if base device path determination was successful
+if [ -z "${FULL_USER_DATA_DEVICE}" ] || [ ! -e "${FULL_USER_DATA_DEVICE}" ]; then
+    echo "Error: Failed to determine a valid base device path from '${USER_DATA_DEVICE_PARTITION}' (Derived: '${FULL_USER_DATA_DEVICE}')."
+    exit 1
+fi
+echo "Determined base device path: ${FULL_USER_DATA_DEVICE}"
+
+
+# Sanity check if all variables seem populated
+if [ -z "${FULL_USER_DATA_DEVICE}" ] || [ -z "${USER_DATA_DEVICE_PARTITION}" ] || [ -z "${USER_DATA_PARTITION_NUMBER}" ]; then
+    echo "Error: Failed to automatically determine all required partition details."
+    exit 1
+fi
+
+
+echo "-----------------------------------------------------"
+echo "Automatic detection complete. Using the following:"
+echo "  Device Path      : ${FULL_USER_DATA_DEVICE}"
+echo "  Partition Path   : ${USER_DATA_DEVICE_PARTITION}"
+echo "  Partition Number : ${USER_DATA_PARTITION_NUMBER}"
+echo "  Mount Point      : ${DATA_MOUNT_POINT}"
+echo "-----------------------------------------------------"
+# Optional: Add a confirmation prompt before proceeding
+# read -p "Press Enter to continue with resizing, or Ctrl+C to abort..."
+
+# Stop services that might be using the data partition
+echo "Stopping services..."
+systemctl stop opendsp || echo "Warning: Failed to stop opendsp (maybe not running?)"
+systemctl stop smb || echo "Warning: Failed to stop smb (maybe not running?)"
+systemctl stop nmb || echo "Warning: Failed to stop nmb (maybe not running?)"
+# Add a small delay to allow services to shut down cleanly
+sleep 5
+
+# Unmount data directory
+echo "Unmounting ${DATA_MOUNT_POINT}..."
+if mountpoint -q "${DATA_MOUNT_POINT}"; then
+    umount -v "${DATA_MOUNT_POINT}"
+    if [ $? -ne 0 ]; then
+        echo "Error: Failed to unmount ${DATA_MOUNT_POINT}. Check if any process is using it (e.g., 'lsof ${DATA_MOUNT_POINT}')."
+        exit 1
+    fi
+else
+    echo "${DATA_MOUNT_POINT} is not mounted, skipping unmount."
+fi
+
+# Any GPT issues? Force a Fix before use parted
+printf "Fix\n" | parted ---pretend-input-tty /dev/sda print
+
+echo "Resizing partition ${USER_DATA_PARTITION_NUMBER} on ${FULL_USER_DATA_DEVICE}..."
+# Using 100% tells parted to use all available space up to the end of the disk.
+parted --script "${FULL_USER_DATA_DEVICE}" -- resizepart "${USER_DATA_PARTITION_NUMBER}" 100%
+
+# Check parted exit status
+if [ $? -ne 0 ]; then
+    echo "Error: parted failed to resize partition ${USER_DATA_PARTITION_NUMBER} on ${FULL_USER_DATA_DEVICE}."
+    # Attempt to remount before exiting? Maybe not, as the state is uncertain.
+    exit 1
+fi
+
+# Check and resize filesystem
+echo "Checking and resizing filesystem on ${USER_DATA_DEVICE_PARTITION}..."
+# Run e2fsck non-interactively (-p) and force check (-f)
+e2fsck -p -f "${USER_DATA_DEVICE_PARTITION}"
+# e2fsck exit codes: 0=OK, 1=errors corrected, 2=errors corrected+reboot needed, >2=operational error
+fsck_exit_code=$?
+if [ ${fsck_exit_code} -eq 0 ]; then
+    echo "Filesystem check completed: No errors found."
+elif [ ${fsck_exit_code} -eq 1 ]; then
+    echo "Filesystem check completed: Errors corrected."
+elif [ ${fsck_exit_code} -eq 2 ]; then
+    echo "Filesystem check completed: Errors corrected, system reboot is recommended."
+elif [ ${fsck_exit_code} -ge 4 ]; then
+    echo "Error: e2fsck encountered an operational error (${fsck_exit_code}) on ${USER_DATA_DEVICE_PARTITION}."
+    # It might be unsafe to proceed with resize2fs
+    exit 1
+else
+    echo "Warning: e2fsck finished with code ${fsck_exit_code}."
+fi
+
+# Now resize the filesystem to fill the (potentially larger) partition
+resize2fs "${USER_DATA_DEVICE_PARTITION}"
+if [ $? -ne 0 ]; then
+    echo "Error: resize2fs failed on ${USER_DATA_DEVICE_PARTITION}."
+    # Attempting to remount might fail if resize2fs corrupted something.
+    exit 1
+fi
+
+echo "Done! Filesystem resized."
+
+# Remount the data partition
+echo "Remounting ${DATA_MOUNT_POINT}..."
+mount "${USER_DATA_DEVICE_PARTITION}" "${DATA_MOUNT_POINT}"
+if [ $? -ne 0 ]; then
+    echo "Error: Failed to remount ${USER_DATA_DEVICE_PARTITION} at ${DATA_MOUNT_POINT} after resizing."
+    echo "Please check system logs ('dmesg' or 'journalctl') for filesystem errors."
+    # Proceeding to reboot might be the best option here, but inform the user.
+    echo "Will proceed to reboot, but manual checks might be needed afterwards."
+fi
+
+# Optional: Clean lost+found only if remount was successful and directory exists
+if mountpoint -q "${DATA_MOUNT_POINT}" && [ -d "${DATA_MOUNT_POINT}/lost+found" ]; then
+    echo "Removing lost+found directory..."
+    rm -rf "${DATA_MOUNT_POINT}/lost+found"
+fi
+
+# change partition owner to opendsp
+chown -R opendsp:opendsp ${DATA_MOUNT_POINT}
+
+echo "-----------------------------------------------------"
+echo "Resize operation complete."
+echo "-----------------------------------------------------"
+echo "Press Enter to reboot your machine (recommended)..."
+read
+
+# Attempt to remove the script itself before rebooting
+echo "Removing this script ($0)..."
+rm "$0"
+if [ $? -ne 0 ]; then
+    echo "Warning: Failed to remove the script file $0."
+fi
+
+echo "Rebooting now..."
+shutdown -r now
+
+# Exit gracefully if shutdown command fails for some reason
+exit 0
