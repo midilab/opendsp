@@ -1,0 +1,45 @@
+From 649914c369578ef2a2db42ec02f4c1836b5eb8b7 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Fri, 30 Jul 2021 23:15:40 +0200
+Subject: [PATCH] Modify ttl generation target so we can sed it to correct path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream-Status: Inappropriate[Configuration]
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ ports-legacy/meson.build | 2 +-
+ ports/meson.build        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/ports-legacy/meson.build b/ports-legacy/meson.build
+index cc8a6001..5ebcdd45 100644
+--- a/ports-legacy/meson.build
++++ b/ports-legacy/meson.build
+@@ -281,7 +281,7 @@ if build_lv2 or build_vst2
+                         'mkdir', '-p', plugin_lv2_dir, '&&',
+                         'cd', plugin_lv2_dir, '&&',
+                         'cp', plugin_lv2_lib.full_path(), plugin_lv2_dir / plugin_name + lib_suffix, '&&',
+-                        (meson.is_cross_build() ? 'wine' : 'env'), lv2_ttl_generator, '.' / plugin_name + lib_suffix,
++                        'eval', 'echo', plugin_lv2_dir / plugin_name + lib_suffix, '>>', '%PLUGIN_INFO_FILE%',
+                     ],
+                     install: true,
+                     install_dir: lv2dir,
+diff --git a/ports/meson.build b/ports/meson.build
+index 248c4c71..d6a8ede1 100644
+--- a/ports/meson.build
++++ b/ports/meson.build
+@@ -224,7 +224,7 @@ foreach plugin : plugins
+                     'mkdir', '-p', plugin_lv2_dir, '&&',
+                     'cd', plugin_lv2_dir, '&&',
+                     'mv', plugin_lv2_lib.full_path(), plugin_lv2_dir / plugin_name + lib_suffix, '&&',
+-                    (meson.is_cross_build() ? 'wine' : 'env'), lv2_ttl_generator, '.' / plugin_name + lib_suffix,
++                    'eval', 'echo', plugin_lv2_dir / plugin_name + lib_suffix, '>>', '%PLUGIN_INFO_FILE%',
+                 ],
+                 install: true,
+                 install_dir: lv2dir,
+-- 
+2.31.1
+
