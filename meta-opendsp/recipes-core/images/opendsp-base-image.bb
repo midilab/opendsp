@@ -19,8 +19,26 @@ IMAGE_INSTALL += " gcc make cmake pkgconfig"
 IMAGE_INSTALL += " e2fsprogs-resize2fs"
 
 # x env
-IMAGE_INSTALL += " xserver-xorg xserver-xorg-xvfb xorg-minimal-fonts xinit xauth x11vnc rxvt-unicode xdotool openbox obconf"
-#IMAGE_INSTALL += " packagegroup-core-x11"
+IMAGE_INSTALL += " \
+    xserver-xorg \
+    xserver-xorg-xvfb \
+    xorg-minimal-fonts \
+    xinit \
+    xauth \
+    x11vnc \
+    rxvt-unicode \
+    xdotool \
+    openbox \
+    obconf \
+    xserver-xorg-video-modesetting \
+    xserver-xorg-video-fbdev \
+    xserver-xorg-video-vesa \
+    mesa-gl \
+    mesa-dri-drivers \
+    font-alias \
+    font-misc-misc \
+    font-cursor-misc \
+"
 
 # networking
 IMAGE_INSTALL += " samba hostapd"
@@ -48,6 +66,12 @@ IMAGE_INSTALL += " \
     gearmulator-lv2 \
     lv2-ttl-generator \
     distrho-ports \
+    dpf-plugins \
+"
+
+# meta-video
+IMAGE_INSTALL += " \
+    projectm \
 "
 
 IMAGE_LINGUAS = "en-us"

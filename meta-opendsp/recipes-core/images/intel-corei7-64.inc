@@ -4,6 +4,14 @@ MACHINE_FEATURES += " intel-graphics opengl"
 # Install GRUB bootloader and xf86 drivers for Intel GPU
 IMAGE_INSTALL += " grub-efi"
 
+# X11 support for generic Intel
+IMAGE_INSTALL += " \
+    xserver-xorg-video-intel \
+    xserver-xorg-video-amdgpu \
+    xserver-xorg-video-nouveau \
+    mesa-vulkan-drivers \
+"
+
 # Specify the WKS file for the image layout
 WKS_FILE = "intel-corei7-64.wks"
 

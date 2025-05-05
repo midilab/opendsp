@@ -15,5 +15,6 @@ BBLAYERS ?= " \
     /workdir/meta-raspberrypi \
     /workdir/meta-opendsp \
     /workdir/meta-dsp \
+    /workdir/meta-video \
     /workdir/meta-qt5 \
 "

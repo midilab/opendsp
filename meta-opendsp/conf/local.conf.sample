@@ -4,6 +4,7 @@
 MACHINE = "intel-corei7-64"
 # 64 bit Intel Skylake CPU (and later) with MMX, SSE, SSE2, SSE3, SSE4.1, SSE4.2, AVX, and AVX2 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
 #MACHINE = "intel-skylake-64"
+# Raspberry PI 2/3
 #MACHINE = "raspberrypi3"
 
 DISTRO = "opendsp"
