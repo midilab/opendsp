@@ -1,0 +1,46 @@
+From 56bebbedd9d6304711ffd2fc3526193e0e8251f6 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Sat, 7 Apr 2018 20:57:09 +0200
+Subject: [PATCH] find native qt build tools by configure options - auto
+ detection does not work
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream-Status: Inappropriate [cross specific]
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ configure.ac | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 31c9e372..d550fb33 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -69,9 +69,19 @@ AS_IF([test "x$enable_qt" = "xyes"], [
+     AC_MSG_ERROR([Qt >= 5.0.0 is required. Try installing qtdeclarative5-dev])
+   fi
+ 
+-  AC_CHECK_PROGS(MOC, [moc-qt5 moc])
+-  AC_CHECK_PROGS(UIC, [uic-qt5 uic])
+-  AC_CHECK_PROGS(RCC, [rcc])
++  AC_ARG_WITH(moc,
++    AC_HELP_STRING([--with-moc=PATH], [use alternate moc path]),
++    [MOC="$withval"], [MOC=""])
++  AC_SUBST(MOC)
++  AC_ARG_WITH(uic,
++    AC_HELP_STRING([--with-uic=PATH], [use alternate uic path]),
++    [UIC="$withval"], [UIC=""])
++  AC_SUBST(UIC)
++  AC_ARG_WITH(rcc,
++    AC_HELP_STRING([--with-rcc=PATH], [use alternate rcc path]),
++    [RCC="$withval"], [RCC=""])
++  AC_SUBST(RCC)
++
+   if test -z "$MOC" || test -z "$UIC" || test -z "$RCC"; then
+     AC_MSG_ERROR([Qt utility programs moc, uic, and rcc are required.])
+   fi
+-- 
+2.14.3
+

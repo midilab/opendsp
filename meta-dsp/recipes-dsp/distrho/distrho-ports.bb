@@ -49,9 +49,9 @@ do_ttl_sed() {
     sed -i 's|$GEN ./$FILE|echo "`pwd`/$FILE" >> ${LV2_PLUGIN_INFO_FILE}|g' `find ${S}/scripts -name *.sh`
 }
 
-EXTRA_OEMESON += " \
-    -Doptimizations=false \
-"
+#EXTRA_OEMESON += " \
+#    -Doptimizations=false \
+#"
 
 do_install:append() {
     # obxd-presets

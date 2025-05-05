@@ -1,0 +1,35 @@
+From 5a2f6eec3bd27725cd957e1642008f34f3b82f41 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
+Date: Mon, 4 Jun 2018 22:35:38 +0200
+Subject: [PATCH] Makefile.am: Fix installation with DESTDIR set
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Upstream-Status: Submitted [1]
+
+[1] https://github.com/projectM-visualizer/projectm/pull/67
+
+Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
+---
+ Makefile.am | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 062bb3ca..19dbef1f 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -19,8 +19,8 @@ pm_shaders__DATA = src/libprojectM/Renderer/blur.cg \
+ 
+ # find and install all preset files
+ install-data-local:
+-	test -z $(pkgdatadir) || $(MKDIR_P) $(pm_presets_dir)
+-	find "$(PRESETSDIR)" -type f -exec $(INSTALL_DATA) {} $(pm_presets_dir) \;
++	test -z $(DESTDIR)$(pkgdatadir) || $(MKDIR_P) $(DESTDIR)$(pm_presets_dir)
++	find "$(PRESETSDIR)" -type f -exec $(INSTALL_DATA) {} $(DESTDIR)$(pm_presets_dir) \;
+ 
+ # from https://stackoverflow.com/questions/30897170/ac-subst-does-not-expand-variable answer: https://stackoverflow.com/a/30960268
+ # ptomato https://stackoverflow.com/users/172999/ptomato
+-- 
+2.14.3
+
