@@ -12,9 +12,9 @@ SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1 \
 "
 
 # version
-PV = "v0.12.2"
+PV = "v0.12.3"
 # commit
-SRCREV = "533536a2c173130f9bff453947d4b86417a665a8"
+SRCREV = "b989f051d440325c1965270a62b05f73b8522fd7"
 
 S = "${WORKDIR}/git/src"
 
