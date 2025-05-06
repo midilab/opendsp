@@ -22,6 +22,7 @@ IMAGE_INSTALL += " e2fsprogs-resize2fs"
 IMAGE_INSTALL += " \
     xserver-xorg \
     xserver-xorg-xvfb \
+    xf86-video-fbdev \
     xorg-minimal-fonts \
     xinit \
     xauth \
@@ -30,14 +31,6 @@ IMAGE_INSTALL += " \
     xdotool \
     openbox \
     obconf \
-    xserver-xorg-video-modesetting \
-    xserver-xorg-video-fbdev \
-    xserver-xorg-video-vesa \
-    mesa-gl \
-    mesa-dri-drivers \
-    font-alias \
-    font-misc-misc \
-    font-cursor-misc \
 "
 
 # networking

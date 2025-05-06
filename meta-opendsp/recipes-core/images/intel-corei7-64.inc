@@ -5,11 +5,14 @@ MACHINE_FEATURES += " intel-graphics opengl"
 IMAGE_INSTALL += " grub-efi"
 
 # X11 support for generic Intel
+# xf86-video-amdgpu: not avaliable for kirkstone
 IMAGE_INSTALL += " \
-    xserver-xorg-video-intel \
-    xserver-xorg-video-amdgpu \
-    xserver-xorg-video-nouveau \
-    mesa-vulkan-drivers \
+    xf86-video-ast \
+    xf86-video-intel \
+    xf86-video-vesa \
+    xf86-video-vmware \
+    xf86-video-ati \
+    xf86-video-nouveau \
 "
 
 # Specify the WKS file for the image layout
