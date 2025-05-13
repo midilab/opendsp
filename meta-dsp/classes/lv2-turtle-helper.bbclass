@@ -12,12 +12,12 @@
 # 3. Generate ttl-files at first boot / after package was installed
 
 
-# File containing names of plugins to handle in do_compile:append 
+# File containing names of plugins to handle in do_compile:append
 # Line-format expected: <some-path-in-build>/<plugin>.so
 LV2_PLUGIN_INFO_FILE = "${WORKDIR}/lv2-ttl-generator-data"
 LV2_PLUGIN_INFO_FILE_CLEANED = "${LV2_PLUGIN_INFO_FILE}-cleaned"
 
-# File containing names of plugins to handle in do_compile:append 
+# File containing names of plugins to handle in do_compile:append
 # Line-format expected: <path-ontarget>/<plugin>.so
 LV2_PLUGIN_POSTINST_INFO_FILE = "${LV2_PLUGIN_INFO_FILE}-postinst"
 

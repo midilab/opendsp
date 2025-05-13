@@ -1,3 +1,8 @@
 #!/bin/bash
 
-docker run --rm -it -v ./:/workdir crops/poky --workdir=/workdir 
+docker run --rm -it \
+  -v ./:/workdir \
+  -e TEMPLATECONF=/workdir/meta-opendsp/conf \
+  --workdir=/workdir \
+  crops/poky \
+  /bin/bash -c "source poky/oe-init-build-env && exec /bin/bash -i"
