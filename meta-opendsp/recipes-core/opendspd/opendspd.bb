@@ -7,8 +7,12 @@ LIC_FILES_CHKSUM = "file://../LICENSE;md5=d32239bcb673463ab874e80d47fae504"
 # default user to run opendspd is opendsp
 OPENDSP_HOME_DIR = "/home/opendsp"
 
-SRC_URI = "git://github.com/midilab/opendspd.git;protocol=https;nobranch=1 \
-           file://resize_userdata \
+SRC_URI = " \
+    git://github.com/midilab/opendspd.git;protocol=https;nobranch=1 \
+    file://first-boot-setup.sh \
+    file://first-boot-setup.service \
+    file://changepasswd \
+    file://resize_userdata \
 "
 
 # version
@@ -18,7 +22,8 @@ SRCREV = "b989f051d440325c1965270a62b05f73b8522fd7"
 
 S = "${WORKDIR}/git/src"
 
-FILES:${PN} = "${bindir}/*"
+FILES:${PN} += "${bindir}/*"
+FILES:${PN} += "${sbindir}/*"
 FILES:${PN} += "${sysconfdir}/*"
 FILES:${PN} += "${systemd_system_unitdir}/*"
 FILES:${PN} += "${OPENDSP_HOME_DIR}/.*"
@@ -43,7 +48,7 @@ inherit systemd
 # create_ap.service
 NATIVE_SYSTEMD_SUPPORT = "1"
 SYSTEMD_PACKAGES += "${PN}"
-SYSTEMD_SERVICE:${PN} += "opendsp.service"
+SYSTEMD_SERVICE:${PN} += " opendsp.service first-boot-setup.service"
 SYSTEMD_AUTO_ENABLE = "enable"
 
 do_install:append() {
@@ -56,6 +61,13 @@ do_install:append() {
     install -m 0644 ../services/vdisplay.service ${D}${systemd_system_unitdir}/
     install -m 0644 ../services/display.service ${D}${systemd_system_unitdir}/
 
+    # first boot setup
+    install -m 0644 ${WORKDIR}/first-boot-setup.service ${D}${systemd_system_unitdir}/
+    install -d ${D}${sbindir}
+    install -m 0755 ${WORKDIR}/first-boot-setup.sh ${D}${sbindir}/
+    install -d ${D}${bindir}
+    install -D ${WORKDIR}/resize_userdata -m 0777 ${D}${bindir}/
+
     # opendsp user skel data
     install -d ${D}${OPENDSP_HOME_DIR}/.config/openbox/
     cp -rf --no-preserve=ownership ../skel/openbox/* ${D}${OPENDSP_HOME_DIR}/.config/openbox/
@@ -67,7 +79,6 @@ do_install:append() {
     # opendsp tools
     install -d ${D}${OPENDSP_HOME_DIR}/.config/openbox/scripts/
     cp -rf --no-preserve=ownership ../tools/openbox/scripts/*.py ${D}${OPENDSP_HOME_DIR}/.config/openbox/scripts/
-    install -D ../tools/bin/changepasswd -m 0755 ${D}${bindir}/changepassword
     install -D ../tools/bin/opendspd-update -m 0755 ${D}${bindir}/opendspd-update
     install -D ../tools/bin/vlc-youtube-update -m 0755 ${D}${bindir}/vlc-youtube-update
 
@@ -79,8 +90,9 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/.log/a2j/
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 
-    # Install resize_userdata script
-    install -D ${WORKDIR}/resize_userdata -m 0777 ${D}${bindir}/resize_userdata
+    # changepasswd file
+    install -D ${WORKDIR}/changepasswd -m 0755 ${D}${bindir}/
+
 }
 
 inherit setuptools3

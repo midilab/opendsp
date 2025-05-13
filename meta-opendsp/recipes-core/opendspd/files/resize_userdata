@@ -181,18 +181,23 @@ chown -R opendsp:opendsp ${DATA_MOUNT_POINT}
 echo "-----------------------------------------------------"
 echo "Resize operation complete."
 echo "-----------------------------------------------------"
-echo "Press Enter to reboot your machine (recommended)..."
-read
+#echo "Press Enter to reboot your machine (recommended)..."
+#read
 
 # Attempt to remove the script itself before rebooting
 echo "Removing this script ($0)..."
-rm "$0"
+rm -f "$0"
 if [ $? -ne 0 ]; then
     echo "Warning: Failed to remove the script file $0."
 fi
 
-echo "Rebooting now..."
-shutdown -r now
+#echo "Rebooting now..."
+#shutdown -r now
+
+# re-enable services
+systemctl start nmb || true
+systemctl start smb || true
+systemctl start opendsp || true
 
 # Exit gracefully if shutdown command fails for some reason
 exit 0

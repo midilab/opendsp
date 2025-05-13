@@ -3,6 +3,6 @@
 part /boot --source bootimg-efi --sourceparams="loader=grub-efi, title=boot, label=boot-efi, initrd=${INITRD_IMAGE_LIVE}-${MACHINE}.${INITRAMFS_FSTYPES}" --ondisk sda --label boot --align 1024 --use-uuid --active
 part / --source rootfs --rootfs-dir=${IMAGE_ROOTFS} --ondisk sda --label opendsp --align 1024 --use-uuid --fstype=ext4
 # user data
-part /home/opendsp/data --source rootfs --rootfs-dir=${IMAGE_ROOTFS}/home/opendsp/data --ondisk sda --fstype=ext4 --label data --align 1024 --use-uuid --size 128M
+part /home/opendsp/data --source rootfs --rootfs-dir=${IMAGE_ROOTFS}/home/opendsp/data --ondisk sda --fstype=ext4 --label data --align 1024 --use-uuid
 
 bootloader --ptable gpt --timeout=0 --append=" rootwait "

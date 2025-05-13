@@ -1,6 +1,7 @@
 SUMMARY = "OpenDSP base with opendspd, user data partition and readonly rootfs."
 LICENSE = "MIT"
 
+
 #
 # image setup
 #
@@ -10,7 +11,7 @@ IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
-IMAGE_INSTALL += " opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src fltk fltk-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils alsa-firmware a2jmidid mpg123 parted cpupower wget"
+IMAGE_INSTALL += " shadow opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src fltk fltk-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils alsa-firmware a2jmidid mpg123 parted cpupower wget"
 
 # Development environment?
 IMAGE_INSTALL += " gcc make cmake pkgconfig"
@@ -57,10 +58,10 @@ IMAGE_INSTALL += " \
     suil \
     jc303-lv2 \
     gearmulator-lv2 \
-    lv2-ttl-generator \
-    distrho-ports \
-    dpf-plugins \
 "
+# fix offline setup with read-only fs
+#distrho-ports-lv2
+#distrho-ports-presets
 
 # meta-video
 IMAGE_INSTALL += " \
@@ -72,7 +73,7 @@ IMAGE_LINGUAS = "en-us"
 SDIMG_ROOTFS_TYPE = "ext4"
 IMAGE_FSTYPES = "wic"
 
-# To make the image read only, uncomment the following line
+# yes we want read-only filesystem
 IMAGE_FEATURES += " read-only-rootfs"
 
 #
@@ -176,25 +177,16 @@ SSID=OpenDSP
 PASSPHRASE=opendspd
 USE_PSK=0
 EOF
-
-	# changing samba file share service password
-	#echo -ne "${PASSWORD}\n${PASSWORD}\n" | smbpasswd -a -s opendsp
-	# chaging vnc virtual desktop service password
-	#x11vnc -storepasswd ${PASSWORD} ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
-
-	# rm lost+found on data user partition
-	#rm -r ${IMAGE_ROOTFS}/home/opendsp/data/lost+found
-
-	# set sane permitions
-    chown -R 1000 ${IMAGE_ROOTFS}/home/opendsp/
-    chgrp -R 1000 ${IMAGE_ROOTFS}/home/opendsp/
 }
 
 do_opendsp_image_pre () {
+	# set sane permitions
+    chown -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
+    chgrp -R opendsp ${IMAGE_ROOTFS}/home/opendsp/
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
-#IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
+IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
 
-# for user name resolution at chown and chmod?
-#DEPENDS += "shadow-native"
+# for user name resolution at chown and chgrp
+DEPENDS += " shadow-native"

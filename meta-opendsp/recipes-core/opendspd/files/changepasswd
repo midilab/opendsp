@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -e
+
+PASSWORD=""
+
+# Skip interactive prompts if password is provided via argument
+if [ -n "$1" ]; then
+    PASSWORD="$1"
+    #if [ ${#PASSWORD} -lt 8 ]; then
+    #    echo "Error: Password must be at least 8 characters long. Aborting."
+    #    exit 1
+    #fi
+else
+    echo -e "This will change opendsp passwords for:\n1 - System account\n2 - Wifi access point services\n3 - Samba file share\n4 - VNC service"
+    read -p "Press enter if you want to continue"
+
+    # Reading new password from user
+    while true; do
+        read -s -p "New Password: " PASSWORD
+        echo
+        read -s -p "Confirm New Password: " PASSWORD2
+        echo
+
+        #if [ ${#PASSWORD} -lt 8 ]
+        #then
+        #    echo "Password must be at least 8 characters long, please try again..."
+        #    continue
+        #fi
+
+        if [ "$PASSWORD" = "$PASSWORD2" ]
+        then
+            break
+        else
+            echo "Passwords do not match, please try again..."
+        fi
+    done
+fi
+
+# remount file system for write pruporse
+sudo mount -o remount,rw / || true
+sleep 1
+
+# changing system password
+#HASHED_PASSWORD=$(openssl passwd -1 "$PASSWORD")
+echo "opendsp:$PASSWORD" | sudo chpasswd || true
+
+# changing samba file share service password
+echo -ne "$PASSWORD\n$PASSWORD\n" | sudo smbpasswd -a -s opendsp || true
+
+# chaging vnc virtual desktop service password
+x11vnc -storepasswd $PASSWORD /home/opendsp/.vnc/passwd || true
+
+# chaging wifi access point service connection password
+sudo sed -i "/PASSPHRASE/c\PASSPHRASE=$PASSWORD" /etc/create_ap.conf || true
+
+# remount file system for read only
+sudo mount -o remount,ro / || true
+sleep 1
+
+if [ -z "$1" ]; then
+    echo -e "Done! The following services needs to be restart:\n1 - Wifi access point services\n2 - Samba file share"
+    read -p "Press enter if you want to continue"
+    # restart services to apply password changes
+    # samba
+    echo "Restarting services..."
+    sudo systemctl stop smb || true
+    sudo systemctl stop nmb || true
+    sleep 5
+    sudo systemctl start nmb || true
+    sudo systemctl start smb || true
+    # vnc services(do not restart, if the script are running inside a vnc session then we got ourselfs killed before we end processing)
+    #sudo systemctl restart vdisplay
+    # wif access point
+    #sudo systemctl restart create_ap
+fi
+
+
+echo "Password updated successfully."
