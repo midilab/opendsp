@@ -92,16 +92,6 @@ echo "  Partition Path   : ${USER_DATA_DEVICE_PARTITION}"
 echo "  Partition Number : ${USER_DATA_PARTITION_NUMBER}"
 echo "  Mount Point      : ${DATA_MOUNT_POINT}"
 echo "-----------------------------------------------------"
-# Optional: Add a confirmation prompt before proceeding
-# read -p "Press Enter to continue with resizing, or Ctrl+C to abort..."
-
-# Stop services that might be using the data partition
-echo "Stopping services..."
-systemctl stop opendsp || echo "Warning: Failed to stop opendsp (maybe not running?)"
-systemctl stop smb || echo "Warning: Failed to stop smb (maybe not running?)"
-systemctl stop nmb || echo "Warning: Failed to stop nmb (maybe not running?)"
-# Add a small delay to allow services to shut down cleanly
-sleep 5
 
 # Unmount data directory
 echo "Unmounting ${DATA_MOUNT_POINT}..."
@@ -181,8 +171,6 @@ chown -R opendsp:opendsp ${DATA_MOUNT_POINT}
 echo "-----------------------------------------------------"
 echo "Resize operation complete."
 echo "-----------------------------------------------------"
-#echo "Press Enter to reboot your machine (recommended)..."
-#read
 
 # Attempt to remove the script itself before rebooting
 echo "Removing this script ($0)..."
@@ -190,14 +178,6 @@ rm -f "$0"
 if [ $? -ne 0 ]; then
     echo "Warning: Failed to remove the script file $0."
 fi
-
-#echo "Rebooting now..."
-#shutdown -r now
-
-# re-enable services
-systemctl start nmb || true
-systemctl start smb || true
-systemctl start opendsp || true
 
 # Exit gracefully if shutdown command fails for some reason
 exit 0

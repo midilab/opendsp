@@ -1,11 +1,8 @@
 [Unit]
 Description=First Boot Setup Script
 DefaultDependencies=no
-# Ensure /var is mounted and writable if the marker is there.
-# systemd-remount-fs.service runs early. If /var is a separate partition, var.mount is important.
 After=local-fs.target systemd-remount-fs.service var.mount
 Before=sysinit.target shutdown.target
-# This condition ensures the service only runs if the marker file doesn't exist
 ConditionPathExists=!/var/lib/first-boot-setup/completed
 
 [Service]
