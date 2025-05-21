@@ -59,9 +59,6 @@ IMAGE_INSTALL += " \
     jc303-lv2 \
     gearmulator-lv2 \
     carla \
-    python3-pyqt5 \
-    qtbase \
-    qtsvg \
 "
 # fix offline setup with read-only fs
 #distrho-ports-lv2

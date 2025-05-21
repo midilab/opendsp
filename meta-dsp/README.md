@@ -1,7 +1,7 @@
 # meta-dsp OpenEmbedded Layer
 
 Audio processors, Synthesizers, Samplers, Effects and General Audio Tools.
-Forked from meta-musicians layer for DSP only. With some plus apps and up-to-date.
+Some recipes forked from meta-musicians layer for DSP only. With some plus apps and up-to-date.
 This is still a working in progress layer.
 
 to be add: BYOD
