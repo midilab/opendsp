@@ -56,8 +56,12 @@ IMAGE_INSTALL += " \
     sord \
     sratom \
     suil \
+    jc303 \
     jc303-lv2 \
+    jc303-vst3 \
+    gearmulator \
     gearmulator-lv2 \
+    gearmulator-vst3 \
     carla \
 "
 # fix offline setup with read-only fs

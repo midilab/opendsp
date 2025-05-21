@@ -43,7 +43,7 @@ EXTRA_OECMAKE = " \
     -Dgearmulator_BUILD_JUCEPLUGIN_LV2=ON \
     -Dgearmulator_BUILD_JUCEPLUGIN_CLAP=OFF \
     -Dgearmulator_BUILD_JUCEPLUGIN_VST2=OFF \
-    -Dgearmulator_BUILD_JUCEPLUGIN_VST3=OFF \
+    -Dgearmulator_BUILD_JUCEPLUGIN_VST3=ON \
     -Dgearmulator_BUILD_JUCEPLUGIN_AU=OFF \
 "
 BUILD_TYPE = "Release"
@@ -91,5 +91,6 @@ do_install:append() {
 # Specify the files to include in the package
 FILES:${PN} += " \
     ${libdir}/lv2 \
+    ${libdir}/vst3 \
     ${sysconfdir}/skel \
 "
