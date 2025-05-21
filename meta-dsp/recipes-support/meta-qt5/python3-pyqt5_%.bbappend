@@ -1,7 +1,11 @@
 BBCLASSEXTEND = "native"
 
+# Ensure QtSvg is available in the build environment
+DEPENDS += " qtsvg"
 DEPENDS:class-native = "qtbase-native sip3-native python3-native"
 
+# Add QtSvg to the PYQT_MODULES for runtime
+PYQT_MODULES += " QtSvg"
 PYQT_MODULES:class-native = "QtCore"
 
 # This is a copy from meta-qt5 adjusted to native staging
@@ -43,4 +47,3 @@ do_install:class-native() {
 }
 
 RDEPENDS:${PN}:class-native = ""
-

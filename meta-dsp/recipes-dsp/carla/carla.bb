@@ -8,8 +8,11 @@ LIC_FILES_CHKSUM = " \
 
 SRC_URI = " \
     git://github.com/falkTX/Carla.git;branch=main;protocol=https \
+    file://0001-do-not-try-to-cross-run-carla-lv2-export.patch \
 "
 SRCREV = "6bc9a90ebb1767649d2538108ed4a604ce96dacb"
+# latest before qt6 update
+# c37d53a4216654118e711fa41e88e7e801d5bd9b
 S = "${WORKDIR}/git"
 PV = "2.5.0"
 
@@ -46,10 +49,6 @@ do_configure() {
     # Fix the python3.10 path in pyrcc5 and pyuic5
     sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.0-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.0-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyrcc5
     sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.0-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.0-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyuic5
-    # remove lv2 generation setup part from makefile, move it to do_compile:append via qemu
-    sed -i '/@echo "Generating LV2 ttl data"/d' ${B}/source/plugin/Makefile
-    sed -i '/$(SILENT)cd $(BINDIR) && $(EXE_WRAPPER) .\/carla-lv2-export$(APP_EXT)/d' ${B}/source/plugin/Makefile
-    sed -i '/$(SILENT)cd $(BINDIR)\/carla.lv2 && ln -sf ..\/\*bridge-\* ..\/carla-discovery-\* ./d' ${B}/source/plugin/Makefile
 
     oe_runmake features
 }
@@ -75,4 +74,4 @@ FILES:${PN} += " \
 
 INSANE_SKIP:${PN} = "dev-so"
 
-RDEPENDS:${PN} += "python3-pyqt5 qtsvg bash"
+RDEPENDS:${PN} += "python3-pyqt5 bash"
