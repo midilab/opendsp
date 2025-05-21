@@ -3,7 +3,6 @@ Description=First Boot Setup Script
 DefaultDependencies=no
 After=local-fs.target systemd-remount-fs.service var.mount
 Before=sysinit.target shutdown.target
-ConditionPathExists=!/var/lib/first-boot-setup/completed
 
 [Service]
 Type=oneshot

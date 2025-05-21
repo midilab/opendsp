@@ -13,6 +13,7 @@ SRC_URI = " \
     file://first-boot-setup.service \
     file://changepasswd \
     file://resize_userdata \
+    file://passdb.tdb \
 "
 
 # version
@@ -93,6 +94,10 @@ do_install:append() {
     # changepasswd file
     install -D ${WORKDIR}/changepasswd -m 0755 ${D}${bindir}/
 
+    # because samba couldn't get password updated at boot time we preset a default one file
+    # TODO: find a fix! this is a security issue to host this file on repository
+    mkdir -p ${D}/var/lib/samba/private/
+    install -D ${WORKDIR}/passdb.tdb -m 0600 ${D}/var/lib/samba/private/
 }
 
 inherit setuptools3
