@@ -1,4 +1,4 @@
-From 88c61efce068b4cfe6d4c175bd9d1b85def23708 Mon Sep 17 00:00:00 2001
+From 03f32985c35cd2a4130e7b5bfe99b0e2b0b51956 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Andreas=20M=C3=BCller?= <schnitzeltony@gmail.com>
 Date: Sat, 15 Jul 2017 00:03:36 +0200
 Subject: [PATCH] do not try to cross-run carla-lv2-export
@@ -15,12 +15,12 @@ Signed-off-by: Andreas Müller <schnitzeltony@gmail.com>
  1 file changed, 1 insertion(+), 3 deletions(-)
 
 diff --git a/source/plugin/Makefile b/source/plugin/Makefile
-index 389dd77ee..251ecc18c 100644
+index 1b4017ead..1ec221366 100644
 --- a/source/plugin/Makefile
 +++ b/source/plugin/Makefile
-@@ -528,9 +528,7 @@ $(BINDIR)/carla.lv2/manifest.ttl: $(OBJDIR)/carla-lv2-export.cpp.o $(BINDIR)/car
+@@ -505,9 +505,7 @@ $(BINDIR)/carla.lv2/manifest.ttl: $(OBJDIR)/carla-lv2-export.cpp.o $(BINDIR)/car
  	@echo "Linking carla-lv2-export$(APP_EXT)"
- 	$(SILENT)$(CXX) $< $(LIBS_START) $(LIBS) $(LIBS_juce) $(LIBS_END) $(NATIVE_LINK_FLAGS) -o $(BINDIR)/carla-lv2-export$(APP_EXT)
+ 	$(SILENT)$(CXX) $< $(LIBS_START) $(LIBS) $(LIBS_END) $(NATIVE_LINK_FLAGS) -o $(BINDIR)/carla-lv2-export$(APP_EXT)
  
 -	@echo "Generating LV2 ttl data"
 -	$(SILENT)cd $(BINDIR) && $(EXE_WRAPPER) ./carla-lv2-export$(APP_EXT)
@@ -29,6 +29,3 @@ index 389dd77ee..251ecc18c 100644
  
  $(BINDIR)/carla-lv2-export$(APP_EXT): $(OBJDIR)/carla-lv2-export.cpp.o
  	-@mkdir -p $(BINDIR)
--- 
-2.34.3
-
