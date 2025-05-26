@@ -145,7 +145,6 @@ do_install () {
 
 FILES_${PN} += " \
     ${libdir}/lv2 \
-    ${libdir}/vst \
     ${libdir}/vst3 \
     ${sysconfdir}/skel \
 "
