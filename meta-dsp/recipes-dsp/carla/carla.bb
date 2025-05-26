@@ -14,13 +14,44 @@ SRCREV = "17000e7fe99459b25a50094a8b00bdfa12f2bfbc"
 S = "${WORKDIR}/git"
 PV = "2.5.9"
 
-REQUIRED_DISTRO_FEATURES = "x11"
+REQUIRED_DISTRO_FEATURES += " x11"
 
-inherit pkgconfig qemu-ext-musicians features_check
+inherit qmake5_base python3native pkgconfig qemu-ext-musicians features_check mime mime-xdg gtk-icon-cache
 
 B = "${S}"
 
-EXTRA_OEMAKE += "SKIP_STRIPPING=true"
+DEPENDS += " \
+    python3-pyqt5-native \
+    qtbase-native \
+    qtbase \
+    gtk+ \
+    gtk+3 \
+    liblo \
+    fluidsynth \
+    libsndfile1 \
+"
+
+EXTRA_OEMAKE += " \
+    DEFAULT_QT=5 \
+    NOOPT=true \
+    HAVE_PYQT=true \
+    HAVE_PYQT4=false \
+    HAVE_PYQT5=true \
+    SKIP_STRIPPING=true \
+"
+
+export QT5_HOSTBINS="${OE_QMAKE_PATH_EXTERNAL_HOST_BINS}"
+export UIC_QT5="${STAGING_DIR_NATIVE}/usr/bin/uic"
+export MOC_QT5="${STAGING_DIR_NATIVE}/usr/bin/moc"
+export RCC_QT5="${STAGING_DIR_NATIVE}/usr/bin/rcc"
+
+do_configure() {
+    # Fix the python3.10 path in pyrcc5 and pyuic5
+    sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyrcc5
+    sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyuic5
+
+    oe_runmake features
+}
 
 do_compile:append() {
     cd ${S}/bin
@@ -35,6 +66,9 @@ do_install() {
     install -d ${D}${sysconfdir}/skel/data/app/falkTX
     install -d ${D}${sysconfdir}/skel/.config
     ln -sf ../data/app/falkTX ${D}${sysconfdir}/skel/.config/falkTX
+
+    # Remove redundant RPATH
+    chrpath --delete ${D}${libdir}/carla/styles/carlastyle.so || true
 }
 
 FILES:${PN} += " \
@@ -49,4 +83,4 @@ FILES:${PN} += " \
 
 INSANE_SKIP:${PN} = "dev-so"
 
-RDEPENDS:${PN} += "python3-pyqt5 qtbase bash"
+RDEPENDS:${PN} += "python3-pyqt5 bash"
