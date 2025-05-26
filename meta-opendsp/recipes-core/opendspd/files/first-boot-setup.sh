@@ -35,6 +35,10 @@ fi
 systemctl disable first-boot-setup
 rm -f /etc/systemd/system/first-boot-setup.service
 
+# copy skel data to opendsp user home
+cp -a /etc/skel/. /home/opendsp/
+chown -R opendsp:opendsp /home/opendsp
+
 # remount file system read-only
 sudo mount -o remount,ro / || true
 sleep 1
