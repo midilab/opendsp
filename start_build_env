@@ -2,7 +2,7 @@
 
 docker run --rm -it \
   -v ./:/workdir \
-  -e TEMPLATECONF=/workdir/meta-opendsp/conf \
+  -e TEMPLATECONF=/workdir/meta-opendsp/conf/templates/default \
   --workdir=/workdir \
-  crops/poky \
+  crops/poky:ubuntu-22.04 \
   /bin/bash -c "source poky/oe-init-build-env && exec /bin/bash -i"

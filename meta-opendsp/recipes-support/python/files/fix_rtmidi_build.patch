@@ -1,0 +1,36 @@
+Upstream-Status: Pending
+--- a/src/rtmidimodule.cpp	2025-05-28 08:29:21.998944702 -0300
++++ b/src/patch-rtmidimodule.cpp	2025-05-28 08:31:15.448768253 -0300
+@@ -22,6 +22,7 @@
+ #include "PyMidiMessage.h"
+ #include "pkglobals.h"
+ #include <queue>
++#include <sys/time.h>
+   
+ static PyObject *rtmidi_Error;
+ 
+@@ -94,7 +95,7 @@
+     (*outMidi->m) = inMidi;  
+ 
+     args = Py_BuildValue("(O)", outMidi);  
+-    result = PyEval_CallObject(self->callback, args);
++    result = PyObject_CallObject(self->callback, args);
+     if(result == NULL)
+     {
+       PyThreadState_SetAsyncExc(self->calling_thread_id, 0);
+@@ -177,12 +178,9 @@
+       gettimeofday(&now, 0);
+       
+       struct timespec time;
+-      TIMEVAL_TO_TIMESPEC(&now, &time);
+-      unsigned long sec = ms / 1000;
+-      unsigned long nsec = (ms % 1000) * 1000000;
+-      
+-      time.tv_sec += sec;
+-      time.tv_nsec += nsec;
++     
++      time.tv_sec = now.tv_sec;
++      time.tv_nsec = now.tv_usec * 1000; 
+       while(time.tv_nsec >= 1000000000) {
+         time.tv_sec++;
+         time.tv_nsec -= 1000000000;

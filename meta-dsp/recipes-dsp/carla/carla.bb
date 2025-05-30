@@ -22,6 +22,7 @@ B = "${S}"
 
 DEPENDS += " \
     python3-pyqt5-native \
+    python3-pyqt5-sip-native \
     qtbase-native \
     qtbase \
     gtk+ \
@@ -32,11 +33,6 @@ DEPENDS += " \
 "
 
 EXTRA_OEMAKE += " \
-    DEFAULT_QT=5 \
-    NOOPT=true \
-    HAVE_PYQT=true \
-    HAVE_PYQT4=false \
-    HAVE_PYQT5=true \
     SKIP_STRIPPING=true \
 "
 
@@ -46,9 +42,9 @@ export MOC_QT5="${STAGING_DIR_NATIVE}/usr/bin/moc"
 export RCC_QT5="${STAGING_DIR_NATIVE}/usr/bin/rcc"
 
 do_configure() {
-    # Fix the python3.10 path in pyrcc5 and pyuic5
-    sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyrcc5
-    sed -i 's|/workdir/build/tmp/work/x86_64-linux/python3-pyqt5-native/5.15.7-r0/image//workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3.10|/workdir/build/tmp/work/corei7-64-midilab-linux/carla/2.5.9-r0/recipe-sysroot-native/usr/bin/python3-native/python3.10|g' ${STAGING_DIR_NATIVE}/usr/bin/pyuic5
+    # Fix the python3 path in pyrcc5 and pyuic5
+    sed -i 's|/usr/bin/python3 |/usr/bin/python3-native/python3 |g' ${STAGING_DIR_NATIVE}/usr/bin/pyrcc5
+    sed -i 's|/usr/bin/python3 |/usr/bin/python3-native/python3 |g' ${STAGING_DIR_NATIVE}/usr/bin/pyuic5
 
     oe_runmake features
 }

@@ -1,6 +1,6 @@
 SUMMARY = "Recipe to embedded the Python PiP Package mididings"
 HOMEPAGE ="https://pypi.org/project/mididings"
-LICENSE = "GPLv2"
+LICENSE = "GPL-3.0-or-later"
 LIC_FILES_CHKSUM = "file://README.md;md5=f0f58f50d57bd7496dab1a157dd50174"
 
 PYPI_PACKAGE = "mididings"
@@ -18,4 +18,4 @@ DEPENDS += " \
     boost \
 "
 
-inherit setuptools3 pypi pkgconfig 
+inherit setuptools3 pypi pkgconfig

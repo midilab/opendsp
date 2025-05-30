@@ -5,8 +5,10 @@ LIC_FILES_CHKSUM = "file://setup_pkechomidi.py;md5=2e6339c4898996525a11f81a0653e
 
 PYPI_PACKAGE = "rtmidi"
 
-SRC_URI[sha256sum] = "f1ffd73d6571e6ce2769d77e247523738605a71c32d8f60b56a3b41002d0d54c"
+SRC_URI += "file://fix_rtmidi_build.patch"
 
-DEPENDS += "alsa-lib"
+SRC_URI[sha256sum] = "bc1e40c24f7df052df9b1e586b82a6987f899ae1a8596ec682af662df275e9b0"
 
 inherit pypi python_setuptools_build_meta
+
+DEPENDS += "alsa-lib"

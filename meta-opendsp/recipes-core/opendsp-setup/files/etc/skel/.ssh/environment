@@ -1,0 +1,1 @@
+export XAUTHORITY=/tmp/.Xauthority

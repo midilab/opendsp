@@ -63,11 +63,11 @@ do_install:append() {
     install -m 0644 ../services/display.service ${D}${systemd_system_unitdir}/
 
     # first boot setup
-    install -m 0644 ${WORKDIR}/first-boot-setup.service ${D}${systemd_system_unitdir}/
+    install -m 0644 ${WORKDIR}/sources-unpack/first-boot-setup.service ${D}${systemd_system_unitdir}/
     install -d ${D}${sbindir}
-    install -m 0755 ${WORKDIR}/first-boot-setup.sh ${D}${sbindir}/
+    install -m 0755 ${WORKDIR}/sources-unpack/first-boot-setup.sh ${D}${sbindir}/
     install -d ${D}${bindir}
-    install -D ${WORKDIR}/resize_userdata -m 0777 ${D}${bindir}/
+    install -D ${WORKDIR}/sources-unpack/resize_userdata -m 0777 ${D}${bindir}/
 
     # opendsp user skel data
     install -d ${D}${OPENDSP_HOME_DIR}/.config/openbox/
@@ -92,12 +92,12 @@ do_install:append() {
     install -d ${D}${OPENDSP_HOME_DIR}/.config/a2j/
 
     # changepasswd file
-    install -D ${WORKDIR}/changepasswd -m 0755 ${D}${bindir}/
+    install -D ${WORKDIR}/sources-unpack/changepasswd -m 0755 ${D}${bindir}/
 
     # because samba couldn't get password updated at boot time we preset a default one file
     # TODO: find a fix! this is a security issue to host this file on repository
     mkdir -p ${D}/var/lib/samba/private/
-    install -D ${WORKDIR}/passdb.tdb -m 0600 ${D}/var/lib/samba/private/
+    install -D ${WORKDIR}/sources-unpack/passdb.tdb -m 0600 ${D}/var/lib/samba/private/
 }
 
 inherit setuptools3

@@ -1,7 +1,7 @@
 DESCRIPTION = "Firmware binaries for loader programs in alsa-tools and hotplug firmware loader"
 HOMEPAGE = "https://alsa-project.org/"
 SECTION = "base/kernel"
-LICENSE = "BSD-3-Clause & GPL-2.0-only & LGPL-2.1-only & alsa-firmware-custom"
+LICENSE = "BSD-3-Clause & GPL-2.0-only & LGPL-2.1-only"
 LIC_FILES_CHKSUM = " \
     file://COPYING;md5=d2240eee132996e6acef85bb7bc349db \
     file://aica/license.txt;md5=272787adcad53e7d7efe9dc0ce98eefd \

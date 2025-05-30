@@ -1,0 +1,51 @@
+Upstream-Status: Pending
+--- a/src/liblo.pyx	2015-03-15 00:05:16.000000000 -0300
++++ b/src/patched-liblo.pyx	2025-05-28 10:31:22.496952163 -0300
+@@ -206,7 +206,7 @@
+ 
+ 
+ cdef int _msg_callback(const_char *path, const_char *types, lo_arg **argv,
+-                       int argc, lo_message msg, void *cb_data) with gil:
++                       int argc, lo_message msg, void *cb_data) noexcept with gil:
+     cdef int i
+     cdef char t
+     cdef unsigned char *ptr
+@@ -231,12 +231,12 @@
+         elif t == 't': v = _timetag_to_double(argv[i].t)
+         elif t == 'b':
+             if PY_VERSION_HEX >= 0x03000000:
+-                v = bytes(<unsigned char*>lo_blob_dataptr(argv[i]))
++                v = bytes(<unsigned char*>lo_blob_dataptr(<lo_blob>argv[i]))
+             else:
+                 # convert binary data to python list
+                 v = []
+-                ptr = <unsigned char*>lo_blob_dataptr(argv[i])
+-                size = lo_blob_datasize(argv[i])
++                ptr = <unsigned char*>lo_blob_dataptr(<lo_blob>argv[i])
++                size = lo_blob_datasize(<lo_blob>argv[i])
+                 for j from 0 <= j < size:
+                     v.append(ptr[j])
+         else:
+@@ -271,19 +271,19 @@
+     return r if r != None else 0
+ 
+ 
+-cdef int _bundle_start_callback(lo_timetag t, void *cb_data) with gil:
++cdef int _bundle_start_callback(lo_timetag t, void *cb_data) noexcept with gil:
+     cb = <object>cb_data
+     r = cb.start_func(_timetag_to_double(t), cb.user_data)
+     return r if r != None else 0
+ 
+ 
+-cdef int _bundle_end_callback(void *cb_data) with gil:
++cdef int _bundle_end_callback(void *cb_data) noexcept with gil:
+     cb = <object>cb_data
+     r = cb.end_func(cb.user_data)
+     return r if r != None else 0
+ 
+ 
+-cdef void _err_handler(int num, const_char *msg, const_char *where) with gil:
++cdef void _err_handler(int num, const_char *msg, const_char *where) noexcept with gil:
+     # can't raise exception in cdef callback function, so use a global variable
+     # instead
+     global __exception
