@@ -8,7 +8,6 @@ LIC_FILES_CHKSUM = " \
 
 SRC_URI = " \
     git://github.com/DISTRHO/DISTRHO-Ports.git;branch=master;protocol=https \
-    file://0001-Modify-ttl-generation-target-so-we-can-sed-it-to-cor.patch \
     \
     http://linuxsynths.com/ObxdPatchesDemos/ObxdPatchesBrian-01.tar.gz;name=linuxsynths-obxd-patches1;subdir=linuxsynths-obxd-patches \
     \
@@ -30,9 +29,12 @@ SRC_URI[linuxsynths-vex-patches2.sha256sum] = "378cff261dab333c5f29246b6f3f557e0
 
 REQUIRED_DISTRO_FEATURES = "x11 opengl"
 
-inherit meson pkgconfig lv2-turtle-helper features_check pack_audio_plugins
+inherit meson pkgconfig features_check pack_audio_plugins
 
 DEPENDS += " \
+    lv2-native \
+    lv2-ttl-generator-native \
+    alsa-lib-native \
     virtual/libgl \
     alsa-lib \
     libx11 \
@@ -42,16 +44,20 @@ DEPENDS += " \
     fftw \
 "
 
-LV2_TTL_GENERATOR = "${B}/libs/lv2-ttl-generator/lv2_ttl_generator"
+export LV2_TTL_GENARATOR = "${STAGING_DIR_NATIVE}${bindir_native}/lv2-ttl-generator"
 
-do_ttl_sed() {
-    sed -i 's|%PLUGIN_INFO_FILE%|${LV2_PLUGIN_INFO_FILE}|g' `find ${S} -name meson.build`
-    sed -i 's|$GEN ./$FILE|echo "`pwd`/$FILE" >> ${LV2_PLUGIN_INFO_FILE}|g' `find ${S}/scripts -name *.sh`
+EXTRA_OEMESON += " \
+    -Dplugins='arctican-function,arctican-pilgrim,dexed,drowaudio-distortion,drowaudio-distortionshaper,drowaudio-flanger,drowaudio-reverb,drowaudio-tremolo,drumsynth,easySSP,eqinox,HiReSam,juce-opl,klangfalter,LUFSMeter,LUFSMeter-Multi,luftikus,obxd,pitchedDelay,refine,stereosourceseparation,tal-dub-3,tal-filter,tal-filter-2,tal-noisemaker,tal-reverb,tal-reverb-2,tal-reverb-3,tal-vocoder-2,temper,vex,wolpertinger,vitalium' \
+    -Dbuild-lv2=true \
+    -Dbuild-vst2=false \
+    -Dbuild-vst3=true \
+"
+
+do_configure:append() {
+    # meson thinks it is cross-compile(wich it is, but no wine needed, lets rely on lv2-ttl-generator-native)
+    sed -i "s#(meson.is_cross_build() ? 'wine' : 'env'), lv2_ttl_generator#'env', 'LD_LIBRARY_PATH=${STAGING_DIR_NATIVE}${libdir_native}', '${LV2_TTL_GENARATOR}'#g" ${S}/ports/meson.build
+    sed -i "s#(meson.is_cross_build() ? 'wine' : 'env'), lv2_ttl_generator#'env', 'LD_LIBRARY_PATH=${STAGING_DIR_NATIVE}${libdir_native}', '${LV2_TTL_GENARATOR}'#g" ${S}/ports-legacy/meson.build
 }
-
-#EXTRA_OEMESON += " \
-#    -Doptimizations=false \
-#"
 
 do_install:append() {
     # obxd-presets

@@ -9,6 +9,8 @@ SRCREV = "14842be64ba309b8717592c5cf461925fa8a98af"
 S = "${WORKDIR}/git"
 PV = "0.0.0+git${SRCPV}"
 
+inherit native
+
 BBCLASSEXTEND = "native"
 
 do_compile() {
@@ -23,4 +25,3 @@ do_install() {
 
 # There are cases we neet we need target versions
 SYSROOT_DIRS:append:class-target = " ${bindir}"
-

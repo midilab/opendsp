@@ -14,7 +14,7 @@ EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 IMAGE_INSTALL += " shadow opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src fltk fltk-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils alsa-firmware a2jmidid mpg123 parted cpupower wget bash"
 
 # Development environment?
-IMAGE_INSTALL += " gcc make cmake pkgconfig"
+#IMAGE_INSTALL += " gcc make cmake pkgconfig"
 
 # Tools
 IMAGE_INSTALL += " e2fsprogs-resize2fs"
@@ -44,29 +44,22 @@ IMAGE_INSTALL += " udev-rules-tty"
 # meta-dsp
 IMAGE_INSTALL += " \
     lv2 \
-    ganv \
-    ingen \
-    ingen-standalone \
-    lilv \
     jalv \
     mda-lv2 \
     patchage \
-    raul \
-    serd \
-    sord \
-    sratom \
-    suil \
     jc303 \
     jc303-lv2 \
     jc303-vst3 \
     gearmulator \
     gearmulator-lv2 \
     gearmulator-vst3 \
+    distrho-ports-lv2 \
+    distrho-ports-vst3 \
+    distrho-ports-presets \
+    ingen \
+    ingen-standalone \
     carla \
 "
-# fix offline setup with read-only fs
-#distrho-ports-lv2
-#distrho-ports-presets
 
 # meta-video
 IMAGE_INSTALL += " \
