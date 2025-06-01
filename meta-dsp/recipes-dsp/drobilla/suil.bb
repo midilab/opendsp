@@ -1,19 +1,18 @@
 SUMMARY = "Suil is a lightweight C library for loading and wrapping LV2 plugin UIs"
 HOMEPAGE = "https://drobilla.net/software/suil"
 LICENSE = "MIT"
-LIC_FILES_CHKSUM = "file://COPYING;md5=323e8282a413e218c2ec674a44c02cf4"
+LIC_FILES_CHKSUM = "file://COPYING;md5=b5f0db0454006d99276ee4a1e4cf17e4"
 
-inherit waf features_check pkgconfig
+inherit meson features_check pkgconfig
 
 REQUIRED_DISTRO_FEATURES = "x11"
 
 DEPENDS = "gtk+ gtk+3 qtbase lv2"
 
-PV = "0.10.12"
+PV = "0.10.22"
 SRC_URI = " \
-    http://download.drobilla.net/${BPN}-${PV}.tar.bz2 \
-    file://0001-Fix-build-for-python3-only-environments.patch \
+    http://download.drobilla.net/${BPN}-${PV}.tar.xz \
 "
-SRC_URI[sha256sum] = "daa763b231b22a1f532530d3e04c1fae48d1e1e03785e23c9ac138f207b87ecd"
+SRC_URI[sha256sum] = "d720969e0f44a99d5fba35c733a43ed63a16b0dab867970777efca4b25387eb7"
 
 FILES:${PN} += "${libdir}/suil-0"

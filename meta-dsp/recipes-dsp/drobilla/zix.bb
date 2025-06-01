@@ -8,6 +8,7 @@ inherit meson pkgconfig
 SRC_URI = " \
     gitsm://gitlab.com/drobilla/zix.git;protocol=https;branch=main \
 "
-SRCREV = "8b9a97eff86a6f9e0c3b21e329e34d6a4ff2ffa7"
+# 0.6.2
+SRCREV = "ee35824ffe3eaf5d1cc32ceca3233b723aac7d43"
 
 S = "${WORKDIR}/git"

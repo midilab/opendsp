@@ -3,7 +3,6 @@ HOMEPAGE = "http://drobilla.net/software/lilv"
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://COPYING;md5=7e70199cf220ed471b0bf4ccdd02261e"
 
-# Use meson instead of waf, keep others
 inherit meson python3native bash-completion pkgconfig
 
 DEPENDS += "lv2 serd sord sratom"
