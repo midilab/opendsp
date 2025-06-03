@@ -5,16 +5,17 @@ LIC_FILES_CHKSUM = " \
 "
 
 SRC_URI = "git://github.com/DISTRHO/DPF-Plugins.git;branch=main;protocol=https"
-SRCREV = "014db6d4ef170b44653b1eb668686b624e4ae3f8"
+SRCREV = "0e6116c77e7d341306cdf8db827c2c2c3ec031d9"
 S = "${WORKDIR}/git"
-PV = "v1.4"
+PV = "v1.7"
 
 REQUIRED_DISTRO_FEATURES = "x11 opengl"
 
-inherit pkgconfig lv2-turtle-helper pack_audio_plugins features_check
+inherit pkgconfig pack_audio_plugins features_check
 
 # TODO standalone: *.desktop
 DEPENDS += " \
+    lv2-ttl-generator-native \
     virtual/libgl \
     cairo \
     lv2 \
@@ -28,8 +29,16 @@ EXTRA_OEMAKE += " \
     SKIP_STRIPPING=true \
 "
 
-do_ttl_sed() {
-    sed -i 's|${EXE_WRAPPER} "${GEN}" "./\x24{FILE}"|echo "`realpath  "./$FILE"`" >> ${LV2_PLUGIN_INFO_FILE}|g' ${S}/dpf/utils/generate-ttl.sh
+export LV2_TTL_GENARATOR = "${STAGING_DIR_NATIVE}${bindir_native}/lv2-ttl-generator"
+
+do_configure:append() {
+    # create symbolic link for LV2_TTL_GENARATOR at ${S}/dpf/utils/lv2_ttl_generator
+    ln -sf "${LV2_TTL_GENARATOR}" "${S}/dpf/utils/lv2_ttl_generator"
+}
+
+do_compile:prepend() {
+    # projectm fails to find sysroot /usr/lib where libprojectm.so.0 lives
+    export LD_LIBRARY_PATH="${STAGING_DIR_TARGET}/usr/lib:${LD_LIBRARY_PATH}"
 }
 
 do_install() {

@@ -56,6 +56,9 @@ IMAGE_INSTALL += " \
     distrho-ports-lv2 \
     distrho-ports-vst3 \
     distrho-ports-presets \
+    dpf-plugins-standalone \
+    dpf-plugins-lv2 \
+    dpf-plugins-vst \
     ingen \
     ingen-standalone \
     carla \

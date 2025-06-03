@@ -6,7 +6,7 @@ LIC_FILES_CHKSUM = "file://LICENSE.txt;md5=26f590fe167311fe2a5a7ce0b3e71900"
 inherit autotools-brokensep pkgconfig features_check
 inherit ${@bb.utils.contains('PACKAGECONFIG', 'qt', 'qmake5_paths', '', d)}
 
-REQUIRED_DISTRO_FEATURES = "opengl ${@bb.utils.contains('PACKAGECONFIG', 'qt', 'pulseaudio', '', d)}"
+REQUIRED_DISTRO_FEATURES = "opengl ${@bb.utils.contains('PACKAGECONFIG', 'qt', 'jack', '', d)}"
 
 DEPENDS += " \
     libglu \
