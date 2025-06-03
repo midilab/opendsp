@@ -1,14 +1,14 @@
 # meta-dsp OpenEmbedded Layer
 
 Audio processors, Synthesizers, Samplers, Effects and General Audio Tools.
-Some recipes forked from meta-musicians layer for DSP only. With some plus apps and up-to-date.
+Some recipes forked from meta-musicians layer for DSP only. With some plus apps and up-to-date recipes.
 This is still a working in progress layer.
 
-to be add: BYOD
 
 ## Audio Processing
 calf (pro audio studio plugins)
 guitarix gxplugins.lv2 (Guitar universe emulation plugins)
+BYOD
 mod-sooper-looper-lv2 (Audio Looper)
 beatslash-lv2 (Beat Repeater/Beat Slicer)
 bchoppr (audio stream chopping), bshapr (Beat / envelope shaper), bslizr (Sequenced audio slicing effect LV2 plugin)
