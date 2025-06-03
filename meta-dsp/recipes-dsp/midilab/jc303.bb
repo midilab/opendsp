@@ -30,8 +30,8 @@ DEPENDS += " \
 "
 
 SRC_URI = "gitsm://github.com/midilab/jc303.git;protocol=https;branch=main"
-SRCREV = "6e7caceb0d221682c301a0aab389691fd56644eb"
-PV = "0.12.0"
+SRCREV = "1976fa167ecc13dada8e5cfa5b50f0d895d82daa"
+PV = "0.12.2"
 
 S = "${WORKDIR}/git"
 
@@ -45,7 +45,7 @@ EXTRA_OECMAKE = " \
 "
 BUILD_TYPE = "Release"
 
-# Since this projet makes use of cmake FetchContent we need network access for configrue
+# Since this projet makes use of cmake FetchContent we need network access for configure
 do_configure[network] =  "1"
 
 # Set GIT_SSL_NO_VERIFY environment variable for configure task
