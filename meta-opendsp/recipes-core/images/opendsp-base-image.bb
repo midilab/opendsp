@@ -11,7 +11,54 @@ IMAGE_FEATURES:remove = "splash dropbear"
 EXTRA_IMAGE_FEATURES += " ssh-server-openssh package-management"
 
 # all opendsp ecosystem specific required packages
-IMAGE_INSTALL += " shadow opendspd sudo boost rtmidi liblo python3 python3-pip python3-setuptools python3-pyliblo python3-cython python3-decorator python3-wheel python3-installer python3-appdirs python3-certifi python3-packaging python3-pillow python3-psutil python3-pyparsing python3-pyserial python3-six python3-tornado python3-cffi python3-jack-client python3-rtmidi python3-mididings pyxdg jack-dev jack-server jack-utils jack-src fltk fltk-src alsa-lib alsa-tools alsa-plugins alsa-topology-conf alsa-utils alsa-firmware a2jmidid mpg123 parted cpupower wget bash"
+IMAGE_INSTALL += " \
+    shadow \
+    opendspd \
+    sudo \
+    boost \
+    rtmidi \
+    liblo \
+    python3 \
+    python3-pip \
+    python3-setuptools \
+    python3-pyliblo \
+    python3-cython \
+    python3-decorator \
+    python3-wheel \
+    python3-installer \
+    python3-appdirs \
+    python3-certifi \
+    python3-packaging \
+    python3-pillow \
+    python3-psutil \
+    python3-pyparsing \
+    python3-pyserial \
+    python3-six \
+    python3-tornado \
+    python3-cffi \
+    python3-jack-client \
+    python3-rtmidi \
+    python3-mididings \
+    pyxdg \
+    jack-dev \
+    jack-server \
+    jack-utils \
+    jack-src \
+    fltk \
+    fltk-src \
+    alsa-lib \
+    alsa-tools \
+    alsa-plugins \
+    alsa-topology-conf \
+    alsa-utils \
+    alsa-firmware \
+    a2jmidid \
+    mpg123 \
+    parted \
+    cpupower \
+    wget \
+    bash \
+"
 
 # Development environment?
 #IMAGE_INSTALL += " gcc make cmake pkgconfig"
@@ -27,12 +74,37 @@ IMAGE_INSTALL += " \
     xorg-minimal-fonts \
     xinit \
     xauth \
+    xset \
     x11vnc \
     rxvt-unicode \
     xdotool \
     openbox \
     obconf \
 "
+
+# openGL support
+IMAGE_INSTALL += " \
+    mesa \
+    libgles1-mesa \
+    libgles2-mesa \
+    libgles3-mesa \
+    mesa-demos \
+    libglu \
+    libgl \
+    libegl \
+    glew \
+"
+# mesa mesa-dri-drivers mesa-gl
+#IMAGE_INSTALL_append = " xserver-xorg-extension-glx xserver-xorg-video-modesetting "
+#gsl xrandr
+# none avaliable, but using intel drive we get accel done
+# install at /usr/share/X11/xorg.conf.d/20-intel.conf
+#Section "Device"
+#    Identifier  "Intel Graphics"
+#    Driver      "intel"
+#    Option      "AccelMethod" "uxa"   # or "sna" (try both if you have issues)
+#    Option      "DRI" "3"
+#EndSection
 
 # networking
 IMAGE_INSTALL += " samba hostapd"
@@ -67,6 +139,7 @@ IMAGE_INSTALL += " \
 # meta-video
 IMAGE_INSTALL += " \
     projectm \
+    projectm-presets-cream-of-the-crop \
 "
 
 IMAGE_LINGUAS = "en-us"

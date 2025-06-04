@@ -25,10 +25,8 @@ PV = "3.1.7+git${SRCPV}"
 
 EXTRA_OECONF += " \
     --enable-jack \
+    --enable-gles \
 "
-
-# for embedded systems...
-#--enable--gles
 
 do_configure:append() {
     # Patch Makefile.in to use the full path for PRESETSDIR
@@ -39,10 +37,14 @@ do_install:append() {
     # Install presets manually for now
     # avaliable:
     # presets_bltc201, presets_milkdrop_104, presets_projectM, presets_yin, presets_eyetune, presets_milkdrop_200, presets_stock, presets_milkdrop, presets_mischa_collection, presets_tryptonaut
-    install -m 0644 ${S}/presets/presets_projectM/* ${D}/${datadir}/projectM/presets/
+    install -m 0644 ${S}/presets/presets_mischa_collection/* ${D}/${datadir}/projectM/presets/
 
     # Remove native presets for now - they are at the wrong location
     rm -f ${D}/${datadir}/projectM/presets/*.so*
+
+    # Create skel directory structure and symbolic link for runtime user data
+    install -d ${D}${sysconfdir}/skel/data/app/projectM
+    ln -sf data/app/projectM "${D}${sysconfdir}/skel/.projectM"
 }
 
 FILES:${PN} += " \

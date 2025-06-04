@@ -7,12 +7,12 @@ IMAGE_INSTALL += " grub-efi"
 # X11 support for generic Intel
 # xf86-video-amdgpu: not avaliable for kirkstone
 IMAGE_INSTALL += " \
-    xf86-video-ast \
     xf86-video-intel \
-    xf86-video-vesa \
     xf86-video-vmware \
-    xf86-video-ati \
-    xf86-video-nouveau \
+    intel-media-driver \
+    intel-vaapi-driver \
+    libva-intel \
+    libva-intel-utils \
 "
 
 # Specify the WKS file for the image layout
