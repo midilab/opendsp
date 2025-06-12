@@ -1,7 +1,6 @@
 SUMMARY = "OpenDSP base with opendspd, user data partition and readonly rootfs."
 LICENSE = "MIT"
 
-
 #
 # image setup
 #
@@ -58,7 +57,9 @@ IMAGE_INSTALL += " \
     cpupower \
     wget \
     bash \
+    util-linux \
 "
+# htop
 
 # Development environment?
 #IMAGE_INSTALL += " gcc make cmake pkgconfig"
@@ -98,13 +99,6 @@ IMAGE_INSTALL += " \
 #IMAGE_INSTALL_append = " xserver-xorg-extension-glx xserver-xorg-video-modesetting "
 #gsl xrandr
 # none avaliable, but using intel drive we get accel done
-# install at /usr/share/X11/xorg.conf.d/20-intel.conf
-#Section "Device"
-#    Identifier  "Intel Graphics"
-#    Driver      "intel"
-#    Option      "AccelMethod" "uxa"   # or "sna" (try both if you have issues)
-#    Option      "DRI" "3"
-#EndSection
 
 # networking
 IMAGE_INSTALL += " samba hostapd"
@@ -252,6 +246,7 @@ PASSPHRASE=opendspd
 USE_PSK=0
 EOF
 }
+
 
 do_opendsp_image_pre () {
 	# set sane permitions
