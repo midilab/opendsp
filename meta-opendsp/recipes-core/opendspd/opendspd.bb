@@ -17,9 +17,9 @@ SRC_URI = " \
 "
 
 # version
-PV = "v0.12.4"
+PV = "v0.13.0"
 # commit
-SRCREV = "5430c6d52b3a3dfb4459fb658f750b1a746bc2bf"
+SRCREV = "166e659f6753ff4f13f10b8defb814eba2783b62"
 
 S = "${WORKDIR}/git/src"
 
