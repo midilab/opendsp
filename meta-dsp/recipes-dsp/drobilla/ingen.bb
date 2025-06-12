@@ -22,7 +22,7 @@ DEPENDS += " \
 SRC_URI = " \
     gitsm://gitlab.com/drobilla/ingen.git;protocol=https;branch=main \
 "
-SRCREV = "6e02a3e2e60ffdcebdb2a244dd11e500e108c6bb"
+SRCREV = "13a045d01c7a77fc918b7f496f5bf96ade4f6812"
 
 S = "${WORKDIR}/git"
 PV = "0.5.1+git${SRCPV}"
