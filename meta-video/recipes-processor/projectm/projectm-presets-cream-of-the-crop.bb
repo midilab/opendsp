@@ -14,8 +14,6 @@ inherit allarch
 
 do_install() {
     install -d ${D}${datadir}/projectM/presets
-    rm -f ${S}/LICENSE.md
-    rm -f ${S}/README.md
 
     # Recursively install all directories
     cd ${S}
