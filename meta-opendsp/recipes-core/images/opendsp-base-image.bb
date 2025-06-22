@@ -16,6 +16,8 @@ IMAGE_INSTALL += " \
     sudo \
     boost \
     rtmidi \
+    rtirq \
+    procps \
     liblo \
     python3 \
     python3-pip \
@@ -43,6 +45,7 @@ IMAGE_INSTALL += " \
     jack-server \
     jack-utils \
     jack-src \
+    jamrouter \
     fltk \
     fltk-src \
     alsa-lib \
@@ -58,8 +61,8 @@ IMAGE_INSTALL += " \
     wget \
     bash \
     util-linux \
+    htop \
 "
-# htop
 
 # Development environment?
 #IMAGE_INSTALL += " gcc make cmake pkgconfig"
@@ -70,6 +73,7 @@ IMAGE_INSTALL += " e2fsprogs-resize2fs"
 # x env
 IMAGE_INSTALL += " \
     xserver-xorg \
+    xserver-common \
     xserver-xorg-xvfb \
     xf86-video-fbdev \
     xorg-minimal-fonts \
@@ -185,35 +189,38 @@ EOF
 	echo "needs_root_rights = yes" >> ${IMAGE_ROOTFS}/etc/X11/Xwrapper.config
 
 	# xinitrc
-	echo "[[ -f ~/.Xresources ]] && xrdb ~/.Xresources" > ${IMAGE_ROOTFS}/home/opendsp/.xinitrc
-	echo "exec openbox-session" >> ${IMAGE_ROOTFS}/home/opendsp/.xinitrc
+	echo "[[ -f ~/.Xresources ]] && xrdb ~/.Xresources" > ${IMAGE_ROOTFS}/etc/skel/.xinitrc
+	echo "exec openbox-session" >> ${IMAGE_ROOTFS}/etc/skel/.xinitrc
 
 	# allow x11 forward for plugmod ingen edit modules
 	echo "X11Forwarding yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
 	echo "PermitUserEnvironment yes" >> ${IMAGE_ROOTFS}/etc/ssh/sshd_config
 
 	# allow usage of x display from terminal and via x11 forward
-	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.ssh/
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/home/opendsp/.ssh/environment
-	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/home/opendsp/.profile
+	mkdir -p ${IMAGE_ROOTFS}/etc/skel/.ssh/
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/etc/skel/.ssh/environment
+	echo "export XAUTHORITY=/tmp/.Xauthority" >> ${IMAGE_ROOTFS}/etc/skel/.profile
 
 	# create a place for x11vnc data to live on
-	mkdir -p ${IMAGE_ROOTFS}/home/opendsp/.vnc/
-	echo "" > ${IMAGE_ROOTFS}/home/opendsp/.vnc/passwd
+	mkdir -p ${IMAGE_ROOTFS}/etc/skel/.vnc/
+	echo "" > ${IMAGE_ROOTFS}/etc/skel/.vnc/passwd
+
+    # add this for TERM use xterm as default
+    echo "export TERM=xterm-256color" >> ${IMAGE_ROOTFS}/etc/skel/.bashrc
 
 	# set sudo permition to enable opendspd changes realtime priority of process
 	echo "opendsp ALL=(ALL) NOPASSWD: ALL" >> ${IMAGE_ROOTFS}/etc/sudoers
 
-	# set cpu for performance mode
-	#sed -i '/governor/d' ${IMAGE_ROOTFS}/etc/default/cpupower
-	mkdir -p ${IMAGE_ROOTFS}/etc/default/
-	echo "governor='performance'" >> ${IMAGE_ROOTFS}/etc/default/cpupower
-	# get a better swappiness for realtime environment
+    # get a better swappiness for realtime environment
 	echo "vm.swappiness=10" >> ${IMAGE_ROOTFS}/etc/sysctl.conf
 
 	# set realtime environment for DSP
-	echo "@audio 	- rtprio 	99" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+	echo "@audio 	- rtprio 	95" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
 	echo "@audio 	- memlock 	unlimited" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+	echo "@audio 	- nice 	-19" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+	echo "@audio 	- nofile 	65536" >> ${IMAGE_ROOTFS}/etc/security/limits.conf
+    sed -i 's/#DefaultLimitMEMLOCK.*/DefaultLimitMEMLOCK=infinity/' ${IMAGE_ROOTFS}/etc/systemd/system.conf
+    sed -i 's/#DefaultLimitNOFILE.*/DefaultLimitNOFILE=65536/' ${IMAGE_ROOTFS}/etc/systemd/system.conf
 
 	# setup create_ap wifi access point
 	cat <<EOF >> ${IMAGE_ROOTFS}/etc/create_ap.conf
@@ -255,7 +262,7 @@ do_opendsp_image_pre () {
 }
 
 ROOTFS_POSTPROCESS_COMMAND += "do_opendsp_rootfs_post; "
-IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
+#IMAGE_PREPROCESS_COMMAND += "do_opendsp_image_pre; "
 
 # for user name resolution at chown and chgrp
 DEPENDS += " shadow-native"

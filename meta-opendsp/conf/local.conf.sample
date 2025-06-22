@@ -1,11 +1,16 @@
+# You can chose your machine via env var at compile time
+# MACHINE=raspberrypi3 bitbake opendsp-base-image
+# or...
+# export MACHINE=raspberrypi3
+# Chose only one!
 # 32 bit Intel Core 2 CPU (and later) with MMX, SSE, SSE2, SSE3, and SSSE3 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
-#MACHINE = "intel-core2-32"
+#MACHINE ??= "intel-core2-32"
 # 64 bit Intel Core i7 CPU (and later) with MMX, SSE, SSE2, SSE3, and SSSE3 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
-MACHINE = "intel-corei7-64"
+MACHINE ??= "intel-corei7-64"
 # 64 bit Intel Skylake CPU (and later) with MMX, SSE, SSE2, SSE3, SSE4.1, SSE4.2, AVX, and AVX2 instruction set support. Supports a moderately wide range of drivers that should boot and be usable on "typical" hardware.
-#MACHINE = "intel-skylake-64"
+#MACHINE ??= "intel-skylake-64"
 # Raspberry PI 2/3
-#MACHINE = "raspberrypi3"
+#MACHINE ??= "raspberrypi3"
 
 DISTRO = "opendsp"
 
